@@ -1,0 +1,178 @@
+package app.nichepro.responsehandler;
+
+import java.util.ArrayList;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.google.gson.Gson;
+
+import app.nichepro.model.BaseResponseObject;
+import app.nichepro.model.ErrorResponseObject;
+import app.nichepro.model.LoginResponseObject;
+import app.nichepro.model.PatientMedicationListResponseObject;
+import app.nichepro.model.PatientNoteListResponseObject;
+import app.nichepro.model.PatientNoteResponseObject;
+
+
+public interface BaseParser {
+	ArrayList<BaseResponseObject> getParsedData(String data);
+}
+class ErrorParser implements BaseParser{
+
+	@Override
+	public ArrayList<BaseResponseObject> getParsedData(String data) {
+		// TODO Auto-generated method stub
+		ArrayList<BaseResponseObject> items = new ArrayList<BaseResponseObject>();
+		ErrorResponseObject ero = new ErrorResponseObject();
+		ero.setErrorText(data);
+		items.add(ero);
+		return items;
+	}
+}
+class LoginParser implements BaseParser{
+
+	@Override
+	public ArrayList<BaseResponseObject> getParsedData(String data) {
+		// TODO Auto-generated method stub
+		ArrayList<BaseResponseObject> items = new ArrayList<BaseResponseObject>();
+		LoginResponseObject lro = new LoginResponseObject();
+		lro.setLoggedIn(false);
+		JSONObject json = null;
+		
+		try {
+			json = new JSONObject(data);
+				if (json != null) {
+					if (json.has("_LOGIN_PASSED_")) {
+						lro.setLoggedIn(Boolean.parseBoolean(json.getString("_LOGIN_PASSED_")));
+					}
+					if(json.has("partyId")){
+						lro.setPartyId(json.getString("partyId"));
+					}
+				}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		items.add(lro);
+		return items;
+		}
+	
+}
+
+class RegistrationParser implements BaseParser{
+
+	@Override
+	public ArrayList<BaseResponseObject> getParsedData(String data) {
+		// TODO Auto-generated method stub
+		ArrayList<BaseResponseObject> items = new ArrayList<BaseResponseObject>();
+		LoginResponseObject lro = new LoginResponseObject();
+		lro.setLoggedIn(false);
+
+		JSONObject json = null;
+		
+		try {
+			json = new JSONObject(data);
+				if (json != null) {
+					if (json.has("_LOGIN_PASSED_")) {
+						lro.setLoggedIn(Boolean.parseBoolean(json.getString("_LOGIN_PASSED_")));
+						lro.setNewlyRegistered(true);
+					}
+					if(json.has("partyId")){
+						lro.setPartyId(json.getString("partyId"));
+					}
+				}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		items.add(lro);
+		return items;
+		}
+	
+}
+class AddPatientNoteParser implements BaseParser{
+
+	@Override
+	public ArrayList<BaseResponseObject> getParsedData(String data) {
+		// TODO Auto-generated method stub
+		ArrayList<BaseResponseObject> items = new ArrayList<BaseResponseObject>();
+		LoginResponseObject lro = new LoginResponseObject();
+		lro.setLoggedIn(false);
+
+		JSONObject json = null;
+		
+		try {
+			json = new JSONObject(data);
+				if (json != null) {
+					if (json.has("_LOGIN_PASSED_")) {
+						lro.setLoggedIn(Boolean.parseBoolean(json.getString("_LOGIN_PASSED_")));
+						lro.setNewlyRegistered(true);
+					}
+					if(json.has("partyId")){
+						lro.setPartyId(json.getString("partyId"));
+					}
+				}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		items.add(lro);
+		return items;
+		}
+	
+}
+class ListPatientNoteParser implements BaseParser{
+
+	@Override
+	public ArrayList<BaseResponseObject> getParsedData(String data) {
+		// TODO Auto-generated method stub
+		ArrayList<BaseResponseObject> items = new ArrayList<BaseResponseObject>();
+
+		JSONObject json = null;
+
+		try {
+			json = new JSONObject(data);
+				if (json != null) {
+					if (json.has("note")) {
+				        Gson gson = new Gson();
+						PatientNoteListResponseObject pnlro = gson.fromJson(data, PatientNoteListResponseObject.class);
+						items.add(pnlro);
+					}
+					
+				}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return items;
+		}
+
+}
+class PatientMedicationListParser implements BaseParser{
+
+	@Override
+	public ArrayList<BaseResponseObject> getParsedData(String data) {
+		ArrayList<BaseResponseObject> items = new ArrayList<BaseResponseObject>();
+		
+		JSONObject json = null;
+		
+		try {
+			json = new JSONObject(data);
+			if (json != null) {
+				if (json.has("element")) {
+			        Gson gson = new Gson();
+					PatientMedicationListResponseObject pmlro = gson.fromJson(data, PatientMedicationListResponseObject.class);
+					items.add(pmlro);
+				}
+				}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		return items;
+		}
+	
+}

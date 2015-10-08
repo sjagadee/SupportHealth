@@ -1,0 +1,500 @@
+package app.nichepro.fragmenttabpatient.ehr;
+
+import java.util.ArrayList;
+
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+import app.nichepro.HealthCareApp;
+import app.nichepro.activities.healthcare.BaseFragment;
+import app.nichepro.activities.healthcare.R;
+import app.nichepro.fragmenttabpatient.info.PatientInfoListAdapter;
+import app.nichepro.fragmenttabpatient.info.PatientInfoMyNotesFragment;
+import app.nichepro.fragmenttabpatient.info.PatientInfoSymptomFragment;
+import app.nichepro.model.BaseResponseObject;
+import app.nichepro.model.ErrorResponseObject;
+import app.nichepro.model.PartyListResponseObject;
+import app.nichepro.model.PatientAllergiesListResponseObject;
+import app.nichepro.model.PatientAppointmentListResponseObject;
+import app.nichepro.model.PatientDiagnosisListResponseObject;
+import app.nichepro.model.PatientMedicationListResponseObject;
+import app.nichepro.model.PatientVitalStatListResponseObject;
+import app.nichepro.model.SymtomPatientListResponseObject;
+import app.nichepro.responsehandler.ResponseParserListener;
+import app.nichepro.util.Constants;
+import app.nichepro.util.EnumFactory.LoginType;
+import app.nichepro.util.EnumFactory.ResponseMesssagType;
+import app.nichepro.util.UIUtilities;
+import app.nichepro.util.WebLinks;
+import app.nichepro.util.WebRequestTask;
+
+public class PatientEHRFragment extends BaseFragment implements
+		ResponseParserListener {
+
+	ArrayList<String> mEhrData;
+	WebRequestTask ehrRequestTask;
+	private ResponseMesssagType msgType;
+	// public boolean isFromDoctor;
+	public String mPatientId;
+	public String mTabName;
+	HealthCareApp myApp;
+	private LoginType mActorType;
+
+	public PatientEHRFragment(LoginType actorType, String tabName,
+			String patientId) {
+		this.mActorType = actorType;
+		this.mPatientId = patientId;
+		this.mTabName = tabName;
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		myApp = (HealthCareApp) getActivity().getApplication();
+		mEhrData = new ArrayList<String>();
+		mEhrData.add("Appointments");
+		mEhrData.add("Medication");
+		mEhrData.add("Diagnostic History");
+		mEhrData.add("Allergies");
+		mEhrData.add("Vital Statistics");
+		mEhrData.add("Symptoms Tracker");
+
+		if (mActorType != null
+				&& mActorType.toString()
+						.compareTo(LoginType.Patient.toString()) == 0) {
+			mEhrData.add("Share Health Records");
+		} else if (mActorType != null
+				&& mActorType.toString().compareTo(
+						LoginType.Physician.toString()) == 0) {
+			mEhrData.add("Note by Physician");
+
+		}
+
+		View view = inflater.inflate(R.layout.info_first_screen, container,
+				false);
+
+		TextView txtView = (TextView) view.findViewById(R.id.heading1);
+		txtView.setText("Health Records");
+		ListView list = (ListView) view.findViewById(R.id.lvInfoItems);
+		ArrayAdapter<String> listAdapter = new PatientInfoListAdapter(
+				inflater.getContext(), inflater, R.layout.patient_list_cell);
+		for (String element : mEhrData) {
+			listAdapter.add(element);
+		}
+		list.setAdapter(listAdapter);
+
+		// Creating an item click listener, to open/close our toolbar for each
+		// item
+		list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, final View view,
+					int position, long id) {
+				switch (position) {
+				case 0:
+					requestForAppointments();
+					break;
+				case 1:
+					requestForMedication();
+					break;
+				case 2:
+					requestForDiagnosisHistory();
+					break;
+				case 3:
+					requestForAllergies();
+					break;
+				case 4:
+					requestForVitalStatistics();
+					break;
+				case 5:
+					requestForSymtom();
+					break;
+				case 6: {
+
+					if (mActorType != null
+							&& mActorType.toString().compareTo(
+									LoginType.Patient.toString()) == 0) {
+						requestForDoctor();
+					} else if (mActorType != null
+							&& mActorType.toString().compareTo(
+									LoginType.Physician.toString()) == 0) {
+
+						mDoctorActivity.pushFragments(mTabName,
+								new PatientInfoMyNotesFragment(mActorType,
+										mTabName, mPatientId), true, true);
+
+					}
+
+				}
+					break;
+				}
+			}
+		});
+		return view;
+	}
+
+	public void requestForSymtom() {
+		ehrRequestTask = new WebRequestTask(
+				WebLinks.getLink(WebLinks.ListPatientSymtoms), getActivity(),
+				this);
+		if (mActorType != null
+				&& mActorType.toString()
+						.compareTo(LoginType.Patient.toString()) == 0) {
+			ehrRequestTask.AddParam(Constants.PARAM_patientId, myApp
+					.getLoggedInUser().getPartyId());
+
+		} else {
+			ehrRequestTask.AddParam(Constants.PARAM_patientId, mPatientId);
+		}
+
+		ehrRequestTask.execute();
+	}
+
+	public void requestForAllergies() {
+		ehrRequestTask = new WebRequestTask(
+				WebLinks.getLink(WebLinks.LIST_OF_ALLERGIES), getActivity(),
+				this);
+
+		if (mActorType != null
+				&& mActorType.toString()
+						.compareTo(LoginType.Patient.toString()) == 0) {
+			ehrRequestTask.AddParam(Constants.PARAM_patientId, myApp
+					.getLoggedInUser().getPartyId());
+
+		} else {
+			ehrRequestTask.AddParam(Constants.PARAM_patientId, mPatientId);
+		}
+
+		ehrRequestTask.execute();
+	}
+
+	public void requestForAppointments() {
+		ehrRequestTask = new WebRequestTask(
+				WebLinks.getLink(WebLinks.APPOINTMENT_LIST), getActivity(),
+				this);
+		if (mActorType != null
+				&& mActorType.toString()
+						.compareTo(LoginType.Patient.toString()) == 0) {
+			ehrRequestTask.AddParam(Constants.PARAM_patientId, myApp
+					.getLoggedInUser().getPartyId());
+
+		} else {
+			ehrRequestTask.AddParam(Constants.PARAM_patientId, mPatientId);
+		}
+
+		ehrRequestTask.AddParam(Constants.PARAM_partyType,
+				Constants.VALUE_PATIENT);
+		ehrRequestTask.AddParam(Constants.PARAM_dateValue,
+				Constants.VALUE_UPCOMING);
+		ehrRequestTask.execute();
+
+	}
+
+	public void requestForDiagnosisHistory() {
+		ehrRequestTask = new WebRequestTask(
+				WebLinks.getLink(WebLinks.LIST_OF_DIAGNOSIS), getActivity(),
+				this);
+
+		if (mActorType != null
+				&& mActorType.toString()
+						.compareTo(LoginType.Patient.toString()) == 0) {
+			ehrRequestTask.AddParam(Constants.PARAM_patientId, myApp
+					.getLoggedInUser().getPartyId());
+
+		} else {
+			ehrRequestTask.AddParam(Constants.PARAM_patientId, mPatientId);
+		}
+		ehrRequestTask.execute();
+	}
+
+	public void requestForDoctor() {
+
+		ehrRequestTask = new WebRequestTask(
+				WebLinks.getLink(WebLinks.ACTOR_LIST), getActivity(), this);
+		ehrRequestTask.AddParam(Constants.PARAM_partyType, "Doctor");
+		ehrRequestTask.AddParam(Constants.PARAM_roleTypeId, "HC_PROVIDER");
+		ehrRequestTask.execute();
+
+	}
+
+	public void requestForNote() {
+
+		ehrRequestTask = new WebRequestTask(
+				WebLinks.getLink(WebLinks.LIST_OF_NOTES), getActivity(), this);
+
+		ehrRequestTask.AddParam(Constants.PARAM_partyIdFrom, myApp
+				.getLoggedInUser().getPartyId());
+		;
+		ehrRequestTask.AddParam(Constants.PARAM_partyIdTo, mPatientId);
+		// ehrRequestTask.AddParam(Constants.PARAM_noteName, "Doctor");
+		// ehrRequestTask.AddParam(Constants.PARAM_noteInfo, "HC_PROVIDER");
+
+		ehrRequestTask.execute();
+
+	}
+
+	public void requestForMedication() {
+		ehrRequestTask = new WebRequestTask(
+				WebLinks.getLink(WebLinks.LIST_OF_MEDICATION), getActivity(),
+				this);
+
+		if (mActorType != null
+				&& mActorType.toString()
+						.compareTo(LoginType.Patient.toString()) == 0) {
+			ehrRequestTask.AddParam(Constants.PARAM_patientId, myApp
+					.getLoggedInUser().getPartyId());
+
+		} else {
+			ehrRequestTask.AddParam(Constants.PARAM_patientId, mPatientId);
+		}
+
+		ehrRequestTask.execute();
+	}
+
+	public void requestForVitalStatistics() {
+		ehrRequestTask = new WebRequestTask(
+				WebLinks.getLink(WebLinks.LIST_OF_VITALSTAT), getActivity(),
+				this);
+
+		if (mActorType != null
+				&& mActorType.toString()
+						.compareTo(LoginType.Patient.toString()) == 0) {
+			ehrRequestTask.AddParam(Constants.PARAM_patientId, myApp
+					.getLoggedInUser().getPartyId());
+
+		} else {
+			ehrRequestTask.AddParam(Constants.PARAM_patientId, mPatientId);
+		}
+
+		ehrRequestTask.execute();
+	}
+
+	@Override
+	public void onEndParsingMsgType(ResponseMesssagType msgType) {
+		// TODO Auto-generated method stub
+		this.msgType = msgType;
+	}
+
+	@Override
+	public void onEndParsingResponse(ArrayList<BaseResponseObject> items) {
+		// TODO Auto-generated method stub
+		if (this.msgType == ResponseMesssagType.MedicationListMessageType) {
+			if (items != null && !items.isEmpty() && items.size() > 0) {
+				PatientEhrMedicationFragment pemf = new PatientEhrMedicationFragment();
+
+				pemf.medicationListObject = (PatientMedicationListResponseObject) items
+						.get(0);
+
+				if (mActorType != null
+						&& mActorType.toString().compareTo(
+								LoginType.Physician.toString()) == 0) {
+					pemf.isFromDoctor = true;
+					pemf.patientId = mPatientId;
+					mDoctorActivity.pushFragments(mTabName, pemf, true, true);
+
+				} else if (mActorType != null
+						&& mActorType.toString().compareTo(
+								LoginType.Sponsor.toString()) == 0) {
+					pemf.isFromDoctor = true;
+					pemf.patientId = mPatientId;
+					mSponsorActivity.pushFragments(mTabName, pemf, true, true);
+
+				} else {
+					mActivity
+							.pushFragments(Constants.TAB_EHR, pemf, true, true);
+				}
+			}
+
+		} else if (this.msgType == ResponseMesssagType.DoctorListMessageType) {
+			PatientEhrShareHealthRecordFragment peshrf = new PatientEhrShareHealthRecordFragment();
+			if (items != null && !items.isEmpty() && items.size() > 0) {
+				peshrf.doctorListObject = (PartyListResponseObject) items
+						.get(0);
+
+				if (mActorType != null
+						&& mActorType.toString().compareTo(
+								LoginType.Physician.toString()) == 0) {
+					mDoctorActivity.pushFragments(mTabName, peshrf, true, true);
+
+				} else if (mActorType != null
+						&& mActorType.toString().compareTo(
+								LoginType.Sponsor.toString()) == 0) {
+					mSponsorActivity
+							.pushFragments(mTabName, peshrf, true, true);
+				} else {
+					mActivity.pushFragments(Constants.TAB_EHR, peshrf, true,
+							true);
+				}
+
+			}
+		} else if (this.msgType == ResponseMesssagType.DiagnosisListMessageType) {
+			PatientEhrDiagnosisFragment pedf = new PatientEhrDiagnosisFragment();
+			if (items != null && !items.isEmpty() && items.size() > 0) {
+
+				pedf.diagnosisListObject = (PatientDiagnosisListResponseObject) items
+						.get(0);
+
+				if (mActorType != null
+						&& mActorType.toString().compareTo(
+								LoginType.Physician.toString()) == 0) {
+					mDoctorActivity.pushFragments(mTabName, pedf, true, true);
+
+				} else if (mActorType != null
+						&& mActorType.toString().compareTo(
+								LoginType.Sponsor.toString()) == 0) {
+					mSponsorActivity.pushFragments(mTabName, pedf, true, true);
+				} else {
+					mActivity
+							.pushFragments(Constants.TAB_EHR, pedf, true, true);
+				}
+
+			}
+		} else if (this.msgType == ResponseMesssagType.VitalStatisticsMessageType) {
+			PatientEhrVitalStatFragment pevsf = new PatientEhrVitalStatFragment();
+			if (items != null && !items.isEmpty() && items.size() > 0) {
+
+				pevsf.vitalstatListObject = (PatientVitalStatListResponseObject) items
+						.get(0);
+				if (mActorType != null
+						&& mActorType.toString().compareTo(
+								LoginType.Physician.toString()) == 0) {
+					mDoctorActivity.pushFragments(mTabName, pevsf, true, true);
+
+				} else if (mActorType != null
+						&& mActorType.toString().compareTo(
+								LoginType.Sponsor.toString()) == 0) {
+					mSponsorActivity.pushFragments(mTabName, pevsf, true, true);
+				} else {
+					mActivity.pushFragments(Constants.TAB_EHR, pevsf, true,
+							true);
+				}
+
+			}
+		} else if (this.msgType == ResponseMesssagType.PatientAppointmentListMessageType) {
+			if (items != null && !items.isEmpty() && items.size() > 0) {
+				PatientEhrAppointmentsFragment pevsf = new PatientEhrAppointmentsFragment();
+
+				pevsf.mAppointmentData = (PatientAppointmentListResponseObject) items
+						.get(0);
+
+				if (mActorType != null
+						&& mActorType.toString().compareTo(
+								LoginType.Physician.toString()) == 0) {
+					pevsf.isFromDoctor = true;
+					pevsf.patientId = mPatientId;
+					mDoctorActivity.pushFragments(mTabName, pevsf, true, true);
+
+				} else if (mActorType != null
+						&& mActorType.toString().compareTo(
+								LoginType.Sponsor.toString()) == 0) {
+					pevsf.isFromDoctor = true;
+					pevsf.patientId = mPatientId;
+					mSponsorActivity.pushFragments(mTabName, pevsf, true, true);
+				} else {
+					mActivity.pushFragments(Constants.TAB_EHR, pevsf, true,
+							true);
+				}
+
+			}
+		} else if (this.msgType == ResponseMesssagType.AllergiesListMessageType) {
+			if (items != null && !items.isEmpty() && items.size() > 0) {
+				PatientEhrAllergiesFragment peaf = new PatientEhrAllergiesFragment();
+
+				peaf.allergiesListObject = (PatientAllergiesListResponseObject) items
+						.get(0);
+				if (mActorType != null
+						&& mActorType.toString().compareTo(
+								LoginType.Physician.toString()) == 0) {
+					mDoctorActivity.pushFragments(mTabName, peaf, true, true);
+
+				} else if (mActorType != null
+						&& mActorType.toString().compareTo(
+								LoginType.Sponsor.toString()) == 0) {
+					mSponsorActivity.pushFragments(mTabName, peaf, true, true);
+				} else {
+					mActivity
+							.pushFragments(Constants.TAB_EHR, peaf, true, true);
+				}
+			}
+		} else if (this.msgType == ResponseMesssagType.PatientSymtomsListMessageType) {
+
+			if (items != null && !items.isEmpty() && items.size() > 0) {
+
+				SymtomPatientListResponseObject slro = (SymtomPatientListResponseObject) items
+						.get(0);
+
+				if (slro != null && slro._PATIENT_SYMOTOM_LIST_ != null
+						&& slro._PATIENT_SYMOTOM_LIST_.size() > 0) {
+					PatientInfoSymptomFragment pihlf = new PatientInfoSymptomFragment();
+					pihlf.setFromEHR(true);
+					pihlf.setmPatientSymtomsList(slro);
+
+					if (mActorType != null
+							&& mActorType.toString().compareTo(
+									LoginType.Physician.toString()) == 0) {
+						mDoctorActivity.pushFragments(mTabName, pihlf, true,
+								true);
+
+					} else if (mActorType != null
+							&& mActorType.toString().compareTo(
+									LoginType.Sponsor.toString()) == 0) {
+						mSponsorActivity.pushFragments(mTabName, pihlf, true,
+								true);
+					} else {
+						mActivity.pushFragments(Constants.TAB_EHR, pihlf, true,
+								true);
+					}
+				} else {
+					UIUtilities.showConfirmationAlert(getActivity(),
+							R.string.dialog_title_information,
+							"Your symptoms list is empty!",
+							R.string.dialog_button_Ok,
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int which) {
+
+								}
+							});
+				}
+
+			}
+		} else if (this.msgType == ResponseMesssagType.ErrorResponseMessageType) {
+			if (items != null && !items.isEmpty() && items.size() > 0) {
+				ErrorResponseObject ero = (ErrorResponseObject) items.get(0);
+				UIUtilities.showErrorWithOkButton(getActivity(),
+						ero.getErrorText());
+			} else
+				UIUtilities.showServerError(getActivity());
+
+		} else if (this.msgType == ResponseMesssagType.UnknownResponseMessageType) {
+			UIUtilities.showServerError(getActivity());
+		} else {
+			UIUtilities.showServerError(getActivity());
+		}
+	}
+
+	@Override
+	public void onErrorResponse(ArrayList<BaseResponseObject> items) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onError(Exception ex) {
+		// TODO Auto-generated method stub
+		UIUtilities.showErrorWithOkButton(getActivity(), ex.getMessage());
+
+	}
+
+	public ResponseMesssagType getMsgType() {
+		return msgType;
+	}
+
+	public void setMsgType(ResponseMesssagType msgType) {
+		this.msgType = msgType;
+	}
+}

@@ -1,0 +1,58 @@
+package app.nichepro.fragmenttabpatient.community;
+
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import app.nichepro.activities.healthcare.BaseFragment;
+import app.nichepro.activities.healthcare.R;
+
+
+public class PatientCommunityFragment extends BaseFragment implements
+		View.OnClickListener {
+
+	Button healthPartners, requestForSponcer, latestOnCancer, events, forum;
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.community_first_screen, container,
+				false);
+
+		requestForSponcer = (Button) view.findViewById(R.id.bRequestForSponcers);
+		forum = (Button) view.findViewById(R.id.bForum);
+		latestOnCancer = (Button) view.findViewById(R.id.bLatestOnCancer);
+		events = (Button) view.findViewById(R.id.bEvents);
+		healthPartners = (Button) view.findViewById(R.id.bHealthPartners);
+		requestForSponcer.setOnClickListener(this);
+		forum.setOnClickListener(this);
+		latestOnCancer.setOnClickListener(this);
+		events.setOnClickListener(this);
+		healthPartners.setOnClickListener(this);
+		return view;
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		switch (v.getId()) {
+		case R.id.bRequestForSponcers:
+
+			break;
+		case R.id.bForum:
+
+			break;
+		case R.id.bLatestOnCancer:
+
+			break;
+		case R.id.bEvents:
+
+			break;
+		case R.id.bHealthPartners:
+
+			break;
+		}
+
+	}
+}

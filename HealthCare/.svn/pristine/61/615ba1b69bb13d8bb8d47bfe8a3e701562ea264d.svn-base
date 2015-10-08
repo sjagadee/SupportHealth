@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/LinearLayout01"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/radioGroup1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/bPending"
+            android:layout_width="0dip"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="@drawable/message_list_state_btn"
+            android:text="@string/pending"
+            android:textAlignment="center"
+            android:textSize="16sp" >
+        </Button>
+
+        <Button
+            android:id="@+id/bApproved"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/message_list_state_btn"
+            android:text="@string/approved"
+            android:textAlignment="center"
+            android:textSize="16sp" >
+        </Button>
+
+        <Button
+            android:id="@+id/bRejected"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/message_list_state_btn"
+            android:text="@string/rejected"
+            android:textAlignment="center"
+            android:textSize="16sp" >
+        </Button>
+    </LinearLayout>
+
+    <ViewFlipper
+        android:id="@+id/ViewFlipper01"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <!-- adding views to ViewFlipper -->
+
+        <LinearLayout
+            android:id="@+id/pendingrequest"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/blue_border"
+                android:text="Pending Request"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <ListView
+                android:id="@+id/pendingsponsoredlist"
+                style="@style/listStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="#FCFCFC" >
+            </ListView>
+        </LinearLayout>
+
+        <!-- end of flipper 1 -->
+
+        <LinearLayout
+            android:id="@+id/approvedrequest"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/blue_border"
+                android:text="Approved Request"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <ListView
+                android:id="@+id/approvedsponsoredlist"
+                style="@style/listStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="#FCFCFC" >
+            </ListView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/rejectedrequest"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/blue_border"
+                android:text="Rejected Request"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <ListView
+                android:id="@+id/rejectedsponsoredlist"
+                style="@style/listStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="#FCFCFC" >
+            </ListView>
+        </LinearLayout>
+        <!-- end of flipper 3 -->
+
+    </ViewFlipper>
+
+</LinearLayout>

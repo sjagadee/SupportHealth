@@ -1,0 +1,43 @@
+package app.nichepro.fragmenttabpatient.home;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
+import app.nichepro.activities.healthcare.R;
+import app.nichepro.model.KeyValue;
+
+public class PatientMyNotesListAdapter extends ArrayAdapter<KeyValue> {
+	LayoutInflater minflater;
+
+	public PatientMyNotesListAdapter(Context context,
+			LayoutInflater inflater, int textViewResourceId) {
+		super(context, textViewResourceId);
+		minflater = inflater;
+	}
+
+	@Override
+	public View getView(final int position, View convertView, ViewGroup parent) {
+
+		if (convertView == null) {
+
+			convertView = minflater.inflate(R.layout.patient_home_list_cell,
+					null);
+		}
+
+		KeyValue kv = getItem(position);
+		((TextView) convertView.findViewById(R.id.date)).setText(kv.getKey());
+		((TextView) convertView.findViewById(R.id.note)).setText(kv.getValue());
+		TextView view = (TextView) convertView.findViewById(R.id.check);
+		view.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				android.util.Log.e("view", position + "");
+			}
+		});
+
+		return convertView;
+	}
+}

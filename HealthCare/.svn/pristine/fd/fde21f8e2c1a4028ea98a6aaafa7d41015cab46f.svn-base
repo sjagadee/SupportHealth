@@ -1,0 +1,110 @@
+package app.nichepro.activities.healthcare;
+
+import java.util.ArrayList;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import app.nichepro.model.KeyValue;
+
+public class AboutCervicalCancerDetailActivity extends BaseActivity {
+
+	ArrayList<KeyValue> mCancerData;
+
+	public void initializeHash() {
+		mCancerData = new ArrayList<KeyValue>();
+		KeyValue kv = new KeyValue();
+		kv.setKey("Overview");
+		kv.setValue("The cervix is the lower part of the uterus that opens into the vagina. Cervical cancer occurs when abnormal cells on the cervix grow out of control.");
+		mCancerData.add(kv);
+
+		kv = new KeyValue();
+		kv.setKey("Statistics");
+		kv.setValue("More than 20% of cases of cervical cancer are found in women over 65. ");
+		mCancerData.add(kv);
+
+		kv = new KeyValue();
+		kv.setKey("Risk factors");
+		kv.setValue("Risk factors include an ongoing infection with a high-risk type of HPV (a sexually transmitted infection), high-risk sexual behaviors, and an impaired immune system.");
+		mCancerData.add(kv);
+
+		kv = new KeyValue();
+		kv.setKey("Symptoms");
+		kv.setValue("Symptoms may include abnormal vaginal bleeding or discharge, significant unexplained change in the menstrual cycle, and pain during sex.");
+		mCancerData.add(kv);
+
+		kv = new KeyValue();
+		kv.setKey("Diagnosis");
+		kv.setValue("Early stages of cervical cancer can be diagnosed through a Pap test. Other tests to confirm diagnosis  include colposcopy , cervical biopsy, endocervical biopsy, and cone biopsy or loop electrosurgical excision procedure (LEEP).");
+		mCancerData.add(kv);
+
+		kv = new KeyValue();
+		kv.setKey("Staging");
+		kv.setValue("There are four main and 10 sub stages: Stage 1, 1A1, 1A2, 1B1, 1B2, Stage 2, 2A1, 2A2, Stage 3, 3A, 3B, and Stage 4, 4A, 4B. Stage 1 means that the cancer is in the neck of the womb. If the cancer has spread to organs further away, such as the lungs, it is said to be in stage 4B.");
+		mCancerData.add(kv);
+
+		kv = new KeyValue();
+		kv.setKey("Treatment");
+		kv.setValue("Treatment choices for cervical cancer may be a single therapy or a combination of therapies that include surgery to remove the cancer, chemotherapy, and radiation therapy.");
+		mCancerData.add(kv);
+
+		kv = new KeyValue();
+		kv.setKey("Side effects");
+		kv.setValue("Side effects of chemotherapy may include loss of appetite, nausea, vomiting, diarrhea, mouth sores, or hair loss. Side effects of radiation therapy may include fatigue, skin irritation, or changes in bowel or urinary habits. ");
+		mCancerData.add(kv);
+
+		kv = new KeyValue();
+		kv.setKey("After treatment");
+		kv.setValue("Cervical cancer patients should continue to have regular checkups and should report any health problems that appear.");
+		mCancerData.add(kv);
+
+		kv = new KeyValue();
+		kv.setKey("Current research");
+		kv.setValue("Doctors are studying new types and schedules of radiation therapy. They also are looking for new drugs, drug combinations, and ways to combine various types of treatment.");
+		mCancerData.add(kv);
+	}
+
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.allaboutcancer);
+		initializeHash();
+
+		RelativeLayout hView = (RelativeLayout) findViewById(R.id.headings);
+		hView.setVisibility(View.VISIBLE);
+		TextView headerView = (TextView) findViewById(R.id.header);
+		headerView.setText("Cervical Cancer");
+
+		ListView list = (ListView) findViewById(R.id.lvCancerExpansion);
+
+		// Creating the list adapter and populating the list
+		ArrayAdapter<KeyValue> listAdapter = new CustomListAdapter(this,
+				this.getLayoutInflater(), R.layout.allaboutcancer_listitem);
+
+		for (KeyValue element : mCancerData) {
+			listAdapter.add(element);
+
+		}
+
+		list.setAdapter(listAdapter);
+
+		// Creating an item click listener, to open/close our toolbar for each
+		// item
+		list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, final View view,
+					int position, long id) {
+
+				TextView txtView = (TextView) view.findViewById(R.id.detail);
+
+				// Creating the expand animation for the item
+				ExpandAnimation expandAni = new ExpandAnimation(txtView, 500);
+
+				// Start the animation on the toolbar
+				txtView.startAnimation(expandAni);
+			}
+		});
+	}
+}

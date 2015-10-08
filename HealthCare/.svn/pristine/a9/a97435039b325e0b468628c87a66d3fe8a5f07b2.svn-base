@@ -1,0 +1,85 @@
+package app.nichepro.util;
+
+
+
+import java.util.HashMap;
+
+/**
+ * A factory for creating Enum objects.
+ */
+public class EnumFactory {
+
+	/**
+	 * The Enum ResponseHeaderType.
+	 */
+	public enum ResponseHeaderType {
+
+		/** The Unknown response header type. */
+		UnknownResponseHeaderType,
+		/** The Patient login response header type. */
+		PatientLoginHeaderType,
+		/** The Doctor login response header type. */
+		DoctorLoginHeaderType,
+		/** The Sponsor login response header type. */
+		SponsorLoginHeaderType,
+		/** The Patient Note response header type. */
+		PatientNoteHeaderType,
+		/** The Hospital list response header type. */
+		HospitalListHeaderType,
+		/** Patient Appointment response header type. */
+		PatientAppointmentListHeaderType,
+		/** The Error response header type. */
+		ErrorResponseHeaderType;
+
+		/**
+		 * Gets the hash map.
+		 * 
+		 * @return the hash map
+		 */
+		public static HashMap<ResponseHeaderType, String> getHashMap() {
+			HashMap<ResponseHeaderType, String> hm = new HashMap<ResponseHeaderType, String>();
+			hm.put(UnknownResponseHeaderType, "unknown");
+			hm.put(PatientLoginHeaderType, "LOGIN");
+			hm.put(DoctorLoginHeaderType, "doctorlogin");
+			hm.put(SponsorLoginHeaderType, "sponsorlogin");
+			hm.put(PatientNoteHeaderType, "patientnote");
+			hm.put(HospitalListHeaderType, "hospitallist");
+			hm.put(ErrorResponseHeaderType, "Error");
+			return hm;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.lang.Enum#toString()
+		 */
+		public String toString() {
+			HashMap<ResponseHeaderType, String> hm = getHashMap();
+			return hm.get(this);
+		}
+
+		/**
+		 * To enum.
+		 * 
+		 * @param text
+		 *            the text
+		 * @return the response header type
+		 */
+		public static ResponseHeaderType toEnum(String text) {
+			HashMap<ResponseHeaderType, String> hm = getHashMap();
+			for (ResponseHeaderType item : hm.keySet()) {
+				if (hm.get(item).equals(text)) {
+					return item;
+				}
+			}
+			throw new AssertionError("Text <" + text
+					+ "> cannot be converted to enum");
+		}
+	}
+	
+	public enum LoginType{
+		Patient,
+		Doctor,
+		Sponsor,
+	}
+}

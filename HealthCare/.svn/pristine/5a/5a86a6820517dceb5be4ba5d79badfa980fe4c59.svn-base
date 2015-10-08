@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/healderlayout"
+        style="@style/fillWidth"
+        android:layout_height="40dip"
+        android:background="@drawable/header" >
+
+        <TextView
+            android:id="@+id/heading1"
+            style="@style/Headertitle"
+            android:layout_centerInParent="true"
+            android:text="@string/alarm" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/alarm_time"
+                android:textSize="20sp" />
+
+            <TimePicker
+                android:id="@+id/timePicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+
+            <Button
+                android:id="@+id/bSelect"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/set_time" />
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/alarm_repeat" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <Button
+                    android:id="@+id/bMonday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_low_white_clickable"
+                    android:text="@string/m" />
+
+                <Button
+                    android:id="@+id/bTuesday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_low_white_clickable"
+                    android:text="@string/t" />
+
+                <Button
+                    android:id="@+id/bWednesday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_low_white_clickable"
+                    android:text="@string/w" />
+
+                <Button
+                    android:id="@+id/bThursday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_low_white_clickable"
+                    android:text="@string/t" />
+
+                <Button
+                    android:id="@+id/bFriday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_low_white_clickable"
+                    android:text="@string/f" />
+
+                <Button
+                    android:id="@+id/bSaturday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_low_white_clickable"
+                    android:text="@string/s" />
+
+                <Button
+                    android:id="@+id/bSunday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_low_white_clickable"
+                    android:text="@string/s"
+                    android:textColor="#FF0000" />
+            </LinearLayout>
+
+            <CheckBox
+                android:id="@+id/cbSelectAll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/every_week_repeat" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/select_a_tone" />
+
+            <Spinner
+                android:id="@+id/sAlarmTone"
+                android:layout_width="210dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dip"
+                android:entries="@array/alarm_tone_choice" />
+
+            <Button
+                android:id="@+id/bStopMusic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/stop" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/name" />
+
+                <EditText
+                    android:id="@+id/etAlarmName"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dip"
+                    android:ems="10"
+                    android:hint="@string/alarm" >
+                </EditText>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

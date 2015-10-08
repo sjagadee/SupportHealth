@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/header_patient_message"
+        android:layout_width="fill_parent"
+        android:layout_height="40dip"
+        android:baselineAligned="false"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/msg_list"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:background="@drawable/message_list_state_btn"
+            android:text="@string/message_list"
+            android:textAlignment="center"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/send_msg"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:background="@drawable/message_list_state_btn"
+            android:text="@string/send_message"
+            android:textAlignment="center"
+            android:textColor="@drawable/white"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <ViewFlipper
+        android:id="@+id/viewFlipper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:addStatesFromChildren="true" >
+
+        <LinearLayout
+            android:id="@+id/patient_message_list"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false" >
+
+            <ListView
+                android:id="@+id/patient_communication"
+                style="@style/listStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="#FCFCFC" >
+            </ListView>
+
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <LinearLayout
+                android:id="@+id/patient_new_note"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:orientation="vertical"
+                android:padding="5dp" >
+
+                <TextView
+                    android:id="@+id/tSelectPatient"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/to:"
+                    android:visibility="gone" />
+
+                <EditText
+                    android:id="@+id/bSelectPatient"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/select_patient"
+                    android:inputType="none"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tSelectDoctor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/to:"
+                    />
+
+                <EditText
+                    android:id="@+id/bSelect"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/select_doctor"
+                    android:inputType="none" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/subject:" />
+
+                <EditText
+                    android:id="@+id/etSubjectMessage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/subject" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/message" />
+
+                <EditText
+                    android:id="@+id/etMessageCommunicate"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:ems="10"
+                    android:hint="@string/mess" />
+
+                <Button
+                    android:id="@+id/bSendCommunicate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/send" />
+            </LinearLayout>
+        </ScrollView>
+    </ViewFlipper>
+
+</LinearLayout>

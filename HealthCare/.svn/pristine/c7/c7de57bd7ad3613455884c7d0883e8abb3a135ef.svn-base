@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/aaa"
+    android:orientation="vertical" 
+    android:padding="25dp" >
+
+    <Button
+        android:id="@+id/bAllergies"
+        android:layout_width="100dp"
+        android:layout_height="80dp"
+        android:layout_alignLeft="@+id/bNotes"
+        android:layout_below="@+id/bNotes"
+        android:layout_marginTop="45dp"
+        android:background="@drawable/btn_blue_clickable"
+        android:text="Allergies" />
+
+    <Button
+        android:id="@+id/bReports"
+        android:layout_width="100dp"
+        android:layout_height="80dp"
+        android:layout_alignBottom="@+id/bAllergies"
+        android:layout_alignLeft="@+id/bAppointments"
+        android:background="@drawable/btn_blue_clickable"
+        android:text="Reports" />
+
+    <Button
+        android:id="@+id/bLabTest"
+        android:layout_width="100dp"
+        android:layout_height="80dp"
+        android:layout_alignLeft="@+id/bAllergies"
+        android:layout_below="@+id/bAllergies"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/btn_blue_clickable"
+        android:text="Lab Test" />
+
+    
+
+    <Button
+        android:id="@+id/bNotes"
+        android:layout_width="100dp"
+        android:layout_height="80dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/btn_blue_clickable"
+        android:text="Notes" />
+
+    <Button
+        android:id="@+id/bMedication"
+        android:layout_width="100dp"
+        android:layout_height="80dp"
+        android:layout_above="@+id/bAllergies"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/btn_blue_clickable"
+        android:text="Medication" />
+
+    <Button
+        android:id="@+id/bAppointments"
+        android:layout_width="100dp"
+        android:layout_height="80dp"
+        android:layout_above="@+id/bAllergies"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/btn_blue_clickable"
+        android:text="Appointments" />
+
+    <Button
+        android:id="@+id/bProblemList"
+        android:layout_width="100dp"
+        android:layout_height="80dp"
+        android:layout_above="@+id/bLabTest"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/btn_blue_clickable"
+        android:text="Problem List" />
+
+    <Button
+        android:id="@+id/bShareHealthRecord"
+        android:layout_width="100dp"
+        android:layout_height="80dp"
+        android:layout_alignLeft="@+id/bReports"
+        android:layout_alignTop="@+id/bLabTest"
+        android:background="@drawable/btn_blue_clickable"
+        android:text="Share Health Records" />
+
+</RelativeLayout>

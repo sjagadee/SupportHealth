@@ -1,0 +1,69 @@
+package app.nichepro.fragmenttabdoctor.patient;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.TextView;
+import app.nichepro.activities.healthcare.R;
+import app.nichepro.model.PartySharingResponseObject;
+import app.nichepro.util.UpdateUiFromAdapterListener;
+
+/**
+ * A simple implementation of list adapter.
+ */
+public class DoctorPatientListAdapter extends
+		ArrayAdapter<PartySharingResponseObject> {
+	LayoutInflater minflater;
+	UpdateUiFromAdapterListener mUpdateUI;
+
+	public DoctorPatientListAdapter(Context context, LayoutInflater inflater,
+			int textViewResourceId, UpdateUiFromAdapterListener updateUI) {
+		super(context, textViewResourceId);
+		minflater = inflater;
+		mUpdateUI = updateUI;
+	}
+
+	@Override
+	public View getView(final int position, View convertView, ViewGroup parent) {
+
+		if (convertView == null) {
+
+			convertView = minflater.inflate(R.layout.doctor_patient_list_cell,
+					null);
+		}
+
+		PartySharingResponseObject item = getItem(position);
+		((TextView) convertView.findViewById(R.id.patient_name_cell))
+				.setText(item.patientName);
+		((TextView) convertView.findViewById(R.id.patient_id))
+				.setText(item.partyId);
+
+		Button btn = (Button) convertView
+				.findViewById(R.id.btn_patient_push_ehr);
+		btn.setTag(position);
+		btn.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				android.util.Log.e("share", position + "");
+				String position = v.getTag().toString();
+				mUpdateUI.updateUI(position);
+			}
+		});
+
+		btn = (Button) convertView.findViewById(R.id.btn_patient_view_ehr);
+		btn.setTag(position);
+		btn.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				android.util.Log.e("view", position + "");
+
+				mUpdateUI.updateUI((Integer) v.getTag());
+
+			}
+		});
+
+		return convertView;
+	}
+}

@@ -1,0 +1,240 @@
+
+package app.nichepro.responsehandler;
+
+import java.io.InputStream;
+import java.util.ArrayList;
+
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
+import android.os.Bundle;
+import app.nichepro.model.BaseResponseObject;
+import app.nichepro.util.EnumFactory.ResponseHeaderType;
+import app.nichepro.util.Log;
+
+/**
+ * The Class ResponseParserBase.
+ */
+public class ResponseParserBase extends DefaultHandler {
+
+	/** The TAG. */
+	private static String TAG = ResponseParserBase.class.getSimpleName();
+	
+	private StringBuffer mLogPrintString = new StringBuffer("");
+
+	/**
+	 * The listener interface for receiving responseParser events. The class
+	 * that is interested in processing a responseParser event implements this
+	 * interface, and the object created with that class is registered with a
+	 * component using the component's
+	 * <code>addResponseParserListener<code> method. When
+	 * the responseParser event occurs, that object's appropriate
+	 * method is invoked.
+	 * 
+	 * @see ResponseParserEvent
+	 */
+	public interface ResponseParserListener {
+
+		/**
+		 * On end parsing msg type.
+		 * 
+		 * @param msgType
+		 *            the msg type
+		 */
+		void onEndParsingMsgType(ResponseHeaderType msgType);
+
+		/**
+		 * On end parsing response.
+		 * 
+		 * @param items
+		 *            the items
+		 * @param rpb
+		 *            the rpb
+		 */
+		void onEndParsingResponse(ArrayList<BaseResponseObject> items);
+
+		/**
+		 * On parse error.
+		 * 
+		 * @param ex
+		 *            the ex
+		 */
+		void onError(Exception ex);
+	}
+	
+	public interface EnhancedResponseParserListener {
+		
+		/**
+		 * On end parsing msg type.
+		 * 
+		 * @param msgType
+		 *            the msg type
+		 */
+		void onEndParsingMsgType(ResponseHeaderType msgType, Bundle invokerData);
+
+		/**
+		 * On end parsing response.
+		 * 
+		 * @param items
+		 *            the items
+		 * @param rpb
+		 *            the rpb
+		 */
+		void onEndParsingResponse(ArrayList<BaseResponseObject> items, Bundle invokerData);
+		
+		/**
+		 * On parse error.
+		 * 
+		 * @param ex
+		 *            the ex
+		 */
+		void onError(Exception ex);
+	}
+
+	/** The items. */
+	private ArrayList<BaseResponseObject> items;
+
+	/** The current item. */
+	protected BaseResponseObject currentItem;
+
+	/** The current string. */
+	protected StringBuilder currentString;
+
+	/** The is storing characters. */
+	protected Boolean isStoringCharacters = false;
+
+
+	/**
+	 * Parses the start.
+	 * 
+	 * @param responseStr
+	 *            the response str
+	 */
+	public ArrayList<BaseResponseObject> parseStart(InputStream is)
+			throws Exception {
+		Log.d(TAG, "In parseStart");
+		try {
+			
+			SAXParserFactory factory = SAXParserFactory.newInstance();
+			SAXParser parser = factory.newSAXParser();
+			parser.parse(is, this);
+		} catch (Exception ex) {
+			throw ex;
+		}
+		return items;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.xml.sax.helpers.DefaultHandler#startDocument()
+	 */
+	@Override
+	public void startDocument() throws SAXException {
+		super.startDocument();
+		Log.d(TAG, "Starting Parsing the document");
+		Log.d(TAG, "Response from server...");
+		items = new ArrayList<BaseResponseObject>();
+		currentString = new StringBuilder();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.xml.sax.helpers.DefaultHandler#characters(char[], int, int)
+	 */
+	@Override
+	public void characters(char[] ch, int start, int length)
+			throws SAXException {
+		super.characters(ch, start, length);
+		if (isStoringCharacters)
+			currentString.append(ch, start, length);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.xml.sax.helpers.DefaultHandler#endDocument()
+	 */
+	@Override
+	public void endDocument() throws SAXException {
+		Log.d(TAG, "Ended Parsing the document");
+		super.endDocument();
+		Log.d(TAG, getLogPrintString());
+		resetogPrintString();
+		
+		
+	}
+
+	/**
+	 * Parsed one item, add it to the arraylist that need to be send to listener
+	 * on parse end
+	 * 
+	 * @param currentItem
+	 *            the current item
+	 */
+	void parsedItem(BaseResponseObject currentItem) {
+		items.add(currentItem);
+	}
+	void parsedItemRemovePrevious(BaseResponseObject currentItem) {
+		items.clear();
+		items.add(currentItem);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.xml.sax.helpers.DefaultHandler#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
+	 */
+	@Override
+	public void startElement(String uri, String localName, String qName,
+			Attributes attributes) throws SAXException { 
+		// TODO Auto-generated method stub
+		super.startElement(uri, localName, qName, attributes);
+		
+		
+	
+			
+		
+		int attribCount = attributes.getLength();
+		String attribs = "";
+		for (int i = 0; i < attribCount ; i++) {
+			attribs += attributes.getQName(i);
+			attribs += "=\"";
+			attribs += attributes.getValue(i);
+			attribs += "\" ";
+		}
+		appendToLogPrintString("<" + localName + " " + attribs + ">");
+		//Log.d(TAG, "<" + localName + " " + attribs + ">");
+		//Log.d(TAG, attribs );
+	}
+
+	/* (non-Javadoc)
+	 * @see org.xml.sax.helpers.DefaultHandler#endElement(java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public void endElement(String uri, String localName, String qName)
+			throws SAXException {
+		// TODO Auto-generated method stub
+		super.endElement(uri, localName, qName);
+		//Log.d(TAG, "</" + localName + ">");
+		appendToLogPrintString("</" + localName + ">\n" );
+	}
+
+	/**
+	 * @return the logPrintString
+	 */
+	private String getLogPrintString() {
+		return mLogPrintString.toString();
+	}
+	
+	private void appendToLogPrintString(String strToAppend) {
+		mLogPrintString.append(strToAppend);
+	}
+	
+	private void resetogPrintString() {
+		mLogPrintString = new StringBuffer("");
+	}
+}

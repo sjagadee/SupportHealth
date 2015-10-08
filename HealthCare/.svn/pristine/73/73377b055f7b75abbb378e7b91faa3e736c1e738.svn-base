@@ -1,0 +1,83 @@
+package app.nichepro.responsehandler;
+
+import java.util.ArrayList;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import app.nichepro.HealthCareApp;
+import app.nichepro.model.BaseResponseObject;
+import app.nichepro.model.ErrorResponseObject;
+import app.nichepro.model.LoginResponseObject;
+
+
+public interface BaseParser {
+	ArrayList<BaseResponseObject> getParsedData(String data);
+}
+
+class LoginParser implements BaseParser{
+
+	@Override
+	public ArrayList<BaseResponseObject> getParsedData(String data) {
+		// TODO Auto-generated method stub
+		ArrayList<BaseResponseObject> items = new ArrayList<BaseResponseObject>();
+		LoginResponseObject lro = new LoginResponseObject();
+		lro.setLoggedIn(false);
+		JSONObject json = null;
+		
+		try {
+			json = new JSONObject(data);
+				if (json != null) {
+					if (json.has("_LOGIN_PASSED_")) {
+						lro.setLoggedIn(Boolean.parseBoolean(json.getString("_LOGIN_PASSED_")));
+					}
+				}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		items.add(lro);
+		return items;
+		}
+	
+}
+
+class RegistrationParser implements BaseParser{
+
+	@Override
+	public ArrayList<BaseResponseObject> getParsedData(String data) {
+		// TODO Auto-generated method stub
+		ArrayList<BaseResponseObject> items = new ArrayList<BaseResponseObject>();
+		LoginResponseObject lro = new LoginResponseObject();
+		lro.setLoggedIn(false);
+
+		JSONObject json = null;
+		
+		try {
+			json = new JSONObject(data);
+				if (json != null) {
+					if (json.has("_LOGIN_PASSED_")) {
+						lro.setLoggedIn(Boolean.parseBoolean(json.getString("_LOGIN_PASSED_")));
+					}
+				}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		items.add(lro);
+		return items;
+		}
+	
+}
+class ErrorParser implements BaseParser{
+
+	@Override
+	public ArrayList<BaseResponseObject> getParsedData(String data) {
+		// TODO Auto-generated method stub
+		ArrayList<BaseResponseObject> items = new ArrayList<BaseResponseObject>();
+		ErrorResponseObject ero = new ErrorResponseObject();
+		ero.setErrorText(data);
+		items.add(ero);
+		return items;
+	}
+}

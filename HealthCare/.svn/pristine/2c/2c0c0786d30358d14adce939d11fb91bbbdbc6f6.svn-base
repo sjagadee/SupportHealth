@@ -1,0 +1,60 @@
+package app.nichepro.util;
+
+
+public class Constants {
+	// XML Tag constants
+
+	// Common
+	/** The Constant TAG_msgtype. */
+	public static final String TAG_msgtype = "msgtype";
+
+	// autocomplete
+	/** The Constant TAG_items. */
+	public static final String TAG_items = "items";
+
+	// links service
+	/** The Constant TAG_links. */
+	public static final String TAG_links = "links";
+
+	// Sign up Response
+	/** The Constant TAG_root. */
+	public static final String TAG_root = "root";
+	
+	/** The Constant TAG_error. */
+	public static final String TAG_error = "error";
+	
+	/** The Constant TAG_status. */
+	public static final String TAG_status = "status";
+
+	// Category Response
+	/** The Constant TAG_item. */
+	public static final String TAG_item = "item";
+	
+	/** The Constant TAG_name. */
+	public static final String TAG_name = "name";
+	
+	/** The Constant Default_app_version. */
+	public static final String Default_app_version = "1.0";
+	
+	// Defaults
+	/** The Constant DEFAULT_emptystring. */
+	public static final String DEFAULT_emptystring = "";
+
+	/** The Constant SHAREDPREF_seed. */
+	public static final String SHAREDPREF_seed = "seed";
+	/** The Constant SHAREDPREF_seed. */
+	public static final String SHAREDPREF_isSeedSet = "isseedset";
+
+	public static final String TAG_seed = "seed";
+	
+	public static final String Empty_String = "";
+	
+	public static final String TAB_HOME  = "tab_home_identifier";
+	public static final String TAB_INFO  = "tab_info_identifier";
+	public static final String TAB_EHR  = "tab_ehr_identifier";
+	public static final String TAB_QUERIES  = "tab_queries_identifier";
+	public static final String TAB_COMMUNITY  = "tab_community_identifier";
+	public static final String TAB_APPOINTMENTS  = "tab_appointments_identifier";
+	public static final String TAB_PATIENT  = "tab_patient_identifier";
+
+}

@@ -1,0 +1,170 @@
+package app.nichepro.fragmenttabpatient.info;
+
+import java.util.ArrayList;
+
+import android.graphics.Color;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.ViewAnimator;
+import app.nichepro.HealthCareApp;
+import app.nichepro.activities.healthcare.BaseFragment;
+import app.nichepro.activities.healthcare.R;
+import app.nichepro.animation.AnimationFactory;
+import app.nichepro.animation.AnimationFactory.FlipDirection;
+import app.nichepro.fragmenttabpatient.home.PatientMyNotesListAdapter;
+import app.nichepro.model.BaseResponseObject;
+import app.nichepro.model.KeyValue;
+import app.nichepro.responsehandler.ResponseParserListener;
+import app.nichepro.util.Constants;
+import app.nichepro.util.EnumFactory.ResponseMesssagType;
+import app.nichepro.util.WebLinks;
+import app.nichepro.util.WebRequestTask;
+
+public class PatientInfoMyNotesFragment extends BaseFragment implements
+		OnClickListener,ResponseParserListener {
+	Boolean isToggle;
+	Button btn1, btn2;
+	Button btnSave;
+	EditText titleTxt;
+	EditText titleUnfo;
+	ViewAnimator viewAnimator;
+	
+	ArrayList<KeyValue> mCancerData;
+	WebRequestTask myNoteRequestTask;
+
+	
+	public void initializeHash() {
+		mCancerData = new ArrayList<KeyValue>();
+		KeyValue kv = new KeyValue();
+
+		kv.setKey("1/12/12");
+		kv.setValue("Having Headace");
+		mCancerData.add(kv);
+
+		kv = new KeyValue();
+		kv.setKey("20/11/12");
+		kv.setValue("Feeling Dizzy");
+		mCancerData.add(kv);
+
+	}
+
+	@Override
+	public View onCreateView(final LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		initializeHash();
+		View view = inflater.inflate(R.layout.patient_info_mynotes_screen,
+				container, false);
+
+		isToggle = true;
+
+		viewAnimator = (ViewAnimator) view.findViewById(R.id.viewFlipper);
+
+		btn1 = (Button) view.findViewById(R.id.bAddNewNotes);
+		btn2 = (Button) view.findViewById(R.id.bMyNotes);
+
+		btn1.setSelected(true);
+		btn1.setOnClickListener(this);
+		btn2.setOnClickListener(this);
+		
+		ListView list = (ListView) view.findViewById(R.id.patientmynoteslist);
+	
+
+
+		// Creating the list adapter and populating the list
+		ArrayAdapter<KeyValue> listAdapter = new PatientMyNotesListAdapter(
+				inflater.getContext(), inflater, R.layout.patient_home_list_cell);
+
+		for (KeyValue element : mCancerData) {
+			listAdapter.add(element);
+
+		}
+		list.setEnabled(false);
+		list.setAdapter(listAdapter);
+		
+		titleTxt = (EditText)view.findViewById(R.id.noteTitleEditTx);
+		titleUnfo = (EditText)view.findViewById(R.id.noteInfoEditTxt
+				);
+
+		btnSave = (Button)view.findViewById(R.id.btnSave);
+		btnSave.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				initializeWebRequest();
+			}
+		});
+
+		return view;
+
+	}
+	public void initializeWebRequest(){
+		myNoteRequestTask = new WebRequestTask(
+				WebLinks.getLink(WebLinks.LOGIN), this, this);
+		HealthCareApp myApp = (HealthCareApp)getActivity().getApplication();
+		myNoteRequestTask.AddParam(Constants.PARAM_noteName, titleTxt.getText().toString());
+		myNoteRequestTask.AddParam(Constants.PARAM_partyId, myApp.getLoggedInUser().getPartyId());
+		myNoteRequestTask.AddParam(Constants.PARAM_noteInfo, titleUnfo.getText().toString());
+		myNoteRequestTask.execute();
+	}
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		
+		case R.id.bAddNewNotes:
+			if (isToggle == false) {
+				AnimationFactory.flipTransition(viewAnimator,
+						FlipDirection.LEFT_RIGHT);
+				btn1.setTextColor(Color.BLACK);
+				btn2.setTextColor(Color.WHITE);
+				btn1.setSelected(true);
+				btn2.setSelected(false);
+			}
+			isToggle = true;
+			break;
+			
+		case R.id.bMyNotes:
+			if (isToggle == true) {
+				AnimationFactory.flipTransition(viewAnimator,
+						FlipDirection.LEFT_RIGHT);
+				btn2.setTextColor(Color.BLACK);
+				btn1.setTextColor(Color.WHITE);
+				btn2.setSelected(true);
+				btn1.setSelected(false);
+			}
+			isToggle = false;
+			break;
+		}
+	}
+
+	@Override
+	public void onEndParsingMsgType(ResponseMesssagType msgType) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onEndParsingResponse(ArrayList<BaseResponseObject> items) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onErrorResponse(ArrayList<BaseResponseObject> items) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onError(Exception ex) {
+		// TODO Auto-generated method stub
+		
+	}
+}

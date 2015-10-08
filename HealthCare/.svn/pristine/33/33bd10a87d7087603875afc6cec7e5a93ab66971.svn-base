@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="app.nichepro.activities.healthcare"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="3"
+        android:targetSdkVersion="7" />
+.
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="app.nichepro.activities.healthcare.HealthCareAppStartupActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+          <activity  
+            android:name="app.nichepro.activities.healthcare.LoginActivity"
+            android:label="@string/app_name"
+            ></activity>
+        <activity  
+            android:name="app.nichepro.activities.healthcare.PatientRegisterationActivity"
+            android:label="@string/app_name"
+            ></activity>
+        <activity  
+            android:name="app.nichepro.activities.healthcare.AboutCancerActivity"
+            android:label="@string/app_name"
+            ></activity>
+            <activity  
+            android:name="app.nichepro.activities.healthcare.AllAboutCancerFragment"
+            android:label="@string/app_name"
+            ></activity>
+                <activity  
+            android:name="app.nichepro.activities.healthcare.TypesOfCancerFragment"
+            android:label="@string/app_name"
+            ></activity>
+        <activity  
+            android:name=".BreastCancer"
+            android:label="@string/app_name"
+            ></activity>
+        <activity  
+            android:name=".CervicalCancer"
+            android:label="@string/app_name"
+            ></activity>
+        <activity  
+            android:name=".OvarianCancer"
+            android:label="@string/app_name"
+            ></activity>
+        <activity  
+            android:name=".UterineCancer"
+            android:label="@string/app_name"
+            ></activity>
+        <activity  
+            android:name=".CheckCancer"
+            android:label="@string/app_name"
+            ></activity>
+        <activity  
+            android:name="app.nichepro.activities.healthcare.PatientTabActivity"
+            android:label="@string/app_name"
+          ></activity>
+        <activity  
+            android:name=".DoctorRegistrationActivity"
+            android:label="@string/app_name"
+            ></activity>
+        
+        
+    </application>
+</manifest>

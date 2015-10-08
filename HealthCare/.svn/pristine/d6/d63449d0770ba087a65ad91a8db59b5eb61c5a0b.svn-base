@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/aaa" >
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+
+            <ImageView
+                android:id="@+id/imageView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/nichehealth" />
+
+            <Button
+                android:id="@+id/binfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/imageView1"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/btn_info_selector" />
+
+            <Button
+                android:id="@+id/bpatient"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/imageView1"
+                android:layout_below="@+id/binfo"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="17dp"
+                android:background="@drawable/btn_patient_selector" />
+
+            <Button
+                android:id="@+id/bdoctor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/bpatient"
+                android:layout_alignBottom="@+id/bpatient"
+                android:layout_alignRight="@+id/imageView1"
+                android:layout_below="@+id/binfo"
+                android:layout_marginRight="17dp"
+                android:background="@drawable/btn_doctor_selector" />
+
+            <Button
+                android:id="@+id/bsponsors"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/bpatient"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="45dp"
+                android:background="@drawable/btn_sponsor_selector" />
+
+            <RelativeLayout
+                android:id="@+id/linear"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/bsponsors"
+                android:layout_marginTop="50dp"
+                android:orientation="horizontal"
+                android:weightSum="1.0" >
+
+                <Button
+                    android:id="@+id/baboutus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/btn_aboutus_selector" />
+
+                <Button
+                    android:id="@+id/bprivacypolicy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/btn_security_selector" />
+
+                <Button
+                    android:id="@+id/bcontactus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/btn_contactus_selector" />
+            </RelativeLayout>
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>

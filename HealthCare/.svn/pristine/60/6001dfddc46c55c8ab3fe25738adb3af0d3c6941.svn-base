@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical"  android:background="#0000ff"
+   >
+    
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="100" >
+
+        <Button
+            android:id="@+id/bMessageList"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Message List"
+            android:layout_weight="50"
+            android:textColor="#ffffff"
+            />
+
+        <Button
+            android:id="@+id/bNewMessage"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="New Message"
+            android:layout_weight="50"
+            android:textColor="#ffffff" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:text="hello i have dizziness, what should i do?"
+        android:textColor="#ffffff" />
+    
+     <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:text="hello have xyz tablet, and revert back"
+        android:textColor="#ffffff" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reply"
+        android:textColor="#ffffff" />
+</LinearLayout>

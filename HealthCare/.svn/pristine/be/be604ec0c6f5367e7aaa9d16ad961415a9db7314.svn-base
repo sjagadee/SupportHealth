@@ -1,0 +1,40 @@
+package app.nichepro.fragmenttabpatient.ehr;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import app.nichepro.activities.healthcare.R;
+import app.nichepro.model.KeyValue;
+import app.nichepro.model.PatientMedicationtResponseObject;
+
+/**
+ * A simple implementation of list adapter.
+ */
+class PatientMedicationListAdapter extends ArrayAdapter<PatientMedicationtResponseObject> {
+	LayoutInflater minflater;
+	
+    public PatientMedicationListAdapter(Context context, LayoutInflater inflater, int textViewResourceId) {
+        super(context,textViewResourceId);
+        minflater = inflater;
+    }
+    
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+
+        if (convertView == null) {
+            convertView = minflater.inflate(R.layout.medication_list_cell, null) ;
+        }
+        PatientMedicationtResponseObject pmro = getItem(position);
+        ((TextView) convertView.findViewById(R.id.medicine)).setText(pmro.getMedicine());
+		((TextView) convertView.findViewById(R.id.quantity)).setText(pmro.getQuantity());
+		((TextView) convertView.findViewById(R.id.startdate)).setText(pmro.getStartdate());
+		((TextView) convertView.findViewById(R.id.diagnosis)).setText(pmro.getDiagnosis());
+		((TextView) convertView.findViewById(R.id.enddate)).setText(pmro.getEnddate());
+        return convertView;
+    }
+}
+

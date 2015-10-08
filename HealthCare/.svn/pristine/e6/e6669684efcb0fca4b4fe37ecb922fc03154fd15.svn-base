@@ -1,0 +1,62 @@
+package app.nichepro.model;
+
+import android.os.Parcel;
+
+import com.google.gson.annotations.SerializedName;
+
+public class CommunicationResponseObject extends BaseResponseObject {
+
+	@SerializedName("communicationEventId")
+	public String communicationEventId;
+	@SerializedName("communicationEventTypeId")
+	public String communicationEventTypeId;
+	@SerializedName("statusId")
+	public String statusId;
+	@SerializedName("contactMechTypeId")
+	public String contactMechTypeId;
+	@SerializedName("roleTypeIdFrom")
+	public String roleTypeIdFrom;
+	@SerializedName("roleTypeIdTo")
+	public String roleTypeIdTo;
+	@SerializedName("partyIdFrom")
+	public String partyIdFrom;
+	@SerializedName("partyIdTo")
+	public String partyIdTo;
+	@SerializedName("entryDate")
+	public String entryDate;
+	@SerializedName("subject")
+	public String subject;
+	@SerializedName("content")
+	public String content;
+	@SerializedName("lastUpdatedStamp")
+	public String lastUpdatedStamp;
+	@SerializedName("lastUpdatedTxStamp")
+	public String lastUpdatedTxStamp;
+	@SerializedName("createdStamp")
+	public String createdStamp;
+	@SerializedName("createdTxStamp")
+	public String createdTxStamp;
+	@SerializedName("fromString")
+	public String fromString;
+	@SerializedName("toString")
+	public String toString;
+	@SerializedName("ccString")
+	public String ccString;
+	@SerializedName("bccString")
+	public String bccString;
+	@SerializedName("messageId")
+	public String messageId;
+
+	@Override
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

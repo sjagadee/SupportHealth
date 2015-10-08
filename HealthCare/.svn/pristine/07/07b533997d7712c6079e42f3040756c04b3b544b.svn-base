@@ -1,0 +1,82 @@
+package app.nichepro.fragmenttabdoctor.home;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
+import app.nichepro.activities.healthcare.R;
+import app.nichepro.model.PatientAppointmentResponseObject;
+import app.nichepro.util.UpdateUiFromAdapterListener;
+
+public class DoctorAppointmentAdapter extends ArrayAdapter<PatientAppointmentResponseObject> implements OnClickListener  {
+	LayoutInflater minflater;
+	UpdateUiFromAdapterListener mUpdateUi;
+
+	static class ViewHolder {
+		
+		TextView timeText;
+		TextView nameText;
+		TextView view;
+
+		/**
+		 * Reset the content of cell to remove the flickering effect
+		 */
+		public void reset() {
+
+		}
+	}
+
+	public DoctorAppointmentAdapter(Context context,
+			LayoutInflater inflater, int textViewResourceId,UpdateUiFromAdapterListener updateUi) {
+		super(context, textViewResourceId);
+		minflater = inflater;
+		mUpdateUi = updateUi;
+	}
+
+	@Override
+	public View getView(final int position, View convertView, ViewGroup parent) {
+		ViewHolder holder;
+		if (convertView == null) {
+
+			convertView = minflater.inflate(R.layout.doctor_home_list_cell,
+					null);
+			holder = new ViewHolder();
+		
+			
+			holder.timeText = ((TextView) convertView.findViewById(R.id.time));
+			holder.nameText = ((TextView) convertView.findViewById(R.id.name));
+			holder.view = ((TextView) convertView.findViewById(R.id.ehr));
+		
+			convertView.setTag(holder);
+		}else{
+			holder = (ViewHolder) convertView.getTag();
+		}
+	
+	PatientAppointmentResponseObject paro = getItem(position);
+	String[] d = null;
+	if (paro.createdDate != null && !paro.createdDate.isEmpty()) {
+		d = paro.createdDate.split("T");
+	}
+
+	
+	if (d != null && d.length > 1) {
+		holder.timeText.setText(d[1]);
+	}
+
+	holder.nameText.setText(paro.patientId);
+	
+	holder.view.setOnClickListener(this);
+	holder.view.setTag(position);
+	return convertView;
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		int position = (Integer) v.getTag();
+		mUpdateUi.updateUI(position);
+	}
+}

@@ -1,0 +1,57 @@
+package app.nichepro.fragmenttabpatient.info;
+
+import java.util.ArrayList;
+
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import app.nichepro.activities.healthcare.BaseFragment;
+import app.nichepro.activities.healthcare.R;
+import app.nichepro.util.Constants;
+
+public class PatientInfoFragment extends BaseFragment {
+
+	ArrayList<String> infoData;
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		infoData = new ArrayList<String>();
+		infoData.add("Profile");
+		infoData.add("Doctor");
+		infoData.add("Cancer Information");
+		infoData.add("My Notes");
+		infoData.add("Hospetal Locator");
+		infoData.add("Symptom Tracker");
+		
+		View view = inflater.inflate(R.layout.info_first_screen, container,
+				false);
+
+		ListView list = (ListView) view.findViewById(R.id.lvInfoItems);
+		ArrayAdapter<String> listAdapter = new PatientInfoListAdapter(inflater.getContext(),inflater, R.layout.patient_list_cell);
+		for (String element : infoData) {
+			listAdapter.add(element);
+		}
+        list.setAdapter(listAdapter);
+
+
+        // Creating an item click listener, to open/close our toolbar for each item
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
+            	if(position == 0){
+            		mActivity.pushFragments(Constants.TAB_INFO, new PatientInfoProfileFragment() , true, true);
+            	}else if(position == 3){
+            		mActivity.pushFragments(Constants.TAB_INFO, new PatientInfoMyNotesFragment(), true, true);
+            	}else if(position == 4){
+            		mActivity.pushFragments(Constants.TAB_INFO, new PatientInfoHospetalList(), true, true);
+            	}
+
+            }
+        });
+		return view;
+	}
+}

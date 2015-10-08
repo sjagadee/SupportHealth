@@ -1,0 +1,75 @@
+package app.nichepro.fragmenttabdoctor.appointments;
+
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import app.nichepro.activities.healthcare.BaseFragment;
+import app.nichepro.activities.healthcare.R;
+
+public class DoctorAppointmentsFragment extends BaseFragment implements
+		View.OnClickListener {
+
+	Button notes, appointments, medication, allergies, reports, problemList,
+			labTest, shareHealthRecords;
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.patient_ehr_first_screen,
+				container, false);
+
+		notes = (Button) view.findViewById(R.id.bNotes);
+		appointments = (Button) view.findViewById(R.id.bAppointments);
+		medication = (Button) view.findViewById(R.id.bMedication);
+		allergies = (Button) view.findViewById(R.id.bAllergies);
+		reports = (Button) view.findViewById(R.id.bReports);
+		problemList = (Button) view.findViewById(R.id.bProblemList);
+		labTest = (Button) view.findViewById(R.id.bLabTest);
+		shareHealthRecords = (Button) view.findViewById(R.id.bShareHealthRecord);
+		notes.setOnClickListener(this);
+		appointments.setOnClickListener(this);
+		medication.setOnClickListener(this);
+		allergies.setOnClickListener(this);
+		reports.setOnClickListener(this);
+		problemList.setOnClickListener(this);
+		labTest.setOnClickListener(this);
+		shareHealthRecords.setOnClickListener(this);
+
+		return view;
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		switch(v.getId()){
+		case R.id.bNotes:
+			
+			break;
+		case R.id.bAppointments:
+			
+			break;
+		case R.id.bMedication:
+			
+			break;
+		case R.id.bAllergies:
+			
+			break;
+		case R.id.bReports:
+			
+			break;
+		case R.id.bProblemList:
+			
+			break;
+		case R.id.bLabTest:
+			
+			break;
+		case R.id.bShareHealthRecord:
+			
+			break;
+		}
+
+	}
+
+}

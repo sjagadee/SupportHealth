@@ -1,0 +1,87 @@
+package app.nichepro.fragmenttabpatient.ehr;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
+import app.nichepro.activities.healthcare.BaseFragment;
+import app.nichepro.activities.healthcare.R;
+import app.nichepro.model.PatientVitalStatResponseObject;
+
+public class PatientVitalStatListAdapter extends
+		ArrayAdapter<PatientVitalStatResponseObject> implements OnClickListener {
+	LayoutInflater minflater;
+	
+	BaseFragment mFragment;
+
+	static class ViewHolder {
+
+		/** The note view. */
+		TextView complaint;
+
+		/** The date name. */
+		TextView date;
+
+		TextView view;
+		/**
+		 * Reset the content of cell to remove the flickering effect
+		 */
+		public void reset() {
+
+		}
+	}
+
+	public PatientVitalStatListAdapter(BaseFragment fragment, Context context,
+			LayoutInflater inflater, int textViewResourceId) {
+		super(context, textViewResourceId);
+		minflater = inflater;
+		mFragment = fragment;
+	}
+
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		ViewHolder holder;
+		if (convertView == null) {
+			convertView = minflater.inflate(R.layout.vitalstat_list_cell, null);
+			holder = new ViewHolder();
+
+			holder.complaint = ((TextView) convertView
+					.findViewById(R.id.complaint));
+			holder.date = ((TextView) convertView.findViewById(R.id.visitdate));
+			
+			holder.view= ((TextView) convertView.findViewById(R.id.ehr));
+
+			convertView.setTag(holder);
+		} else {
+			holder = (ViewHolder) convertView.getTag();
+		}
+
+		PatientVitalStatResponseObject pmro = getItem(position);
+
+		String[] d = null;
+		if (pmro.createdStamp != null && !pmro.createdStamp.isEmpty()) {
+			d = pmro.createdStamp.split("T");
+		}
+
+		if (d != null && d.length > 0) {
+			holder.date.setText(d[0]);
+		}
+
+		holder.complaint.setText(pmro.patientId);
+		
+		holder.view.setOnClickListener(this);
+
+		return convertView;
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		
+		
+		
+	}
+}

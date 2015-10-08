@@ -1,0 +1,326 @@
+
+package app.nichepro.util;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpVersion;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.client.params.HttpClientParams;
+import org.apache.http.conn.params.ConnManagerParams;
+import org.apache.http.conn.params.ConnPerRouteBean;
+import org.apache.http.conn.scheme.PlainSocketFactory;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+import org.apache.http.params.HttpProtocolParams;
+import org.apache.http.protocol.HTTP;
+
+import android.content.Context;
+
+/**
+ * The Class WebRequestClient. Used for making web service request and download
+ * the content
+ */
+public class WebRequestClient {
+
+	/** The TAG. */
+	private static String TAG = WebRequestClient.class.getSimpleName();
+
+	/** The http client. */
+	private DefaultHttpClient httpClient;
+
+	private Context context = null;
+
+	/**
+	 * The Enum RequestMethod.
+	 */
+	public enum RequestMethod {
+
+		/** The GET. */
+		GET,
+		/** The POST. */
+		POST
+	}
+
+	/** The params. */
+	private ArrayList<NameValuePair> params;
+
+	/** The headers. */
+	private ArrayList<NameValuePair> headers;
+
+	/** The DEVICE. */
+	private static String DEVICE = "device";
+
+	/** The DEVICEVERSION. */
+	private static String DEVICEVERSION = "deviceversion";
+
+	/** The DEVICEOSVERSION. */
+	private static String DEVICEOSVERSION = "deviceosversion";
+
+	/** The APPVERSION. */
+	private static String APPVERSION = "appversion";
+
+	/** The APPINSTANCENO. */
+	private static String APPINSTANCENO = "appinstanceno";
+
+	/** The url. */
+	private String url;
+
+	/** The response code. */
+	private int responseCode;
+
+	/** The message. */
+	private String message;
+
+	/** The response. */
+	private String response;
+
+	/**
+	 * Gets the response.
+	 * 
+	 * @return the response
+	 */
+	public String getResponse() {
+		return response;
+	}
+
+	/**
+	 * Gets the error message.
+	 * 
+	 * @return the error message
+	 */
+	public String getErrorMessage() {
+		return message;
+	}
+
+	/**
+	 * Gets the response code.
+	 * 
+	 * @return the response code
+	 */
+	public int getResponseCode() {
+		return responseCode;
+	}
+
+	/**
+	 * Instantiates a new web request client.
+	 * 
+	 * @param url
+	 *            the url
+	 */
+	public WebRequestClient(String url, Context context) {
+		this.context = context;
+		this.url = url;
+		params = new ArrayList<NameValuePair>();
+		AddCommonParams();
+		headers = new ArrayList<NameValuePair>();
+
+		HttpParams params = new BasicHttpParams();
+
+		// use http 1.1
+		HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
+		// Turn off stale checking, connections breaks all the time
+		// and it's not worth it to pay the penalty of checking every time.
+		HttpConnectionParams.setStaleCheckingEnabled(params, false);
+
+		// Default connection and socket timeout of 60 seconds.
+		HttpConnectionParams.setConnectionTimeout(params, 120 * 1000);
+		HttpConnectionParams.setSoTimeout(params, 120 * 1000);
+		HttpConnectionParams.setSocketBufferSize(params, 8192);
+		// Don't handle redirects -- return them to the caller
+		HttpClientParams.setRedirecting(params, false);
+
+		// ConnManagerParams.setMaxTotalConnections(params, 50);
+		ConnPerRouteBean routeParams = new ConnPerRouteBean();
+		routeParams
+				.setDefaultMaxPerRoute(ConnManagerParams.DEFAULT_MAX_TOTAL_CONNECTIONS);
+		ConnManagerParams.setMaxConnectionsPerRoute(params, routeParams);
+		SchemeRegistry schemeRegistry = new SchemeRegistry();
+		schemeRegistry.register(new Scheme("http", PlainSocketFactory
+				.getSocketFactory(), 80));
+
+		// Create an HttpClient with the ThreadSafeClientConnManager.
+		// This connection manager must be used if more than one thread will
+		// be using the HttpClient.
+		ThreadSafeClientConnManager manager = new ThreadSafeClientConnManager(
+				params, schemeRegistry);
+		httpClient = new DefaultHttpClient(manager, params);
+	}
+
+	// Add Common parameters which needs to go along with every request
+	/**
+	 * Adds the common params.
+	 */
+	private void AddCommonParams() {
+		AddParam(DEVICE, android.os.Build.BRAND);
+		AddParam(DEVICEVERSION, android.os.Build.DEVICE);
+		AddParam(DEVICEOSVERSION, android.os.Build.VERSION.RELEASE);
+		AddParam(APPVERSION, UIUtilities.getVersionName(context, context
+				.getClass()));
+		AddParam(APPINSTANCENO, UIUtilities.getUDID(context));
+	}
+
+	/**
+	 * Adds the param.
+	 * 
+	 * @param name
+	 *            the name
+	 * @param value
+	 *            the value
+	 */
+	public void AddParam(String name, String value) {
+		params.add(new BasicNameValuePair(name, value));
+	}
+
+	/**
+	 * Adds the header.
+	 * 
+	 * @param name
+	 *            the name
+	 * @param value
+	 *            the value
+	 */
+	public void AddHeader(String name, String value) {
+		headers.add(new BasicNameValuePair(name, value));
+	}
+
+	/**
+	 * Execute.
+	 * 
+	 * @param method
+	 *            the method
+	 * @throws Exception
+	 *             the exception
+	 */
+	public void Execute(RequestMethod method) throws Exception {
+		switch (method) {
+		case GET: {
+			// add parameters
+			String combinedParams = "";
+			if (!params.isEmpty()) {
+				combinedParams += "?";
+				for (NameValuePair p : params) {
+					String paramString = p.getName()
+							+ "="
+							+ URLEncoder.encode(
+									p.getValue() != null ? p.getValue()
+											: Constants.DEFAULT_emptystring,
+									"UTF-8");
+					if (combinedParams.length() > 1) {
+						combinedParams += "&" + paramString;
+					} else {
+						combinedParams += paramString;
+					}
+				}
+			}
+
+			Log.i(TAG, url + combinedParams);
+			HttpGet request = new HttpGet(url + combinedParams);
+
+			// add headers
+			for (NameValuePair h : headers) {
+				request.addHeader(h.getName(), h.getValue());
+			}
+
+			executeRequest(request, url);
+			break;
+		}
+		case POST: {
+			HttpPost request = new HttpPost(url);
+
+			// add headers
+			for (NameValuePair h : headers) {
+				request.addHeader(h.getName(), (h.getValue() != null ? h
+						.getName() : Constants.DEFAULT_emptystring));
+			}
+
+			if (!params.isEmpty()) {
+				request.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
+			}
+
+			executeRequest(request, url);
+			break;
+		}
+		}
+	}
+
+	/**
+	 * Execute request.
+	 * 
+	 * @param request
+	 *            the request
+	 * @param url
+	 *            the url
+	 */
+	private void executeRequest(HttpUriRequest request, String url) {
+
+		HttpResponse httpResponse;
+
+		try {
+			httpResponse = httpClient.execute(request);
+			responseCode = httpResponse.getStatusLine().getStatusCode();
+			message = httpResponse.getStatusLine().getReasonPhrase();
+
+			HttpEntity entity = httpResponse.getEntity();
+
+			if (entity != null) {
+
+				InputStream instream = entity.getContent();
+				response = convertStreamToString(instream);
+
+				// Closing the input stream will trigger connection release
+				instream.close();
+			}
+
+		} catch (ClientProtocolException e) {
+			httpClient.getConnectionManager().shutdown();
+		} catch (IOException e) {
+			httpClient.getConnectionManager().shutdown();
+		}
+	}
+
+	/**
+	 * Convert stream to string.
+	 * 
+	 * @param is
+	 *            the is
+	 * @return the string
+	 */
+	private static String convertStreamToString(InputStream is) {
+		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+		StringBuilder sb = new StringBuilder();
+
+		String line = null;
+		try {
+			while ((line = reader.readLine()) != null) {
+				sb.append(line + "\n");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				is.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return sb.toString();
+	}
+}

@@ -1,0 +1,60 @@
+package app.nichepro.model;
+
+import android.os.Parcel;
+
+public class LoginResponseObject extends BaseResponseObject {
+
+	private String partyId;
+
+	private boolean isNewlyRegistered;
+	private boolean isLoggedIn;
+
+	private String userId;
+
+	public LoginDetailResponseObject LOGIN_DETAILS;
+	
+	@Override
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public boolean isLoggedIn() {
+		return isLoggedIn;
+	}
+
+	public void setLoggedIn(boolean isLoggedIn) {
+		this.isLoggedIn = isLoggedIn;
+	}
+
+	public String getPartyId() {
+		return partyId;
+	}
+
+	public void setPartyId(String partyId) {
+		this.partyId = partyId;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	public boolean isNewlyRegistered() {
+		return isNewlyRegistered;
+	}
+
+	public void setNewlyRegistered(boolean isNewlyRegistered) {
+		this.isNewlyRegistered = isNewlyRegistered;
+	}
+
+}

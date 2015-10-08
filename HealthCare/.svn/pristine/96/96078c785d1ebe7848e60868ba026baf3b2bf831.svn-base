@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/aaa"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/helloTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:text="@string/hello" />
+
+    <TextView
+        android:id="@+id/numberOfAppTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/helloTxt"
+        android:layout_marginLeft="20dip"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/todays_number_of_appointment" />
+
+    <TextView
+        android:id="@+id/unreadmsgTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/numberOfAppTxt"
+        android:layout_marginLeft="20dip"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/unread_msg" />
+
+    <ListView
+        android:id="@+id/appointmentlist"
+        style="@style/listStyle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/unreadmsgTxt"
+        android:layout_marginLeft="20dip"
+        android:layout_marginRight="20dip"
+        android:layout_marginTop="20dp"
+        android:background="#FCFCFC" >
+
+        <!-- Preview: listitem=@layout/cartlistcell -->
+    </ListView>
+
+</RelativeLayout>

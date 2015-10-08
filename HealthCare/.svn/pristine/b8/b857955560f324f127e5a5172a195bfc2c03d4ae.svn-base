@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/aaa"
+    android:orientation="vertical"
+    android:padding="25dp" >
+
+    <Button
+        android:id="@+id/bHealthPartners"
+        android:layout_width="83dp"
+        android:layout_height="83dp"
+        android:layout_alignLeft="@+id/bForum"
+        android:layout_alignTop="@+id/bEvents"
+        android:background="@drawable/btn_blue_clickable"
+        android:text="@string/health_partners" />
+
+    <Button
+        android:id="@+id/bRequestForSponcers"
+        android:layout_width="83dp"
+        android:layout_height="83dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/btn_blue_clickable"
+        android:text="@string/request_for_sponcer" />
+
+    <Button
+        android:id="@+id/bLatestOnCancer"
+        android:layout_width="83dp"
+        android:layout_height="83dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/btn_blue_clickable"
+        android:text="@string/latest_on_cancer" />
+
+    <Button
+        android:id="@+id/bForum"
+        android:layout_width="83dp"
+        android:layout_height="83dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/btn_blue_clickable"
+        android:text="@string/forum" />
+
+    <Button
+        android:id="@+id/bEvents"
+        android:layout_width="83dp"
+        android:layout_height="83dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/bRequestForSponcers"
+        android:layout_marginTop="46dp"
+        android:background="@drawable/btn_blue_clickable"
+        android:text="@string/events" />
+
+</RelativeLayout>

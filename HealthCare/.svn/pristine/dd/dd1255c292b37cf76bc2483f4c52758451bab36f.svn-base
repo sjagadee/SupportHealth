@@ -1,0 +1,41 @@
+package app.nichepro.model.db;
+
+public class EmailMessage {
+
+	public String USERNAME;
+	public String getUSERNAME() {
+		return USERNAME;
+	}
+	public void setUSERNAME(String uSERNAME) {
+		USERNAME = uSERNAME;
+	}
+	public String getSUBJECT() {
+		return SUBJECT;
+	}
+	public void setSUBJECT(String sUBJECT) {
+		SUBJECT = sUBJECT;
+	}
+	public String getMESSAGE() {
+		return MESSAGE;
+	}
+	public void setMESSAGE(String mESSAGE) {
+		MESSAGE = mESSAGE;
+	}
+	public String getISREAD() {
+		return ISREAD;
+	}
+	public void setISREAD(String iSREAD) {
+		ISREAD = iSREAD;
+	}
+	public String getQTY() {
+		return QTY;
+	}
+	public void setQTY(String qTY) {
+		QTY = qTY;
+	}
+	public String SUBJECT;
+	public String MESSAGE;
+	public String ISREAD;
+	public String QTY;
+
+}

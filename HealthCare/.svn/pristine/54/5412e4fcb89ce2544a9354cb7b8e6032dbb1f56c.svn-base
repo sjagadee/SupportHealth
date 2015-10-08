@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textView0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/doctor_registration"
+        android:textColor="#ffffff"
+        android:textSize="20sp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+            
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title"
+                    android:textColor="#ffffff"
+                    android:textSize="15sp" />
+
+                <EditText
+                    android:id="@+id/etTitle"
+                    android:layout_width="220dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@drawable/password1"
+                    android:ems="10"
+                    android:hint="@string/title"
+                    android:inputType="text" />
+            </RelativeLayout>
+            
+            
+             <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/name"
+                    android:textColor="#ffffff"
+                    android:textSize="15sp" />
+
+                <EditText
+                    android:id="@+id/etName"
+                    android:layout_width="220dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@drawable/password1"
+                    android:ems="10"
+                    android:hint="@string/name"
+                    android:inputType="textPersonName" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/specialization"
+                    android:textColor="#ffffff"
+                    android:textSize="15sp" />
+
+                <EditText
+                    android:id="@+id/etSpecialization"
+                    android:layout_width="220dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@drawable/password1"
+                    android:ems="10"
+                    android:hint="@string/specialization"
+                    android:inputType="textPersonName" />
+                   
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/textView5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/state"
+                    android:textColor="#ffffff"
+                    android:textSize="15sp" />
+
+                <Spinner
+                    android:id="@+id/sState"
+                    android:layout_width="220dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@drawable/password1"
+                    android:entries="@array/state_array" />
+
+            </RelativeLayout>
+            
+            
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/city"
+                    android:textColor="#ffffff"
+                    android:textSize="15sp" />
+                
+                <Spinner
+                    android:id="@+id/sCity"
+                    android:layout_width="220dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@drawable/password1"
+                    android:entries="@array/city_array" />
+
+            </RelativeLayout>
+            
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/zip_code"
+                    android:textColor="#ffffff"
+                    android:textSize="15sp" />
+
+                <EditText
+                    android:id="@+id/etZipCode"
+                    android:layout_width="220dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@drawable/password1"
+                    android:ems="10"
+                    android:hint="@string/zip_code"
+                    android:inputType="number" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/textView7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ph_no"
+                    android:textColor="#ffffff"
+                    android:textSize="15sp" />
+
+                <EditText
+                    android:id="@+id/etPhoneNum"
+                    android:layout_width="220dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@drawable/password1"
+                    android:ems="10"
+                    android:hint="@string/ph_no"
+                    android:inputType="phone" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/email"
+                    android:textColor="#ffffff"
+                    android:textSize="15sp" />
+
+                <EditText
+                    android:id="@+id/etEmail"
+                    android:layout_width="220dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@drawable/password1"
+                    android:ems="10"
+                    android:hint="@string/email"
+                    android:inputType="textEmailAddress" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/textView9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/password"
+                    android:textColor="#ffffff"
+                    android:textSize="15sp" />
+
+                <EditText
+                    android:id="@+id/etRegPassword"
+                    android:layout_width="220dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@drawable/password1"
+                    android:ems="10"
+                    android:hint="@string/password"
+                    android:inputType="textPassword" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/textView10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/confirm_password"
+                    android:textColor="#ffffff"
+                    android:textSize="15sp" />
+
+                <EditText
+                    android:id="@+id/etRegConfirmPass"
+                    android:layout_width="220dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@drawable/password1"
+                    android:ems="10"
+                    android:hint="@string/confirm_password"
+                    android:inputType="textPassword" />
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/bRegister"
+                android:layout_width="250dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:background="@drawable/btn_yellow_clickable"
+                android:text="@string/confirm" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

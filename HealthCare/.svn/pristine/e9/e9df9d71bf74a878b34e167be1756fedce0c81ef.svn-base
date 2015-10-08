@@ -1,0 +1,23 @@
+package app.nichepro.activities.healthcare;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+
+public class BaseFragment extends Fragment {
+	public PatientTabActivity mActivity;
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		
+		mActivity		=	(PatientTabActivity) this.getActivity();
+	}
+	
+	public boolean onBackPressed(){
+		return false;
+	}
+
+	public void onActivityResult(int requestCode, int resultCode, Intent data){
+		
+	}
+}

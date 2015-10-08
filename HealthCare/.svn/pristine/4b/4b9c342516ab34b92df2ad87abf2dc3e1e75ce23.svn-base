@@ -1,0 +1,89 @@
+package app.nichepro.fragmenttabpatient.ehr;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
+import app.nichepro.activities.healthcare.R;
+import app.nichepro.model.PatientMedicationResponseObject;
+
+/**
+ * A simple implementation of list adapter.
+ */
+class PatientMedicationListAdapter extends
+		ArrayAdapter<PatientMedicationResponseObject> {
+	LayoutInflater minflater;
+
+	static class ViewHolder {
+
+		/** The note view. */
+		TextView medicineText;
+
+		/** The date name. */
+		TextView qualityText;
+
+		/** The date name. */
+		TextView startDateText;
+
+		TextView diagnosisText;
+
+		TextView endDateText;
+
+		/**
+		 * Reset the content of cell to remove the flickering effect
+		 */
+		public void reset() {
+
+		}
+	}
+
+	public PatientMedicationListAdapter(Context context,
+			LayoutInflater inflater, int textViewResourceId) {
+		super(context, textViewResourceId);
+		minflater = inflater;
+
+	}
+
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		ViewHolder holder;
+		if (convertView == null) {
+			convertView = minflater
+					.inflate(R.layout.medication_list_cell, null);
+			holder = new ViewHolder();
+
+			holder.medicineText = ((TextView) convertView
+					.findViewById(R.id.medicine));
+			holder.qualityText = ((TextView) convertView
+					.findViewById(R.id.quantity));
+			holder.startDateText = ((TextView) convertView
+					.findViewById(R.id.startdate));
+			holder.diagnosisText = ((TextView) convertView
+					.findViewById(R.id.diagnosis));
+			holder.endDateText = ((TextView) convertView
+					.findViewById(R.id.enddate));
+			convertView.setTag(holder);
+		} else {
+			holder = (ViewHolder) convertView.getTag();
+		}
+
+		PatientMedicationResponseObject pmro = getItem(position);
+
+		String[] d = null;
+		if (pmro.createdDate != null && !pmro.createdDate.isEmpty()) {
+			d = pmro.createdDate.split("T");
+		}
+
+		if (d != null && d.length > 0) {
+			holder.startDateText.setText(d[0]);
+		}
+
+		holder.medicineText.setText(pmro.medicationId);
+		holder.qualityText.setText("500mg");
+		holder.diagnosisText.setText(pmro.diognosisId);
+		holder.endDateText.setText("set date");
+		return convertView;
+	}
+}

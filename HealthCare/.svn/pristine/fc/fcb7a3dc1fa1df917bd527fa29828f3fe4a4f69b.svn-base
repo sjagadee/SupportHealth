@@ -1,0 +1,66 @@
+package app.nichepro.fragmenttabpatient.ehr;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
+import app.nichepro.activities.healthcare.R;
+import app.nichepro.model.PatientAppointmentResponseObject;
+
+public class PatientEhrAppointmentAdapter extends ArrayAdapter<PatientAppointmentResponseObject>  {
+	LayoutInflater minflater;
+	
+	static class ViewHolder {
+		TextView dateText;
+		TextView timeText;
+		TextView doctorText;
+		TextView reasonText;
+		TextView statusText;
+
+		/**
+		 * Reset the content of cell to remove the flickering effect
+		 */
+		public void reset() {
+
+		}
+	}
+
+	public PatientEhrAppointmentAdapter(Context context,
+			LayoutInflater inflater, int textViewResourceId) {
+		super(context, textViewResourceId);
+		minflater = inflater;
+	}
+
+	@Override
+	public View getView(final int position, View convertView, ViewGroup parent) {
+		ViewHolder holder;
+		if (convertView == null) {
+
+			convertView = minflater.inflate(R.layout.patient_ehr_list_cell,
+					null);
+			holder = new ViewHolder();
+		
+			holder.dateText = ((TextView) convertView.findViewById(R.id.date));
+			holder.timeText = ((TextView) convertView.findViewById(R.id.time));
+			holder.doctorText = ((TextView) convertView.findViewById(R.id.doctor));
+			holder.reasonText = ((TextView) convertView.findViewById(R.id.reason));
+			holder.statusText = ((TextView) convertView.findViewById(R.id.status));
+		
+			convertView.setTag(holder);
+		}else{
+			holder = (ViewHolder) convertView.getTag();
+		}
+	
+	PatientAppointmentResponseObject paro = getItem(position);
+	
+	holder.dateText.setText(paro.getAppointmentDate());
+	holder.timeText.setText(paro.getAppointmentTime());
+	holder.doctorText.setText(paro.getDoctor());
+	holder.reasonText.setText(paro.getReason());
+	holder.statusText.setText(paro.getStatus());
+	
+	return convertView;
+	}
+}

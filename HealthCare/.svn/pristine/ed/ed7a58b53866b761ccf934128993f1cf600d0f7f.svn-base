@@ -1,0 +1,62 @@
+package app.nichepro.fragmenttabpatient.ehr;
+
+import java.util.ArrayList;
+
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import app.nichepro.activities.healthcare.BaseFragment;
+import app.nichepro.activities.healthcare.R;
+import app.nichepro.fragmenttabpatient.info.PatientInfoHospetalList;
+import app.nichepro.fragmenttabpatient.info.PatientInfoListAdapter;
+import app.nichepro.fragmenttabpatient.info.PatientInfoMyNotesFragment;
+import app.nichepro.fragmenttabpatient.info.PatientInfoProfileFragment;
+import app.nichepro.util.Constants;
+
+
+public class PatientEHRFragment extends BaseFragment{
+	
+	ArrayList<String> mEhrData;
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		mEhrData = new ArrayList<String>();
+		mEhrData.add("Aponintments");
+		mEhrData.add("Medication");
+		mEhrData.add("Alergies");
+		mEhrData.add("Reports");
+		mEhrData.add("Problem List");
+		mEhrData.add("Lab Test");
+		mEhrData.add("Share Health Records");	
+		View view = inflater.inflate(R.layout.info_first_screen, container,
+				false);
+
+		ListView list = (ListView) view.findViewById(R.id.lvInfoItems);
+		ArrayAdapter<String> listAdapter = new PatientInfoListAdapter(inflater.getContext(),inflater, R.layout.patient_list_cell);
+		for (String element : mEhrData) {
+			listAdapter.add(element);
+		}
+        list.setAdapter(listAdapter);
+
+
+        // Creating an item click listener, to open/close our toolbar for each item
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
+            	if(position == 0){
+            		mActivity.pushFragments(Constants.TAB_EHR, new PatientEhrAppointmentsFragment() , true, true);
+            	}if(position == 1){
+            		mActivity.pushFragments(Constants.TAB_EHR, new PatientEhrMedicationFragment() , true, true);
+            	}if(position == 2){
+            		mActivity.pushFragments(Constants.TAB_EHR, new PatientEhrAllergiesFragment() , true, true);
+            	}
+
+            }
+        });
+		return view;
+	}
+}

@@ -1,0 +1,91 @@
+package app.nichepro.fragmenttabpatient.home;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
+import app.nichepro.activities.healthcare.BaseFragment;
+import app.nichepro.activities.healthcare.R;
+import app.nichepro.fragmenttabpatient.info.PatientInfoProfileFragment;
+import app.nichepro.fragmenttabpatient.info.PatientNoteDetailFragment;
+import app.nichepro.model.PatientNoteResponseObject;
+import app.nichepro.util.Constants;
+
+public class PatientMyNotesListAdapter extends
+		ArrayAdapter<PatientNoteResponseObject> {
+	LayoutInflater minflater;
+	BaseFragment mFragment;
+
+	/**
+	 * The Class ViewHolder. Using ViewHolder pattern for optimizing custom cell
+	 * in list activity This is done for optimizing and reusing the row, when
+	 * user does scrolling and on the list view we don't want to call
+	 * findviewbyid for every cell again and again
+	 */
+	static class ViewHolder {
+
+		/** The note view. */
+		TextView noteText;
+
+		/** The date name. */
+		TextView dateText;
+
+		/** The date name. */
+		TextView viewText;
+
+		/**
+		 * Reset the content of cell to remove the flickering effect
+		 */
+		public void reset() {
+
+		}
+	}
+
+	public PatientMyNotesListAdapter(BaseFragment fragment,Context context, LayoutInflater inflater,
+			int textViewResourceId) {
+		super(context, textViewResourceId);
+		minflater = inflater;
+		mFragment = fragment;
+	}
+
+	@Override
+	public View getView(final int position, View convertView, ViewGroup parent) {
+		ViewHolder holder;
+		if (convertView == null) {
+
+			convertView = minflater.inflate(R.layout.patient_home_list_cell,
+					null);
+			holder = new ViewHolder();
+			holder.noteText = ((TextView) convertView.findViewById(R.id.note));
+			holder.dateText = ((TextView) convertView.findViewById(R.id.date));
+			holder.viewText = (TextView) convertView.findViewById(R.id.check);
+			convertView.setTag(holder);
+		}else{
+			holder = (ViewHolder) convertView.getTag();
+		}
+
+		PatientNoteResponseObject pnro = getItem(position);
+		String[] d = null;
+		if (pnro.noteDateTime != null && !pnro.noteDateTime.isEmpty()) {
+			d = pnro.noteDateTime.split("T");
+		}
+
+		holder.noteText.setText(pnro.noteName);
+		if (d != null && d.length > 0) {
+			holder.dateText.setText(d[0]);
+		}
+		holder.viewText.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				PatientNoteDetailFragment pndf = new PatientNoteDetailFragment();
+				pndf.mNoteObject = getItem(position);
+				mFragment.mActivity.pushFragments(Constants.TAB_INFO, pndf, true, true);
+				android.util.Log.e("view", position + "");
+			}
+		});
+
+		return convertView;
+	}
+}

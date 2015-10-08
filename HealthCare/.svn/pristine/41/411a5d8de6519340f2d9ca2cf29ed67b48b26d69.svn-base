@@ -1,0 +1,63 @@
+package app.nichepro.model;
+
+import android.os.Parcel;
+
+import com.google.gson.annotations.SerializedName;
+
+public class PatientVitalStatResponseObject extends BaseResponseObject {
+
+	@SerializedName("patientId")
+	public String patientId;
+	@SerializedName("codingSystem")
+	public String codingSystem;
+	@SerializedName("fromDate")
+	public String fromDate;
+	@SerializedName("medicationId")
+	public String medicationId;
+	@SerializedName("lastUpdatedStamp")
+	public String lastUpdatedStamp;
+	@SerializedName("lastUpdatedTxStamp")
+	public String lastUpdatedTxStamp;
+	@SerializedName("createdStamp")
+	public String createdStamp;
+	@SerializedName("createdTxStamp")
+	public String createdTxStamp;
+	@SerializedName("value")
+	public String value;
+	@SerializedName("medicationName")
+	public String medicationName;
+	@SerializedName("version")
+	public String version;
+	@SerializedName("DiagnosisId")
+	public String DiagnosisId;
+	@SerializedName("weight")
+	public String weight;
+	@SerializedName("bmi")
+	public String bmi;
+	@SerializedName("diabetiesRandom")
+	public String diabetiesRandom;
+	@SerializedName("pulseRate")
+	public String pulseRate;
+	@SerializedName("height")
+	public String height;
+	@SerializedName("bloodPressure")
+	public String bloodPressure;
+	@SerializedName("diabetiesPost")
+	public String diabetiesPost;
+	@SerializedName("diabetiesFast")
+	public String diabetiesFast;
+	
+
+	@Override
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

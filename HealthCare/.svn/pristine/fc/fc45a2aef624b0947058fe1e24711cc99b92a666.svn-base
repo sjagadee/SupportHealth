@@ -1,0 +1,294 @@
+package app.nichepro.fragmenttabpatient.home;
+
+import java.util.ArrayList;
+
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.ExpandableListView.OnGroupClickListener;
+import android.widget.TextView;
+import app.nichepro.HealthCareApp;
+import app.nichepro.activities.healthcare.BaseFragment;
+import app.nichepro.activities.healthcare.R;
+import app.nichepro.model.BaseResponseObject;
+import app.nichepro.model.CommunicationListResponseObject;
+import app.nichepro.model.CommunicationResponseObject;
+import app.nichepro.model.PatientAppointmentListResponseObject;
+import app.nichepro.model.PatientMedicationListResponseObject;
+import app.nichepro.responsehandler.ResponseParserListener;
+import app.nichepro.util.Constants;
+import app.nichepro.util.EnumFactory.ResponseMesssagType;
+import app.nichepro.util.UIUtilities;
+import app.nichepro.util.WebLinks;
+import app.nichepro.util.WebRequestTask;
+
+public class PatientHomeFragment extends BaseFragment implements
+		ResponseParserListener {
+
+	WebRequestTask ehrRequestTask;
+
+	private ResponseMesssagType msgType;
+	private HealthCareApp myApp;
+	private PatientMedicationListResponseObject medicationListObject;
+	private PatientAppointmentListResponseObject mAppointmentData;
+	private TextView patientName;
+	private TextView txtMsgCount;
+	private ExpandableListView expandableListView;
+	private PatientHomeListAdapter mHomeListAdapter;
+	private LayoutInflater mInflater;
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.patient_home_screen, container,
+				false);
+		mInflater = inflater;
+		myApp = (HealthCareApp) getActivity().getApplication();
+		patientName = (TextView) view.findViewById(R.id.patientTxt);
+		patientName.setText(myApp.getLoggedInUser().LOGIN_DETAILS.firstName);
+		txtMsgCount = (TextView) view.findViewById(R.id.msgCount);
+
+		expandableListView = (ExpandableListView) view
+				.findViewById(R.id.appointment_data);
+
+		if (this.mAppointmentData == null) {
+			requestForAppointments();
+		}
+
+		if (this.medicationListObject == null) {
+			requestForMedication();
+		}
+
+		requestForMessageList();
+		// listener for child row click
+		expandableListView.setOnChildClickListener(myListItemClicked);
+		// listener for group heading click
+		expandableListView.setOnGroupClickListener(myListGroupClicked);
+		populateTheUI();
+		return view;
+	}
+
+	public void requestForAllergies() {
+		ehrRequestTask = new WebRequestTask(
+				WebLinks.getLink(WebLinks.LIST_OF_ALLERGIES), getActivity(),
+				this);
+
+		ehrRequestTask.AddParam(Constants.PARAM_patientId, myApp
+				.getLoggedInUser().getPartyId());
+
+		ehrRequestTask.execute();
+	}
+
+	public void requestForAppointments() {
+
+		ehrRequestTask = new WebRequestTask(
+				WebLinks.getLink(WebLinks.APPOINTMENT_LIST), getActivity(),
+				this);
+
+		ehrRequestTask.AddParam(Constants.PARAM_patientId, myApp
+				.getLoggedInUser().getPartyId());
+
+		ehrRequestTask.AddParam(Constants.PARAM_partyType,
+				Constants.VALUE_PATIENT);
+		ehrRequestTask.AddParam(Constants.PARAM_dateValue,
+				Constants.VALUE_UPCOMING);
+		ehrRequestTask.execute();
+	}
+
+	public void requestForDiagnosisHistory() {
+		ehrRequestTask = new WebRequestTask(
+				WebLinks.getLink(WebLinks.LIST_OF_DIAGNOSIS), getActivity(),
+				this);
+
+		ehrRequestTask.AddParam(Constants.PARAM_patientId, myApp
+				.getLoggedInUser().getPartyId());
+
+		ehrRequestTask.execute();
+	}
+
+	public void requestForMedication() {
+		ehrRequestTask = new WebRequestTask(
+				WebLinks.getLink(WebLinks.LIST_OF_MEDICATION), getActivity(),
+				this);
+
+		ehrRequestTask.AddParam(Constants.PARAM_patientId, myApp
+				.getLoggedInUser().getPartyId());
+
+		ehrRequestTask.execute();
+	}
+
+	public void requestForVitalStatistics() {
+		ehrRequestTask = new WebRequestTask(
+				WebLinks.getLink(WebLinks.LIST_OF_VITALSTAT), getActivity(),
+				this);
+
+		ehrRequestTask.AddParam(Constants.PARAM_patientId, myApp
+				.getLoggedInUser().getPartyId());
+
+		ehrRequestTask.execute();
+	}
+
+	public void requestForMessageList() {
+		ehrRequestTask = new WebRequestTask(
+				WebLinks.getLink(WebLinks.ListCommunication), getActivity(),
+				this);
+
+		ehrRequestTask.AddParam(Constants.PARAM_partyIdFrom, myApp
+				.getLoggedInUser().getPartyId());
+
+		ehrRequestTask.execute();
+	}
+
+	@Override
+	public void onEndParsingMsgType(ResponseMesssagType msgType) {
+		// TODO Auto-generated method stub
+		this.msgType = msgType;
+	}
+
+	@Override
+	public void onEndParsingResponse(ArrayList<BaseResponseObject> items) {
+		// TODO Auto-generated method stub
+		if (this.msgType == ResponseMesssagType.MedicationListMessageType) {
+			if (items != null && !items.isEmpty() && items.size() > 0) {
+
+				PatientMedicationListResponseObject pmlro = (PatientMedicationListResponseObject) items
+						.get(0);
+				this.medicationListObject = null;
+				if (pmlro.MEDICATION_LIST.size() > 0) {
+					this.medicationListObject = pmlro;
+					populateTheUI();
+				} else {
+					UIUtilities.showConfirmationAlert(getActivity(),
+							R.string.dialog_title_information,
+							"No Appointments Found", R.string.dialog_button_Ok,
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int which) {
+
+								}
+							});
+				}
+
+			}
+		} else if (this.msgType == ResponseMesssagType.PatientAppointmentListMessageType) {
+			if (items != null && !items.isEmpty() && items.size() > 0) {
+
+				PatientAppointmentListResponseObject palro = (PatientAppointmentListResponseObject) items
+						.get(0);
+				this.mAppointmentData = null;
+
+				if (palro.APPOINTMENT_LIST.size() > 0) {
+					this.mAppointmentData = palro;
+					populateTheUI();
+				} else {
+					UIUtilities.showConfirmationAlert(getActivity(),
+							R.string.dialog_title_information,
+							"No Appointments Found", R.string.dialog_button_Ok,
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int which) {
+
+								}
+							});
+				}
+
+			}
+		} else if (this.msgType == ResponseMesssagType.CommunicationEventListMessageType) {
+
+			if (items != null && !items.isEmpty() && items.size() > 0) {
+													int count = 0;
+				CommunicationListResponseObject clro = (CommunicationListResponseObject) items
+						.get(0);
+				if (clro.CommunicationEventList != null && clro.CommunicationEventList.size() > 0) {
+					for (CommunicationResponseObject element : clro.CommunicationEventList) {
+						if (element.viewStatus.compareTo("N") == 0) {
+							++count;
+						}
+					}
+				}
+				String str = "No of New Messages:";
+				if (count == 0) {
+					str = "No, new Messages";
+				}else{
+					str = "Number of New Messages:" + count;
+				}
+					
+				txtMsgCount.setText(str);
+			}
+		} else {
+			UIUtilities.showConfirmationAlert(getActivity(),
+					R.string.dialog_title_information, R.string.server_error,
+					R.string.dialog_button_Ok,
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+
+						}
+					});
+		}
+	}
+
+	@Override
+	public void onErrorResponse(ArrayList<BaseResponseObject> items) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onError(Exception ex) {
+		// TODO Auto-generated method stub
+		UIUtilities.showConfirmationAlert(getActivity(),
+				R.string.dialog_title_information, ex.getMessage(),
+				R.string.dialog_button_Ok,
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+
+					}
+				});
+	}
+
+	public ResponseMesssagType getMsgType() {
+		return msgType;
+	}
+
+	public void setMsgType(ResponseMesssagType msgType) {
+		this.msgType = msgType;
+	}
+
+	// our child listener
+	private OnChildClickListener myListItemClicked = new OnChildClickListener() {
+
+		public boolean onChildClick(ExpandableListView parent, View v,
+				int groupPosition, int childPosition, long id) {
+
+			return false;
+		}
+
+	};
+
+	// our group listener
+	private OnGroupClickListener myListGroupClicked = new OnGroupClickListener() {
+
+		public boolean onGroupClick(ExpandableListView parent, View v,
+				int groupPosition, long id) {
+
+			// get the group header
+
+			return false;
+		}
+
+	};
+
+	void populateTheUI() {
+		if (this.mAppointmentData != null && this.medicationListObject != null) {
+			mHomeListAdapter = new PatientHomeListAdapter(
+					mInflater.getContext(), this.medicationListObject,
+					this.mAppointmentData);
+			expandableListView.setAdapter(mHomeListAdapter);
+
+		}
+	}
+}

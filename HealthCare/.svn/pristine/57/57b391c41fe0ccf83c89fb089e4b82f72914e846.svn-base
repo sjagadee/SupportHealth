@@ -1,0 +1,74 @@
+package app.nichepro.fragmenttabdoctor.home;
+
+import java.util.ArrayList;
+
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import app.nichepro.activities.healthcare.BaseFragment;
+import app.nichepro.activities.healthcare.R;
+import app.nichepro.model.KeyValue;
+
+public class DoctorHomeFragment extends BaseFragment 
+	 {
+
+ArrayList<KeyValue> mCancerData;
+	
+	public void initializeHash() {
+		mCancerData = new ArrayList<KeyValue>();
+		KeyValue kv = new KeyValue();
+
+		kv.setKey("Mrs. Andria");
+		kv.setValue("10.30");
+		mCancerData.add(kv);
+		
+		kv = new KeyValue();
+		kv.setKey("Mrs. Kate");
+		kv.setValue("11.00");
+		mCancerData.add(kv);
+		
+		kv = new KeyValue();
+		kv.setKey("Mrs. Terra");
+		kv.setValue("11.30");
+		mCancerData.add(kv);
+		
+	}
+	
+
+    	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		initializeHash();
+        View view       =   inflater.inflate(R.layout.doctor_home_tab_first_screen, container, false);
+
+		
+        ListView list =  (ListView)view.findViewById(R.id.appointmentlist); 
+        		
+        		//(ListView)findViewById(R.id.lvCancerExpansion);
+
+        // Creating the list adapter and populating the list
+        ArrayAdapter<KeyValue> listAdapter = new DoctorAppointmentListAdapter(inflater.getContext(),inflater, R.layout.doctor_home_list_cell);
+
+        for (KeyValue element : mCancerData) {
+			listAdapter.add(element);
+
+		}
+
+        list.setAdapter(listAdapter);
+
+
+//        // Creating an item click listener, to open/close our toolbar for each item
+//        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
+//
+//
+//            }
+//        });
+		return view;
+	}
+
+
+}

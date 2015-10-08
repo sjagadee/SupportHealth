@@ -1,0 +1,45 @@
+package app.nichepro.model;
+
+import android.os.Parcel;
+
+import com.google.gson.annotations.SerializedName;
+
+public class HospitalResponseObject extends BaseResponseObject {
+
+	@SerializedName("facilityId")
+	public String facilityId;
+	@SerializedName("facilityName")
+	public String facilityName;
+	@SerializedName("address1")
+	public String address1;
+	@SerializedName("address2")
+	public String address2;
+	@SerializedName("city")
+	public String city;
+	@SerializedName("postalCode")
+	public String postalCode;
+	@SerializedName("postalCodeExt")
+	public String postalCodeExt;
+	@SerializedName("lattitudeId")
+	public String lattitudeId;
+	@SerializedName("longitudeId")
+	public String longitudeId;
+	@SerializedName("geoPointId")
+	public String geoPointId;
+	@SerializedName("description")
+	public String description;
+
+	
+	@Override
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

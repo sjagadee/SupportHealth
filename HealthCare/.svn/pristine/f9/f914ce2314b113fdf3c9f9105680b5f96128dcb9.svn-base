@@ -1,0 +1,77 @@
+package app.nichepro.fragmenttabsponsor.request;
+
+import android.graphics.Color;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ViewFlipper;
+import app.nichepro.activities.healthcare.BaseFragment;
+import app.nichepro.activities.healthcare.R;
+
+public class SponsorRequestFragment extends BaseFragment implements
+		OnClickListener {
+
+	Button pendingRequest;
+	Button approvedRequest;
+	Button rejectedRequest;
+	ViewFlipper viewFlipper;
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+
+		View view = inflater.inflate(R.layout.sponsor_request_screen,
+				container, false);
+
+		pendingRequest = (Button) view.findViewById(R.id.bPending);
+		approvedRequest = (Button) view.findViewById(R.id.bApproved);
+		rejectedRequest = (Button) view.findViewById(R.id.bRejected);
+		viewFlipper = (ViewFlipper) view.findViewById(R.id.ViewFlipper01);
+
+		pendingRequest.setSelected(true);
+		pendingRequest.setOnClickListener(this);
+		approvedRequest.setOnClickListener(this);
+		rejectedRequest.setOnClickListener(this);
+		approvedRequest.setTextColor(Color.WHITE);
+		rejectedRequest.setTextColor(Color.WHITE);
+
+		return view;
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.bPending:
+			viewFlipper.setDisplayedChild(0);
+			pendingRequest.setTextColor(Color.BLACK);
+			approvedRequest.setTextColor(Color.WHITE);
+			rejectedRequest.setTextColor(Color.WHITE);
+			pendingRequest.setSelected(true);
+			approvedRequest.setSelected(false);
+			rejectedRequest.setSelected(false);
+			break;
+		case R.id.bApproved:
+			viewFlipper.setDisplayedChild(1);
+			pendingRequest.setTextColor(Color.WHITE);
+			approvedRequest.setTextColor(Color.BLACK);
+			rejectedRequest.setTextColor(Color.WHITE);
+			pendingRequest.setSelected(false);
+			approvedRequest.setSelected(true);
+			rejectedRequest.setSelected(false);
+			break;
+		case R.id.bRejected:
+			viewFlipper.setDisplayedChild(2);
+			pendingRequest.setTextColor(Color.WHITE);
+			approvedRequest.setTextColor(Color.WHITE);
+			rejectedRequest.setTextColor(Color.BLACK);
+			pendingRequest.setSelected(false);
+			approvedRequest.setSelected(false);
+			rejectedRequest.setSelected(true);
+			break;
+		}
+	}
+
+}

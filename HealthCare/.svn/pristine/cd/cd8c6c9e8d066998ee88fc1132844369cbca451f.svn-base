@@ -1,0 +1,168 @@
+package app.nichepro.fragmenttabpatient.ehr;
+
+import java.util.List;
+
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import app.nichepro.activities.healthcare.AlarmReceiverActivity;
+import app.nichepro.activities.healthcare.BaseFragment;
+import app.nichepro.activities.healthcare.R;
+import app.nichepro.fragmenttabpatient.info.PatientAlarmFragment;
+import app.nichepro.model.db.AlarmData;
+import app.nichepro.util.Constants;
+import app.nichepro.util.UIUtilities;
+import app.nichepro.util.UpdateUiFromAdapterListener;
+import app.nichepro.util.db.DbUtils;
+
+public class CreateAlarmFragment extends BaseFragment implements
+		OnClickListener, UpdateUiFromAdapterListener {
+
+	private RelativeLayout createAlarm;
+	private ListView mAlarmListView;
+	ArrayAdapter<AlarmData> listAdapter;
+	List<AlarmData> alarmListData = null;
+	private Button delete;
+	private LayoutInflater mInflater;
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.create_alarm_list, container,
+				false);
+		mInflater = inflater;
+		delete = (Button) view.findViewById(R.id.bDelete);
+		delete.setOnClickListener(this);
+		mAlarmListView = (ListView) view.findViewById(R.id.alarmList);
+		createAlarm = (RelativeLayout) view.findViewById(R.id.createAlarm);
+		createAlarm.setOnClickListener(this);
+
+		createAlarmList();
+		return view;
+	}
+
+	void createAlarmList() {
+		listAdapter = new AlarmListAdapter(mInflater.getContext(), mInflater,
+				R.layout.alarm_list_cell, this);
+		alarmListData = DbUtils.getAlarmList(getActivity());
+
+		if (alarmListData != null && alarmListData.size() > 0) {
+			for (AlarmData alarmData : alarmListData) {
+				listAdapter.add(alarmData);
+			}
+			mAlarmListView.setAdapter(listAdapter);
+
+		}
+
+		// Creating an item click listener, to open/close our toolbar for each
+		// item
+		mAlarmListView
+				.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+					public void onItemClick(AdapterView<?> parent,
+							final View view, int position, long id) {
+						AlarmData ad = alarmListData.get(position);
+						PatientAlarmFragment paf = new PatientAlarmFragment();
+						paf.mAlarmData = ad;
+						paf.isEditScreen = true;
+						mActivity.pushFragments(Constants.TAB_EHR, paf, true,
+								true);
+					}
+				});
+	}
+
+	void deleteAlarm() {
+		int count = 0;
+
+		for (AlarmData element : alarmListData) {
+			if (element.isDeleteAlarm == true) {
+				++count;
+			}
+		}
+		if (count > 0) {
+			UIUtilities.showConfirmationAlert(getActivity(),
+					R.string.dialog_title_warning,
+					"It will remove your selected Alarm!",
+					R.string.dialog_button_Ok,
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							for (AlarmData element : alarmListData) {
+								if (element.isDeleteAlarm == true) {
+									Intent intent = new Intent(getActivity(), AlarmReceiverActivity.class);
+
+									AlarmManager alarmManager = (AlarmManager) (AlarmManager) getActivity()
+											.getSystemService(Context.ALARM_SERVICE);
+									PendingIntent operation = PendingIntent.getActivity(getActivity(), element.getRequestedcode(), intent,
+											PendingIntent.FLAG_CANCEL_CURRENT);
+									alarmManager.cancel(operation);
+									DbUtils.removeAlarm(getActivity(), element);
+								}
+							}
+							createAlarmList();
+
+						}
+					});
+		} else {
+			UIUtilities.showConfirmationAlert(getActivity(),
+					R.string.dialog_title_information,
+					"Please select an Alarm", R.string.dialog_button_Ok,
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+
+						}
+					});
+		}
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		switch (v.getId()) {
+		case R.id.bDelete: {
+			deleteAlarm();
+		}
+			break;
+		case R.id.createAlarm:
+			mActivity.pushFragments(Constants.TAB_EHR,
+					new PatientAlarmFragment(), true, true);
+		default:
+			break;
+		}
+
+	}
+
+	@Override
+	public void updateUI(String message) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void updateUI(int position) {
+		// TODO Auto-generated method stub
+		AlarmData ad = alarmListData.get(position);
+		if (ad.isDeleteAlarm == false) {
+			ad.isDeleteAlarm = true;
+		} else
+			ad.isDeleteAlarm = false;
+
+	}
+
+	@Override
+	public void updateUI(String message, int position) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

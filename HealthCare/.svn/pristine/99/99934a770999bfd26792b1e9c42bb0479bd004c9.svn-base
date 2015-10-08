@@ -1,0 +1,43 @@
+
+package app.nichepro.util;
+
+/**
+ * @author expicientmbp
+ * 
+ */
+public class WebLinks {
+
+	// Option
+	// 1) https
+	private static String PROTOCOL = "https://";
+
+	// 2) http
+
+	// private static String PROTOCOL = "http://";
+
+
+	
+	private static String SERVER = "192.168.1.166:28443/CancerCare/control/";
+
+	
+	
+	
+	// category Service
+	public static final String LOGIN = "loginandroid";
+
+	
+
+	public static String getLink(String service) {
+		return String.format("%s%s%s/", PROTOCOL, SERVER, service);
+	};
+
+	public static String getLink(String server, String service) {
+		return String.format("%s%s%s/", PROTOCOL, server, service);
+	};
+
+	public static String getLinkWithProtocol(String protocol, String service) {
+		return String.format("%s%s%s/", protocol, SERVER, service);
+	};
+
+
+}

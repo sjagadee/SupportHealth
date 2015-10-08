@@ -1,0 +1,60 @@
+package app.nichepro.model;
+
+import android.os.Parcel;
+
+public class PatientNoteResponseObject extends BaseResponseObject{
+	
+
+	private String noteId;
+	private String noteName;
+	private String noteInfo;
+	private PatientNoteDateResponseObject noteDateTime;
+	@Override
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public String getNoteId() {
+		return noteId;
+	}
+
+	public void setNoteId(String noteId) {
+		this.noteId = noteId;
+	}
+
+	public String getNoteName() {
+		return noteName;
+	}
+
+	public void setNoteName(String noteName) {
+		this.noteName = noteName;
+	}
+
+	public String getNoteInfo() {
+		return noteInfo;
+	}
+
+	public void setNoteInfo(String noteInfo) {
+		this.noteInfo = noteInfo;
+	}
+
+	public PatientNoteDateResponseObject getNoteDateTime() {
+		return noteDateTime;
+	}
+
+	public void setNoteDateTime(PatientNoteDateResponseObject noteDateTime) {
+		this.noteDateTime = noteDateTime;
+	}
+
+	
+
+	
+
+}

@@ -1,0 +1,124 @@
+package app.nichepro.activities.healthcare;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.os.Handler;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import app.nichepro.model.db.DoctorRegistrationInfo;
+import app.nichepro.util.db.DbUtils;
+
+public class DoctorRegistrationActivity extends Activity implements OnClickListener {
+
+	EditText title, name, specialization, zipCode, phoneNumber, email,
+			password, confirmPassword;
+	Spinner city, state;
+	Button register;
+	String tTitle, tName, tSpecialization, tCity, tState, tZip, tPhone, tEmail, tPass, tConPass;
+	Dialog progress;
+
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.doctorregisteration);
+		title = (EditText) findViewById(R.id.etTitle);
+		name = (EditText) findViewById(R.id.etName);
+		specialization = (EditText) findViewById(R.id.etSpecialization);
+		zipCode = (EditText) findViewById(R.id.etZipCode);
+		phoneNumber = (EditText) findViewById(R.id.etPhoneNum);
+		email = (EditText) findViewById(R.id.etEmail);
+		password = (EditText) findViewById(R.id.etRegPassword);
+		confirmPassword = (EditText) findViewById(R.id.etRegConfirmPass);
+		register = (Button) findViewById(R.id.bRegister);
+		city = (Spinner) findViewById(R.id.sCity);
+		state = (Spinner) findViewById(R.id.sState);
+
+		register.setOnClickListener(this);
+	
+	}
+
+	@SuppressWarnings("deprecation")
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		switch (v.getId()) {
+		case R.id.bRegister:
+			tTitle = title.getText().toString();
+			tName = name.getText().toString();
+			tSpecialization = specialization.getText().toString();
+			tCity = city.toString();
+			tState = state.toString();
+			tZip = zipCode.getText().toString();
+			tPhone = phoneNumber.getText().toString();
+			tEmail = email.getText().toString();
+			tPass = password.getText().toString();
+			tConPass = confirmPassword.getText().toString();
+
+			if (tTitle.matches("") || tName.matches("") || tSpecialization.matches("") || tCity.matches("")
+					|| tState.matches("") || tZip.matches("")
+					|| tPhone.matches("") || tEmail.matches("")
+					|| tPass.matches("") || tConPass.matches("")) {
+				AlertDialog alertDialog = new AlertDialog.Builder(this)
+						.create();
+				alertDialog.setTitle("Register");
+				alertDialog.setMessage("Enter all details!");
+				alertDialog.setButton("OK",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int which) {
+								// here you can add functions
+							}
+						});
+				alertDialog.show();
+			}
+			if (!tPass.equals(tConPass)) {
+				AlertDialog alertDialog = new AlertDialog.Builder(this)
+						.create();
+				alertDialog.setTitle("Password Missmatch");
+				alertDialog.setMessage("Enter the correct Passwords!");
+				alertDialog.setButton("OK",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int which) {
+								// here you can add functions
+							}
+						});
+				alertDialog.show();
+			}else{
+				DoctorRegistrationInfo user = new DoctorRegistrationInfo();
+				user.setTitle(this.tTitle);
+				user.setSpecilization(this.tSpecialization);
+				user.setUsername(this.tName);
+				user.setCity(this.tCity);
+				user.setState(this.tState);
+				user.setZipcode(this.tZip);
+				user.setPhonenumber(this.tPhone);
+				user.setEmail(this.tEmail);
+				user.setPassword(this.tPass);
+				user.setCpassword(this.tConPass);
+				DbUtils.addNewDoctorAccountInfo(this, user);
+				progress = ProgressDialog.show(this,
+						 "Loading", "Please wait...");	
+				 Handler handler = new Handler();
+				 handler.postDelayed(new Runnable() {
+				     public void run() {
+				    	 progress.dismiss();
+				     }}, 3000);  // 3000 milliseconds
+			}
+		
+			
+			break;
+
+		}
+	}
+
+
+}

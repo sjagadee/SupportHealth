@@ -1,0 +1,90 @@
+package app.nichepro.fragmenttabdoctor.home;
+
+import java.util.ArrayList;
+
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import app.nichepro.HealthCareApp;
+import app.nichepro.activities.healthcare.BaseFragment;
+import app.nichepro.activities.healthcare.R;
+import app.nichepro.model.BaseResponseObject;
+import app.nichepro.model.KeyValue;
+import app.nichepro.responsehandler.ResponseParserListener;
+import app.nichepro.util.Constants;
+import app.nichepro.util.WebLinks;
+import app.nichepro.util.WebRequestTask;
+import app.nichepro.util.EnumFactory.ResponseMesssagType;
+
+public class DoctorHomeFragment extends BaseFragment implements
+ResponseParserListener {
+
+	ArrayList<KeyValue> mCancerData;
+	private WebRequestTask appointmentRequestTask;
+	private ResponseMesssagType msgType;
+
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		
+		requestForAppointments();
+		View view = inflater.inflate(R.layout.doctor_home_tab_first_screen,
+				container, false);
+
+//		ListView list = (ListView) view.findViewById(R.id.appointmentlist);
+//
+//		ArrayAdapter<KeyValue> listAdapter = new DoctorAppointmentListAdapter(
+//				inflater.getContext(), inflater, R.layout.doctor_home_list_cell);
+//
+//		for (KeyValue element : mCancerData) {
+//			listAdapter.add(element);
+//
+//		}
+//
+//		list.setAdapter(listAdapter);
+		
+		
+		return view;
+	}
+	
+	public void requestForAppointments() {
+		appointmentRequestTask = new WebRequestTask(
+				WebLinks.getLink(WebLinks.APPOINTMENT_LIST), getActivity(),
+				this);
+		
+		//HealthCareApp myApp = (HealthCareApp) getActivity().getApplication();
+		appointmentRequestTask.AddParam(Constants.PARAM_doctorId, "HCP0009");
+		// myApp.getLoggedInUser().getPartyId()
+		 appointmentRequestTask.AddParam(Constants.PARAM_visitTypeId, Constants.VALUE_PROCEDURE);
+		appointmentRequestTask.execute();
+	}
+
+	@Override
+	public void onEndParsingMsgType(ResponseMesssagType msgType) {
+		// TODO Auto-generated method stub
+		this.msgType = msgType;
+	}
+
+	@Override
+	public void onEndParsingResponse(ArrayList<BaseResponseObject> items) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onErrorResponse(ArrayList<BaseResponseObject> items) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onError(Exception ex) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

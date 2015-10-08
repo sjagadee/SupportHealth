@@ -1,0 +1,94 @@
+package app.nichepro.fragmenttabpatient.ehr;
+
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
+import app.nichepro.activities.healthcare.BaseFragment;
+import app.nichepro.activities.healthcare.ExpandAnimation;
+import app.nichepro.activities.healthcare.R;
+import app.nichepro.model.PatientAppointmentListResponseObject;
+import app.nichepro.model.PatientAppointmentResponseObject;
+
+public class PatientEhrAppointmentsFragment extends BaseFragment {
+
+	PatientAppointmentListResponseObject mAppointmentData;
+	ListView mAppointmentlist;
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+
+		View view = inflater.inflate(R.layout.patient_ehr_appointment,
+				container, false);
+
+		mAppointmentlist = (ListView) view
+				.findViewById(R.id.patientappointments);
+
+		// Creating the list adapter and populating the list
+		ArrayAdapter<PatientAppointmentResponseObject> listAdapter = new PatientEhrAppointmentAdapter(
+				inflater.getContext(), inflater, R.layout.patient_list_app_cell);
+
+		for (PatientAppointmentResponseObject element : mAppointmentData.APPOINTMENT_LIST) {
+			listAdapter.add(element);
+
+		}
+		mAppointmentlist.setAdapter(listAdapter);
+		mAppointmentlist
+				.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+					public void onItemClick(AdapterView<?> parent,
+							final View view, int position, long id) {
+
+						PatientAppointmentResponseObject paro = mAppointmentData.APPOINTMENT_LIST
+								.get(position);
+
+						LinearLayout linearLAyout = (LinearLayout) view
+								.findViewById(R.id.app_detail);
+
+						ImageView cevron = (ImageView)view.findViewById(R.id.icon);
+						TextView timeText = ((TextView) view
+								.findViewById(R.id.time));
+						TextView dateText = ((TextView) view
+								.findViewById(R.id.date));
+						TextView reasonText = ((TextView) view
+								.findViewById(R.id.reason));
+						TextView statusText = ((TextView) view
+								.findViewById(R.id.status));
+						// Creating the expand animation for the item
+
+						if (linearLAyout.getVisibility() == View.VISIBLE) {
+							cevron.setImageResource(R.drawable.black_expand_chevron);
+						}else{
+							cevron.setImageResource(R.drawable.black_shrink_chevron);
+						}
+						
+						String[] d = null;
+						if (paro.createdDate != null
+								&& !paro.createdDate.isEmpty()) {
+							d = paro.createdDate.split("T");
+						}
+
+						if (d != null && d.length > 0) {
+							dateText.setText(d[0]);
+						}
+
+						if (d != null && d.length > 1) {
+							timeText.setText(d[1]);
+						}
+						// reasonText.setText(paro.);
+						ExpandAnimation expandAni = new ExpandAnimation(
+								linearLAyout, 500);
+
+						// Start the animation on the toolbar
+						linearLAyout.startAnimation(expandAni);
+					}
+				});
+		return view;
+	}
+}

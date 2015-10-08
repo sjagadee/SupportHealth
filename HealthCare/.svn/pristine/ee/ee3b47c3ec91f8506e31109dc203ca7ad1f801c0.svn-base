@@ -1,0 +1,46 @@
+
+package app.nichepro.responsehandler;
+
+import app.nichepro.responsehandler.ResponseParserBase.ResponseParserListener;
+import app.nichepro.util.ServerErrorException;
+import app.nichepro.util.EnumFactory.ResponseHeaderType;
+
+public class GenericResponseHandler {
+	
+	/** The MSGTYP e_ starttag. */
+	private static String MSGTYPE_STARTTAG = "<msgtype>";
+	
+	/** The MSGTYP e_ endtag. */
+	private static String MSGTYPE_ENDTAG = "</msgtype>";
+	
+	//Method used to redirect to the correct parser
+	/**
+	 * Parses the start.
+	 *
+	 * @param responseStr the response str
+	 * @param listener the listener
+	 */
+	public static void parseStart(String responseStr, ResponseParserListener listener) {
+		if(responseStr.indexOf(MSGTYPE_ENDTAG) > responseStr.indexOf(MSGTYPE_STARTTAG)){
+			ResponseHeaderType headerType = 
+				ResponseHeaderType.toEnum(
+					responseStr.substring(
+						responseStr.indexOf(MSGTYPE_STARTTAG) + MSGTYPE_STARTTAG.length(), 
+						responseStr.indexOf(MSGTYPE_ENDTAG)).trim()
+						);
+			
+			if(false){
+				
+			}else
+			{
+				if(listener != null){
+					listener.onParseError(new ServerErrorException("Server Error"));
+				}
+			}
+		} else {
+			if(listener != null){
+				listener.onParseError(new ServerErrorException("Server Error"));
+			}
+		}
+	}
+}

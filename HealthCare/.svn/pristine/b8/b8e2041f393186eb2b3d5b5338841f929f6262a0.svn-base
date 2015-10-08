@@ -1,0 +1,168 @@
+package app.nichepro.fragmenttabpatient.queries;
+
+import java.util.ArrayList;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import app.nichepro.activities.healthcare.R;
+import app.nichepro.model.MessageListResponseObject;
+import app.nichepro.model.db.EmailMessage;
+
+public class EmailListAdapter extends BaseExpandableListAdapter {
+
+	Context mContext;
+	ArrayList<MessageListResponseObject> eMessageList;
+
+	static class ViewHolder {
+
+		/** The note view. */
+		TextView user;
+
+		/** The date name. */
+		CheckBox cBox;
+
+		/** The date name. */
+		TextView quantity;
+
+		TextView subject;
+
+		Button shareBtn;
+		Button msgBtn;
+		
+		LinearLayout linearLAyout;
+
+		/**
+		 * Reset the content of cell to remove the flickering effect
+		 */
+		public void reset() {
+
+		}
+	}
+
+	public EmailListAdapter(Context context,
+			ArrayList<MessageListResponseObject> message) {
+		eMessageList = message;
+		mContext = context;
+	}
+
+	@Override
+	public Object getChild(int groupPosition, int childPosition) {
+		MessageListResponseObject msgList = eMessageList.get(groupPosition);
+		return msgList.msgList.get(childPosition);
+	}
+
+	@Override
+	public long getChildId(int groupPosition, int childPosition) {
+		return childPosition;
+	}
+
+	@Override
+	public View getChildView(int groupPosition, int childPosition,
+			boolean isLastChild, View convertView, ViewGroup parent) {
+
+		EmailMessage emsg = (EmailMessage) getChild(groupPosition,
+				childPosition);
+
+		ViewHolder holder;
+
+		if (convertView == null) {
+
+			LayoutInflater inflater = (LayoutInflater) mContext
+					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			convertView = inflater.inflate(R.layout.email_message_list_child_cell,
+					null);
+			holder = new ViewHolder();
+			holder.user = ((TextView) convertView.findViewById(R.id.user));
+			holder.subject = ((TextView) convertView.findViewById(R.id.subject));
+			holder.cBox = ((CheckBox) convertView.findViewById(R.id.chkBox));
+			holder.quantity = ((TextView) convertView.findViewById(R.id.qty));
+			holder.linearLAyout = (LinearLayout) convertView.findViewById(R.id.message_detail);
+			convertView.setTag(holder);
+		} else {
+			holder = (ViewHolder) convertView.getTag();
+		}
+
+		holder.user.setText(emsg.getUSERNAME().toString());
+		holder.subject.setText(emsg.getSUBJECT().toString());
+		//holder.linearLAyout.setVisibility(View.GONE);
+
+		return convertView;
+	}
+
+	@Override
+	public int getChildrenCount(int groupPosition) {
+
+		MessageListResponseObject em = eMessageList.get(groupPosition);
+		int count = em.msgList.size();
+		return count;
+
+	}
+
+	@Override
+	public Object getGroup(int groupPosition) {
+		return eMessageList.get(groupPosition);
+	}
+
+	@Override
+	public int getGroupCount() {
+		return eMessageList.size();
+	}
+
+	@Override
+	public long getGroupId(int groupPosition) {
+		return groupPosition;
+	}
+
+	@Override
+	public View getGroupView(int groupPosition, boolean isLastChild,
+			View convertView, ViewGroup parent) {
+
+		ViewHolder holder;
+
+		if (convertView == null) {
+
+			LayoutInflater inflater = (LayoutInflater) mContext
+					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			convertView = inflater.inflate(R.layout.email_message_list_cell,
+					null);
+			holder = new ViewHolder();
+			holder.user = ((TextView) convertView.findViewById(R.id.user));
+			holder.subject = ((TextView) convertView.findViewById(R.id.subject));
+			holder.cBox = ((CheckBox) convertView.findViewById(R.id.chkBox));
+			holder.quantity = ((TextView) convertView.findViewById(R.id.qty));
+			convertView.setTag(holder);
+		} else {
+			holder = (ViewHolder) convertView.getTag();
+		}
+
+		MessageListResponseObject msg = eMessageList.get(groupPosition);
+		EmailMessage em = msg.msgList.get(0);
+		holder.user.setText(em.getUSERNAME().toString());
+		holder.subject.setText(em.getSUBJECT().toString());
+		holder.quantity.setText(msg.msgList.size() + "");
+		if (msg.msgList.size() > 0) {
+			holder.quantity.setVisibility(View.VISIBLE);
+			holder.quantity.setText(msg.msgList.size() + "");
+
+		}
+
+		return convertView;
+	}
+
+	@Override
+	public boolean hasStableIds() {
+		return true;
+	}
+
+	@Override
+	public boolean isChildSelectable(int groupPosition, int childPosition) {
+		return true;
+	}
+}

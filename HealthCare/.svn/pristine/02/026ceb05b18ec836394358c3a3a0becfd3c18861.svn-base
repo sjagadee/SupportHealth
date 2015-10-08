@@ -1,0 +1,45 @@
+
+package app.nichepro.responsehandler;
+
+import java.util.List;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import app.nichepro.model.ErrorResponseObject;
+import app.nichepro.util.Constants;
+
+
+public class ErrorResonseParser extends ResponseParserBase {
+
+	/** The err obj. */
+	ErrorResponseObject errObj;
+	List<String> errorList;
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.xml.sax.helpers.DefaultHandler#endElement(java.lang.String,
+	 * java.lang.String, java.lang.String)
+	 */
+	@Override
+	public void endElement(String uri, String localName, String name)
+			throws SAXException {
+		super.endElement(uri, localName, name);
+		if (localName.compareTo(Constants.TAG_root) == 0) {
+			parsedItem(errObj);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.xml.sax.helpers.DefaultHandler#startElement(java.lang.String,
+	 * java.lang.String, java.lang.String, org.xml.sax.Attributes)
+	 */
+	@Override
+	public void startElement(String uri, String localName, String name,
+			Attributes attributes) throws SAXException {
+		super.startElement(uri, localName, name, attributes);
+		
+	}
+}

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/healderlayout"
+        style="@style/fillWidth"
+        android:layout_height="40dip"
+        android:background="@drawable/header" >
+
+        <TextView
+            android:id="@+id/heading1"
+            style="@style/Headertitle"
+            android:layout_centerInParent="true"
+            android:text="@string/alarm" />
+
+        <Button
+            android:id="@+id/bDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="30dip"
+            android:layout_alignBaseline="@+id/heading1"
+            android:layout_alignBottom="@+id/heading1"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dip"
+            android:layout_centerInParent="true"
+            android:background="@drawable/btn_blue_clickable"
+            android:text="@string/delete"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/white_border"
+        android:padding="2dp" >
+
+        <RelativeLayout
+            android:id="@+id/createAlarm"
+            android:layout_width="fill_parent"
+            android:layout_height="50dip"
+            android:background="@drawable/skyblue_border_pressed"
+            android:padding="2dp" >
+
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="6dip"
+                android:src="@drawable/plus" />
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignWithParentIfMissing="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dip"
+                android:layout_toRightOf="@+id/icon"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:minHeight="?android:attr/listPreferredItemHeight"
+                android:paddingLeft="5dip"
+                android:scrollHorizontally="true"
+                android:text="@string/create_alarm"
+                android:textColor="@drawable/homepagerowtextcolor"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/alarmList"
+        style="@style/listStyle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#FCFCFC" >
+
+        <!-- Preview: listitem=@layout/cartlistcell -->
+    </ListView>
+
+</LinearLayout>

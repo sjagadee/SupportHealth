@@ -1,0 +1,99 @@
+package app.nichepro.fragmenttabpatient.ehr;
+
+import android.graphics.Color;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.ViewAnimator;
+import app.nichepro.activities.healthcare.BaseFragment;
+import app.nichepro.activities.healthcare.R;
+import app.nichepro.animation.AnimationFactory;
+import app.nichepro.animation.AnimationFactory.FlipDirection;
+import app.nichepro.model.PartyListResponseObject;
+import app.nichepro.model.PartyResponseObject;
+
+
+public class PatientEhrShareHealthRecordFragment extends BaseFragment implements
+		OnClickListener {
+	Boolean isToggle;
+	Button btn_list_of_doctors, btn_add_doctors;
+	Button shareEHR;
+	Button sendMSG;
+
+	ViewAnimator viewAnimator;
+	
+	public PartyListResponseObject doctorListObject;
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.patientshareehrfragment,
+				container, false);
+		
+		ListView list = (ListView) view
+				.findViewById(R.id.doctorlist);
+
+		// Creating the list adapter and populating the list
+		ArrayAdapter<PartyResponseObject> listAdapter = new DoctorListAdapter(
+				inflater.getContext(), inflater, R.layout.doctor_list_view);
+
+		for (PartyResponseObject party : doctorListObject.party) {
+			listAdapter.add(party);
+
+		}
+		list.setAdapter(listAdapter);
+
+		isToggle = true;
+
+		viewAnimator = (ViewAnimator) view.findViewById(R.id.viewFlipper);
+		
+		
+		btn_list_of_doctors = (Button) view.findViewById(R.id.bListOfDoctors);
+		btn_add_doctors = (Button) view.findViewById(R.id.bAddDoctors);
+		btn_list_of_doctors.setSelected(true);
+		btn_list_of_doctors.setOnClickListener(this);
+		btn_add_doctors.setOnClickListener(this);
+		
+		return view;
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+
+		case R.id.bListOfDoctors:
+			if (isToggle == false) {
+				AnimationFactory.flipTransition(viewAnimator,
+						FlipDirection.LEFT_RIGHT);
+				btn_list_of_doctors.setTextColor(Color.BLACK);
+				btn_add_doctors.setTextColor(Color.WHITE);
+				btn_list_of_doctors.setSelected(true);
+				btn_add_doctors.setSelected(false);
+			}
+			isToggle = true;
+			break;
+
+			
+		case R.id.bAddDoctors:
+			if (isToggle == true) {
+				AnimationFactory.flipTransition(viewAnimator,
+						FlipDirection.LEFT_RIGHT);
+				btn_add_doctors.setTextColor(Color.BLACK);
+				btn_list_of_doctors.setTextColor(Color.WHITE);
+				btn_add_doctors.setSelected(true);
+				btn_list_of_doctors.setSelected(false);
+			}
+			isToggle = false;
+			break;
+			
+	
+		}
+
+	}
+
+}

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/header_patient_message"
+        android:layout_width="fill_parent"
+        android:layout_height="40dip"
+        android:baselineAligned="false"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/up_events"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:background="@drawable/message_list_state_btn"
+            android:text="@string/up_event"
+            android:textAlignment="center"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/prev_events"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:background="@drawable/message_list_state_btn"
+            android:text="@string/prev_event"
+            android:textAlignment="center"
+            android:textColor="@drawable/white"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <ViewFlipper
+        android:id="@+id/viewFlipper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:addStatesFromChildren="true" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:orientation="vertical" >
+
+       
+            <ListView
+                android:id="@+id/upcomingeventlist"
+                style="@style/listStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="#FCFCFC" >
+            </ListView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:orientation="vertical" >
+
+            <ListView
+                android:id="@+id/posteventlist"
+                style="@style/listStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="#FCFCFC" >
+            </ListView>
+        </LinearLayout>
+    </ViewFlipper>
+</LinearLayout>

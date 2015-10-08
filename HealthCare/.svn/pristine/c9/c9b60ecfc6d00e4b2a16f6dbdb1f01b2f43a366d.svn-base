@@ -1,0 +1,81 @@
+package app.nichepro.util;
+
+public class WebLinks {
+
+	// Option
+	// 1) https
+	private static String PROTOCOL = "https://";
+
+	// 2) http
+
+	// private static String PROTOCOL = "http://";
+
+	// private static String SERVER =
+	// "101.63.194.241:28443/CancerCare/control/";
+	// Bala Machine
+	//private static String SERVER = "192.168.1.115:28443/CancerCare/control/";
+	// Subu Machine
+private static String SERVER = "192.168.1.166:28443/CancerCare/control/";
+	// Bala public machine
+	// private static String SERVER =
+	// "180.151.36.117:28443/CancerCare/control/";
+
+	// login Service
+	public static final String LOGIN = "loginToAndroid";
+
+	// patient registration Service
+	public static final String PATIENT_REGISTRATION = "CreatePatientToAndroid";
+
+	// doctor registration Service
+	public static final String DOCTOR_REGISTRATION = "CreateDoctorToAndroid";
+
+	// sponsor registration Service
+	public static final String SPONSOR_REGISTRATION = "CreateSponsorToAndroid";
+
+	// patient note Service
+	public static final String CREATE_NOTE = "CreateNoteToAndroid";
+
+	// hospital list Service
+	public static final String HOSPITAL_LIST = "listOfHospitals";
+
+	// appointment list Service
+	public static final String APPOINTMENT_LIST = "listOfAppointments";
+
+	// ailment list Service
+	public static final String AILMENTS_LIST = "listOfAilments";
+
+	// actor(patient,doctor,sponsor) list Service
+	public static final String ACTOR_LIST = "listOfParties";
+
+	// actor(patient,doctor,sponsor) list Service
+	public static final String LIST_OF_NOTES = "listOfNotes";
+
+	public static final String LIST_OF_PROBLEMS = "listOfProblems";
+
+	public static final String LIST_OF_MEDICATION = "listOfMedications";
+
+	public static final String LIST_OF_DIAGNOSIS = "listOfDiagnosis";
+
+	public static final String LIST_OF_VITALSTAT = "listOfvitalStatics";
+
+	public static final String LIST_OF_UPEVENTS = "listOfUpcomingEvents";
+
+	public static final String LIST_OF_PASTEVENTS = "listofPastEvents";
+	public static final String CreateCommunication = "CreateCommeventsToAndroid";
+	public static final String ListCommunication = "listCommunicationEvent";
+
+	
+
+	public static String getLink(String service) {
+		return String.format("%s%s%s/", PROTOCOL, SERVER, service);
+	};
+
+	public static String getLink(String server, String service) {
+		return String.format("%s%s%s/", PROTOCOL, server, service);
+	};
+
+	public static String getLinkWithProtocol(String protocol, String service) {
+		return String.format("%s%s%s/", protocol, SERVER, service);
+	};
+
+}

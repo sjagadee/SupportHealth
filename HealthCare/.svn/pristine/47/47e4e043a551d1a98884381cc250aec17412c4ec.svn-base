@@ -1,0 +1,73 @@
+package app.nichepro.fragmenttabdoctor.queries;
+
+import android.graphics.Color;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.ViewAnimator;
+import app.nichepro.activities.healthcare.BaseFragment;
+import app.nichepro.activities.healthcare.R;
+import app.nichepro.animation.AnimationFactory;
+import app.nichepro.animation.AnimationFactory.FlipDirection;
+
+
+public class DoctorQueryFragment extends BaseFragment implements
+OnClickListener{
+
+	Button btnMsgList;
+	Button btnNewMsg;
+	Boolean isToggle;
+
+	ViewAnimator viewAnimator;
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.patient_query_screen, container,
+				false);
+
+		viewAnimator = (ViewAnimator) view.findViewById(R.id.viewFlipper);
+
+		btnMsgList = (Button) view.findViewById(R.id.msg_list);
+		btnNewMsg = (Button) view.findViewById(R.id.new_msg);
+		btnMsgList.setSelected(true);
+		isToggle = true;
+		btnMsgList.setOnClickListener(this);
+		btnNewMsg.setOnClickListener(this);
+
+		return view;
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.msg_list:
+			if (isToggle == false) {
+				AnimationFactory.flipTransition(viewAnimator,
+						FlipDirection.LEFT_RIGHT);
+				btnMsgList.setTextColor(Color.BLACK);
+				btnNewMsg.setTextColor(Color.WHITE);
+				btnMsgList.setSelected(true);
+				btnNewMsg.setSelected(false);
+			}
+			isToggle = true;
+			break;
+		case R.id.new_msg:
+			if (isToggle == true) {
+				AnimationFactory.flipTransition(viewAnimator,
+						FlipDirection.LEFT_RIGHT);
+				btnMsgList.setTextColor(Color.WHITE);
+				btnNewMsg.setTextColor(Color.BLACK);
+				btnMsgList.setSelected(false);
+				btnNewMsg.setSelected(true);
+			}
+			isToggle = false;
+			break;
+		}
+
+	}
+
+}

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+     android:gravity="center"
+    android:orientation="vertical" >
+    
+     <TextView
+        android:id="@+id/tvDiagnoseCancer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/diagnosed_cancer"
+        android:visibility="invisible" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <CheckBox
+            android:id="@+id/cbYes1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/yes"
+            android:visibility="invisible" />
+
+        <CheckBox
+            android:id="@+id/cbNo1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no"
+            android:visibility="invisible" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvCancerCheckup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cancer_checkup"
+        android:visibility="invisible" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <CheckBox
+            android:id="@+id/cbYes2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/yes"
+            android:visibility="invisible" />
+
+        <CheckBox
+            android:id="@+id/cbNo2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no"
+            android:visibility="invisible" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvVisitHospital"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/visit_hospitals"
+        android:visibility="invisible" />
+
+</LinearLayout>

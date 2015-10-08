@@ -1,0 +1,170 @@
+package app.nichepro.fragmenttabpatient.info;
+
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.TimePicker;
+import app.nichepro.activities.healthcare.BaseFragment;
+import app.nichepro.activities.healthcare.R;
+
+public class PatientAlarmFragment extends BaseFragment implements
+		OnClickListener {
+
+	TimePicker timepicker;
+	TextView text;
+	Button btn_select;
+	Button monday, tuesday, wednesday, thursday, friday, saturday, sunday;
+	Button selectAll;
+	int changecolor = 0;
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+
+		View view = inflater.inflate(R.layout.alarm, container, false);
+
+		text = (TextView) view.findViewById(R.id.textView);
+
+		timepicker = (TimePicker) view.findViewById(R.id.timePicker);
+		timepicker.setIs24HourView(true);
+
+		btn_select = (Button) view.findViewById(R.id.bSelect);
+		btn_select.setOnClickListener(this);
+
+		selectAll = (Button) view.findViewById(R.id.cbSelectAll);
+		monday = (Button) view.findViewById(R.id.bMonday);
+		tuesday = (Button) view.findViewById(R.id.bTuesday);
+		wednesday = (Button) view.findViewById(R.id.bWednesday);
+		thursday = (Button) view.findViewById(R.id.bThursday);
+		friday = (Button) view.findViewById(R.id.bFriday);
+		saturday = (Button) view.findViewById(R.id.bSaturday);
+		sunday = (Button) view.findViewById(R.id.bSunday);
+		monday.setOnClickListener(this);
+		tuesday.setOnClickListener(this);
+		wednesday.setOnClickListener(this);
+		thursday.setOnClickListener(this);
+		friday.setOnClickListener(this);
+		saturday.setOnClickListener(this);
+		sunday.setOnClickListener(this);
+		selectAll.setOnClickListener(this);
+
+		return view;
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.bSelect:
+			text.setText("Alarm Time:" + timepicker.getCurrentHour() + " : "
+					+ timepicker.getCurrentMinute());
+			break;
+		case R.id.bMonday:
+
+			if (changecolor == 0) {
+
+				monday.setBackgroundResource(R.drawable.btn_blue_clickable);
+				changecolor = 1;
+			} else {
+				monday.setBackgroundResource(R.drawable.btn_low_white_clickable);
+
+				changecolor = 0;
+			}
+			break;
+		case R.id.bTuesday:
+			if (changecolor == 0) {
+
+				tuesday.setBackgroundResource(R.drawable.btn_blue_clickable);
+				changecolor = 1;
+			} else {
+				tuesday.setBackgroundResource(R.drawable.btn_low_white_clickable);
+
+				changecolor = 0;
+			}
+			break;
+		case R.id.bWednesday:
+			if (changecolor == 0) {
+
+				wednesday.setBackgroundResource(R.drawable.btn_blue_clickable);
+				changecolor = 1;
+			} else {
+				wednesday
+						.setBackgroundResource(R.drawable.btn_low_white_clickable);
+
+				changecolor = 0;
+			}
+			break;
+		case R.id.bThursday:
+			if (changecolor == 0) {
+
+				thursday.setBackgroundResource(R.drawable.btn_blue_clickable);
+				changecolor = 1;
+			} else {
+				thursday.setBackgroundResource(R.drawable.btn_low_white_clickable);
+
+				changecolor = 0;
+			}
+			break;
+		case R.id.bFriday:
+			if (changecolor == 0) {
+
+				friday.setBackgroundResource(R.drawable.btn_blue_clickable);
+				changecolor = 1;
+			} else {
+				friday.setBackgroundResource(R.drawable.btn_low_white_clickable);
+
+				changecolor = 0;
+			}
+			break;
+		case R.id.bSaturday:
+			if (changecolor == 0) {
+
+				saturday.setBackgroundResource(R.drawable.btn_blue_clickable);
+				changecolor = 1;
+			} else {
+				saturday.setBackgroundResource(R.drawable.btn_low_white_clickable);
+
+				changecolor = 0;
+			}
+			break;
+		case R.id.bSunday:
+			if (changecolor == 0) {
+
+				sunday.setBackgroundResource(R.drawable.btn_blue_clickable);
+				changecolor = 1;
+			} else {
+				sunday.setBackgroundResource(R.drawable.btn_low_white_clickable);
+
+				changecolor = 0;
+			}
+			break;
+
+		case R.id.cbSelectAll:
+			if (changecolor == 0) {
+				monday.setBackgroundResource(R.drawable.btn_blue_clickable);
+				tuesday.setBackgroundResource(R.drawable.btn_blue_clickable);
+				wednesday.setBackgroundResource(R.drawable.btn_blue_clickable);
+				thursday.setBackgroundResource(R.drawable.btn_blue_clickable);
+				friday.setBackgroundResource(R.drawable.btn_blue_clickable);
+				saturday.setBackgroundResource(R.drawable.btn_blue_clickable);
+				sunday.setBackgroundResource(R.drawable.btn_blue_clickable);
+				changecolor = 1;
+			} else {
+				monday.setBackgroundResource(R.drawable.btn_low_white_clickable);
+				tuesday.setBackgroundResource(R.drawable.btn_low_white_clickable);
+				wednesday.setBackgroundResource(R.drawable.btn_low_white_clickable);
+				thursday.setBackgroundResource(R.drawable.btn_low_white_clickable);
+				friday.setBackgroundResource(R.drawable.btn_low_white_clickable);
+				saturday.setBackgroundResource(R.drawable.btn_low_white_clickable);
+				sunday.setBackgroundResource(R.drawable.btn_low_white_clickable);
+				changecolor = 0;
+			}
+			break;
+		}
+
+	}
+
+}

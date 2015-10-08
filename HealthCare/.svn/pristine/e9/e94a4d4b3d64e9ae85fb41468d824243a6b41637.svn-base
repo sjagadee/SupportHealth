@@ -1,0 +1,67 @@
+package app.nichepro.fragmenttabpatient.ehr;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
+import app.nichepro.activities.healthcare.R;
+import app.nichepro.model.PatientAllergiesResponseObject;
+
+public class PatientAllergiesListAdapter extends
+	ArrayAdapter<PatientAllergiesResponseObject> {
+LayoutInflater minflater;
+
+static class ViewHolder {
+
+	TextView allergiesType;
+	TextView cause;
+	TextView result;
+	TextView location;
+	TextView status;
+
+	
+	public void reset() {
+
+	}
+}
+
+public PatientAllergiesListAdapter(Context context,
+		LayoutInflater inflater, int textViewResourceId) {
+	super(context, textViewResourceId);
+	minflater = inflater;
+
+}
+
+@Override
+public View getView(int position, View convertView, ViewGroup parent) {
+	ViewHolder holder;
+	if (convertView == null) {
+		convertView = minflater
+				.inflate(R.layout.allergies_list_cell, null);
+		holder = new ViewHolder();
+
+		holder.allergiesType = ((TextView) convertView.findViewById(R.id.allergy_type));
+		holder.cause = ((TextView) convertView.findViewById(R.id.cause));
+		holder.result = ((TextView) convertView.findViewById(R.id.result));
+		holder.location = ((TextView) convertView.findViewById(R.id.location));
+		holder.status = ((TextView) convertView.findViewById(R.id.status));
+		
+	
+		convertView.setTag(holder);
+	} else {
+		holder = (ViewHolder) convertView.getTag();
+	}
+
+	PatientAllergiesResponseObject paro = getItem(position);
+
+
+	holder.allergiesType.setText(paro.allergyType);
+	holder.cause.setText(paro.cause);
+	holder.result.setText(paro.result);
+	holder.location.setText(paro.location);
+	holder.status.setText(paro.status);
+	return convertView;
+}
+}

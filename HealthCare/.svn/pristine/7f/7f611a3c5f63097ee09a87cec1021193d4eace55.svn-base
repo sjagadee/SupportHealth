@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:baselineAligned="false"
+    android:orientation="horizontal" >
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@drawable/white_border"
+        android:orientation="vertical"
+        android:padding="2dp" >
+
+        <TextView
+            android:id="@+id/visitdate"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/skyblue_border"
+            android:text="@string/visit_date"
+            android:textAlignment="center"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.75"
+        android:background="@drawable/white_border"
+        android:orientation="vertical"
+        android:padding="2dp" >
+
+        <TextView
+            android:id="@+id/complaint"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/skyblue_border"
+            android:text="@string/complaint"
+            android:textAlignment="center"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@drawable/white_border"
+        android:orientation="vertical"
+        android:padding="2dp" >
+
+        <TextView
+            android:id="@+id/ehr"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/skyblue_border_pressed"
+            android:text="@string/view"
+            android:textAlignment="center"
+            android:textSize="12sp"
+            />
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,43 @@
+package app.nichepro.responsehandler;
+
+import java.util.ArrayList;
+
+import app.nichepro.model.BaseResponseObject;
+import app.nichepro.model.ErrorResponseObject;
+
+
+public interface BaseParser {
+	ArrayList<BaseResponseObject> getParsedData(String data);
+}
+
+class LoginParser implements BaseParser{
+
+	@Override
+	public ArrayList<BaseResponseObject> getParsedData(String data) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+}
+
+class RegistrationParser implements BaseParser{
+
+	@Override
+	public ArrayList<BaseResponseObject> getParsedData(String data) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+}
+class ErrorParser implements BaseParser{
+
+	@Override
+	public ArrayList<BaseResponseObject> getParsedData(String data) {
+		// TODO Auto-generated method stub
+		ArrayList<BaseResponseObject> items = new ArrayList<BaseResponseObject>();
+		ErrorResponseObject ero = new ErrorResponseObject();
+		ero.setErrorText(data);
+		items.add(ero);
+		return items;
+	}
+}

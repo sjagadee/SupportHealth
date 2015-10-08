@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical"  android:background="#ffffff"
+    android:gravity="center">
+    
+     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter EHR number:" />
+
+    <EditText
+        android:id="@+id/editText1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <requestFocus />
+    </EditText>
+
+    <Button
+        android:id="@+id/bSync"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sync" />
+
+    <TextView
+        android:id="@+id/tvDiagnoseCancer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Have you been diagnosed with cancer?" 
+        android:visibility="invisible" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+         >
+
+        <CheckBox
+            android:id="@+id/cbYes1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Yes"
+            android:visibility="invisible" />
+
+        <CheckBox
+            android:id="@+id/cbNo1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No"
+            android:visibility="invisible" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvCancerCheckup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Have you undergone a cancer checkup?"
+        android:visibility="invisible" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+          >
+
+        <CheckBox
+            android:id="@+id/cbYes2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Yes"
+            android:visibility="invisible" />
+
+        <CheckBox
+            android:id="@+id/cbNo2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No"
+            android:visibility="invisible" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvVisitHospetal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="visit any of the below hospetals"
+        android:visibility="invisible" />
+   
+
+</LinearLayout>

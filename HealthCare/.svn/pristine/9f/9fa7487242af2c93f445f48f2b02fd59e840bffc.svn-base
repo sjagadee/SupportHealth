@@ -1,0 +1,79 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/aaa" >
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/nichehealth" />
+
+    <Button
+        android:id="@+id/binfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageView1"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/info"
+     />
+
+    <Button
+        android:id="@+id/bpatient"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/imageView1"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="17dp"
+        android:background="@drawable/patient" />
+
+    <Button
+        android:id="@+id/bdoctor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/bpatient"
+        android:layout_alignBottom="@+id/bpatient"
+        android:layout_alignRight="@+id/imageView1"
+        android:layout_marginRight="17dp"
+        android:background="@drawable/doctor" />
+
+    <Button
+        android:id="@+id/bsponsors"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/binfo"
+        android:layout_below="@+id/bdoctor"
+        android:layout_marginTop="39dp"
+        android:background="@drawable/patient" />
+
+    <Button
+        android:id="@+id/baboutus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/bpatient"
+        android:layout_below="@+id/bsponsors"
+        android:layout_marginTop="18dp"
+        android:background="@drawable/about_us" />
+
+    <Button
+        android:id="@+id/bprivacypolicy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/baboutus"
+        android:layout_alignBottom="@+id/baboutus"
+        android:layout_alignLeft="@+id/bsponsors"
+        android:background="@drawable/privacy_policy" />
+
+    <Button
+        android:id="@+id/bcontactus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/bprivacypolicy"
+        android:layout_alignBottom="@+id/bprivacypolicy"
+        android:layout_alignLeft="@+id/bdoctor"
+        android:background="@drawable/contact_us" />
+
+</RelativeLayout>

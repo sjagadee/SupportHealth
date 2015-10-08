@@ -1,0 +1,151 @@
+package app.nichepro.fragmenttabdoctor.queries;
+
+import java.util.ArrayList;
+
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.os.Handler;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.ViewAnimator;
+import app.nichepro.activities.healthcare.BaseFragment;
+import app.nichepro.activities.healthcare.R;
+import app.nichepro.animation.AnimationFactory;
+import app.nichepro.animation.AnimationFactory.FlipDirection;
+import app.nichepro.fragmenttabpatient.queries.EmailListAdapter;
+import app.nichepro.fragmenttabpatient.queries.EmailListFragment;
+import app.nichepro.model.MessageListResponseObject;
+import app.nichepro.model.db.EmailMessage;
+import app.nichepro.util.Constants;
+import app.nichepro.util.db.DbUtils;
+
+public class DoctorQueryFragment extends BaseFragment implements
+		OnClickListener {
+
+	Button btnMsgList;
+	Button btnSendMsg;
+	Boolean isToggle;
+	String tDoctorName, tSubject, tMessage;
+	Dialog progress;
+	Spinner doctorName;
+	EditText subject;
+	EditText message;
+	ViewAnimator viewAnimator;
+	ArrayList<MessageListResponseObject> msgList;
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.doctor_query_screen, container,
+				false);
+		EmailMessage emailMsg = new EmailMessage();
+		emailMsg.setUsername("Dr. Krish Ramesh");
+		msgList = DbUtils.retreiveMsgList(getActivity(), emailMsg);
+
+		viewAnimator = (ViewAnimator) view.findViewById(R.id.viewFlipper);
+
+		btnMsgList = (Button) view.findViewById(R.id.msg_list);
+		btnSendMsg = (Button) view.findViewById(R.id.send_msg);
+		btnMsgList.setSelected(true);
+		isToggle = true;
+		btnMsgList.setOnClickListener(this);
+		btnSendMsg.setOnClickListener(this);
+
+		doctorName = (Spinner) view.findViewById(R.id.sDoctorList);
+		subject = (EditText) view.findViewById(R.id.etSubjectMessage);
+		message = (EditText) view.findViewById(R.id.etMessageCommunicate);
+		Button send = (Button) view.findViewById(R.id.bSendCommunicate);
+
+		ListView list = (ListView) view
+				.findViewById(R.id.patient_communication);
+
+		// Creating the list adapter and populating the list
+		ArrayAdapter<EmailMessage> listAdapter = new EmailListAdapter(
+				inflater.getContext(), inflater,
+				R.layout.email_message_list_cell);
+
+		for (MessageListResponseObject msg : msgList) {
+			EmailMessage eMsg = msg.msgList.get(0);
+			eMsg.setQty("" + msg.msgList.size());
+			listAdapter.add(eMsg);
+
+		}
+		list.setAdapter(listAdapter);
+		list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, final View view,
+					int position, long id) {
+				MessageListResponseObject mlro = msgList.get(position);
+				EmailListFragment edf = new EmailListFragment();
+				edf.msgList = mlro;
+				edf.isDoctor = true;
+				mDoctorActivity.pushFragments(Constants.TAB_QUERIES,
+						edf, true, true);
+			}
+		});
+		
+		send.setOnClickListener(this);
+		return view;
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.msg_list:
+			if (isToggle == false) {
+				AnimationFactory.flipTransition(viewAnimator,
+						FlipDirection.LEFT_RIGHT);
+				btnMsgList.setTextColor(Color.BLACK);
+				btnSendMsg.setTextColor(Color.WHITE);
+				btnMsgList.setSelected(true);
+				btnSendMsg.setSelected(false);
+			}
+			isToggle = true;
+			break;
+		case R.id.send_msg:
+			if (isToggle == true) {
+				AnimationFactory.flipTransition(viewAnimator,
+						FlipDirection.LEFT_RIGHT);
+				btnMsgList.setTextColor(Color.WHITE);
+				btnSendMsg.setTextColor(Color.BLACK);
+				btnMsgList.setSelected(false);
+				btnSendMsg.setSelected(true);
+
+			}
+			isToggle = false;
+			break;
+
+		case R.id.bSendCommunicate: {
+			EmailMessage msg = new EmailMessage();
+			tDoctorName = doctorName.getSelectedItem().toString();
+			tSubject = subject.getText().toString();
+			tMessage = message.getText().toString();
+			msg.setUsername(tDoctorName);
+			msg.setSubject(tSubject);
+			msg.setMessage(tMessage);
+			DbUtils.addNewMsg(getActivity(), msg);
+			progress = ProgressDialog.show(getActivity(), "Loading",
+					"Please wait...");
+			Handler handler = new Handler();
+			handler.postDelayed(new Runnable() {
+				public void run() {
+					progress.dismiss();
+
+				}
+			}, 3000); // 3000 milliseconds
+		}
+			break;
+		}
+
+	}
+
+}

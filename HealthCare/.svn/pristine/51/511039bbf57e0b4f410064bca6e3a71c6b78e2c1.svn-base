@@ -1,0 +1,163 @@
+package app.nichepro.fragmenttabpatient.info;
+
+import java.util.ArrayList;
+
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import app.nichepro.activities.healthcare.BaseFragment;
+import app.nichepro.activities.healthcare.R;
+
+
+public class PatientInfoSymptomFragment extends BaseFragment {
+	ArrayList<String> mSymtomsList;
+
+	public void initializeHash() {
+		mSymtomsList = new ArrayList<String>();
+		String kc = new String("Lump in the breast");
+		mSymtomsList.add(kc);
+
+		kc = new String("Lump in the underarm");
+		mSymtomsList.add(kc);
+
+		kc = new String("Swelling in the armpit");
+		mSymtomsList.add(kc);
+		
+		kc = new String("Pain in the breast");
+		mSymtomsList.add(kc);
+		
+		kc = new String("Tenderness in the breast");
+		mSymtomsList.add(kc);
+		
+		kc = new String("Noticeable flattening on the breast");
+		mSymtomsList.add(kc);
+		
+		kc = new String("Noticeable indentation on the breast");
+		mSymtomsList.add(kc);
+		
+		kc = new String("Change in size of the breast");
+		mSymtomsList.add(kc);
+		
+		kc = new String("Change in contour of the  breast");
+		mSymtomsList.add(kc);
+		
+		kc = new String("Change in temperature of the breast");
+		mSymtomsList.add(kc);
+		
+		kc = new String("Reddish pitted surface like the skin of an orange on the breast");
+		mSymtomsList.add(kc);
+		
+		kc = new String("Retraction of the nipple");
+		mSymtomsList.add(kc);
+		
+		kc = new String("Dimpling of the nipple");
+		mSymtomsList.add(kc);
+		
+		kc = new String("Itching of the nipple");
+		mSymtomsList.add(kc);
+		
+		kc = new String("Burning sensation in the nipple");
+		mSymtomsList.add(kc);
+		
+		kc = new String("Scaly rash in the nipple");
+		mSymtomsList.add(kc);
+		
+		kc = new String("Unusual discharge from the nipple");
+		mSymtomsList.add(kc);
+		
+		kc = new String("Marble-like area under the breast skin");
+		mSymtomsList.add(kc);
+		
+		kc = new String("A area different from any other area in the breast");
+		mSymtomsList.add(kc);
+		
+		kc = new String("Abnormal vaginal bleeding after sexual intercourse");
+		mSymtomsList.add(kc);
+		
+		kc = new String("Abnormal vaginal bleeding between menstrual periods");
+		mSymtomsList.add(kc);
+		
+		kc = new String("Abnormal vaginal bleeding after menopause");
+		mSymtomsList.add(kc);
+		
+		kc = new String("Pain during intercourse");
+		mSymtomsList.add(kc);
+		
+		kc = new String("Pelvic pain");
+		mSymtomsList.add(kc);
+		
+		kc = new String("Difficulty  in urinating");
+		mSymtomsList.add(kc);
+		
+		kc = new String("Dull backache");
+		mSymtomsList.add(kc);
+
+		kc = new String("Pain in the legs");
+		mSymtomsList.add(kc);
+		
+		kc = new String("Diarrhea");
+		mSymtomsList.add(kc);
+		
+		kc = new String("Pain from the rectum when defecating");
+		mSymtomsList.add(kc);
+		
+		kc = new String("Bleeding from the rectum when defecating");
+		mSymtomsList.add(kc);
+		
+		kc = new String("Fatigue");
+		mSymtomsList.add(kc);
+
+		kc = new String("Weight loss");
+		mSymtomsList.add(kc);
+		
+		kc = new String("Loss of appetite");
+		mSymtomsList.add(kc);
+		
+		kc = new String("General feeling of illness");
+		mSymtomsList.add(kc);
+		
+		kc = new String("Bloating of the  stomach");
+		mSymtomsList.add(kc);
+		
+		kc = new String("Difficulty in eating");
+		mSymtomsList.add(kc);
+
+		kc = new String("Feeling full quickly after eating a little");
+		mSymtomsList.add(kc);
+		
+		kc = new String("Back pain");
+		mSymtomsList.add(kc);
+		
+		kc = new String("Passing urine very often");
+		mSymtomsList.add(kc);
+		
+		kc = new String("Constipation");
+		mSymtomsList.add(kc);
+		
+	}
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		initializeHash();
+		View view = inflater.inflate(R.layout.patient_info_symptoms, container,
+				false);
+
+		ListView list = (ListView) view.findViewById(R.id.symptomslist);
+
+		// Creating the list adapter and populating the list
+		ArrayAdapter<String> listAdapter = new SymptomListAdapter(
+				inflater.getContext(), inflater, R.layout.symptom_list_cell);
+
+		for (String element : mSymtomsList) {
+			listAdapter.add(element);
+
+		}
+		list.setAdapter(listAdapter);
+
+		return view;
+	}
+	
+}

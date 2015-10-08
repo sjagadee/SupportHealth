@@ -1,0 +1,241 @@
+
+package app.nichepro.responsehandler;
+
+import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
+import app.nichepro.util.Log;
+import app.nichepro.model.BaseResponseObject;
+import app.nichepro.util.EnumFactory.ResponseHeaderType;
+
+/**
+ * The Class ResponseParserBase.
+ */
+public class ResponseParserBase extends DefaultHandler {
+	
+	/** The TAG. */
+	private static String TAG = ResponseParserBase.class.getSimpleName();
+
+	/**
+	 * The listener interface for receiving responseParser events.
+	 * The class that is interested in processing a responseParser
+	 * event implements this interface, and the object created
+	 * with that class is registered with a component using the
+	 * component's <code>addResponseParserListener<code> method. When
+	 * the responseParser event occurs, that object's appropriate
+	 * method is invoked.
+	 *
+	 * @see ResponseParserEvent
+	 */
+	public interface ResponseParserListener {
+		
+		/**
+		 * On end parsing msg type.
+		 *
+		 * @param msgType the msg type
+		 */
+		void onEndParsingMsgType(ResponseHeaderType msgType);
+
+		/**
+		 * On end parsing response.
+		 *
+		 * @param items the items
+		 * @param rpb the rpb
+		 */
+		void onEndParsingResponse(ArrayList<BaseResponseObject> items,
+				ResponseParserBase rpb);
+
+		/**
+		 * On end parsing item count.
+		 *
+		 * @param itemCount the item count
+		 */
+		void onEndParsingItemCount(int itemCount);
+
+		/**
+		 * On parse error.
+		 *
+		 * @param ex the ex
+		 */
+		void onParseError(Exception ex);
+
+		// Specifically for Category, Product
+		/**
+		 * On end parsing omniture tags.
+		 *
+		 * @param omnitureTags the omniture tags
+		 */
+		void onEndParsingOmnitureTags(HashMap<String, String> omnitureTags);
+
+		// Specifically for weekly add list data
+		/**
+		 * On end parsing sort options.
+		 *
+		 * @param keyArr the key arr
+		 * @param valArr the val arr
+		 */
+		void onEndParsingSortOptions(ArrayList<String> keyArr, ArrayList<String> valArr);
+	}
+
+	/**
+	 * The listener interface for receiving weeklyAdResponseParser events.
+	 * The class that is interested in processing a weeklyAdResponseParser
+	 * event implements this interface, and the object created
+	 * with that class is registered with a component using the
+	 * component's <code>addWeeklyAdResponseParserListener<code> method. When
+	 * the weeklyAdResponseParser event occurs, that object's appropriate
+	 * method is invoked.
+	 *
+	 * @see WeeklyAdResponseParserEvent
+	 */
+	public interface WeeklyAdResponseParserListener extends
+			ResponseParserListener {
+		
+		/**
+		 * On end parsing sneek peak flag.
+		 *
+		 * @param flag the flag
+		 */
+		void onEndParsingSneekPeakFlag(Boolean flag);
+	}
+
+	/** The response parsed listener. */
+	private ResponseParserListener responseParsedListener;
+
+	/**
+	 * Gets the response parsed listener.
+	 *
+	 * @return the responseParsedListener
+	 */
+	public ResponseParserListener getResponseParsedListener() {
+		return responseParsedListener;
+	}
+
+	/**
+	 * Sets the response parsed listener.
+	 *
+	 * @param l the new response parsed listener
+	 */
+	public void setResponseParsedListener(ResponseParserListener l) {
+		this.responseParsedListener = l;
+	}
+
+	/** The items. */
+	private ArrayList<BaseResponseObject> items;
+
+	/** The current item. */
+	protected BaseResponseObject currentItem;
+	
+	/** The current string. */
+	protected StringBuilder currentString;
+	
+	/** The is storing characters. */
+	protected Boolean isStoringCharacters = false;
+
+	/**
+	 * Parses the start.
+	 *
+	 * @param responseStr the response str
+	 */
+	public void parseStart(String responseStr) {
+		Log.d(TAG, "In parseStart");
+		try {
+			SAXParserFactory factory = SAXParserFactory.newInstance();
+			SAXParser parser = factory.newSAXParser();
+			parser.parse(new ByteArrayInputStream(responseStr.getBytes()), this);
+		} catch (Exception ex) {
+			this.parseError(ex);
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see org.xml.sax.helpers.DefaultHandler#startDocument()
+	 */
+	@Override
+	public void startDocument() throws SAXException {
+		super.startDocument();
+		items = new ArrayList<BaseResponseObject>();
+		currentString = new StringBuilder();
+	}
+
+	/* (non-Javadoc)
+	 * @see org.xml.sax.helpers.DefaultHandler#characters(char[], int, int)
+	 */
+	@Override
+	public void characters(char[] ch, int start, int length)
+			throws SAXException {
+		super.characters(ch, start, length);
+		if (isStoringCharacters)
+			currentString.append(ch, start, length);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.xml.sax.helpers.DefaultHandler#endDocument()
+	 */
+	@Override
+	public void endDocument() throws SAXException {
+		super.endDocument();
+		parseEnded();
+	}
+
+	/**
+	 * Parsed response header type, once done notify 
+	 * listener about header type of the response
+	 *
+	 * @param msgType the msg type
+	 */
+	void parsedType(ResponseHeaderType msgType) {
+		if (null != responseParsedListener) {
+			responseParsedListener.onEndParsingMsgType(msgType);
+		}
+	}
+
+	/**
+	 * Parsed one item, add it to the arraylist that 
+	 * need to be send to listener on parse end
+	 *
+	 * @param currentItem the current item
+	 */
+	void parsedItem(BaseResponseObject currentItem) {
+		items.add(currentItem);
+	}
+
+	/**
+	 * Parsed item count, send it to the listener.
+	 *
+	 * @param itemCount the item count
+	 */
+	void parsedItemCount(int itemCount) {
+		if (null != responseParsedListener) {
+			responseParsedListener.onEndParsingItemCount(itemCount);
+		}
+	}
+
+	/**
+	 * Parse ended send items to the listener.
+	 */
+	void parseEnded() {
+		if (null != responseParsedListener) {
+			responseParsedListener.onEndParsingResponse(items, this);
+		}
+		items.clear();
+	}
+
+	/**
+	 * Parse and send the error to the listener.
+	 *
+	 * @param ex the ex
+	 */
+	void parseError(Exception ex) {
+		if (null != responseParsedListener) {
+			responseParsedListener.onParseError(ex);
+		}
+	}
+}

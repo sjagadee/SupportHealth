@@ -1,0 +1,149 @@
+package app.nichepro.util;
+
+import java.util.HashMap;
+
+/**
+ * A factory for creating Enum objects.
+ */
+public class EnumFactory {
+
+	/**
+	 * The Enum ResponseMesssagType.
+	 */
+	public enum ResponseMesssagType {
+
+		/** The Unknown response message type. */
+		UnknownResponseMessageType,
+		/** The login response message type. */
+		LoginMessageType,
+		/** The Patient login response message type. */
+		PatientLoginMessageType,
+		/** The Doctor login response message type. */
+		DoctorLoginMessageType,
+		/** The Sponsor login response message type. */
+		SponsorLoginMessageType,
+		/** Patient Registration response message type. */
+		UserRegistrationMessageType,
+		/** The Patient Note response message type. */
+		PatientNoteMessageType,
+		/** The Hospital list response message type. */
+		HospitalListMessageType,
+		/** Patient Appointment response message type. */
+		AppointmentListMessageType,
+		/** Patient Appointment response message type. */
+		NotelistMessageType,
+		/** Patient Appointment response message type. */
+		PatientAppointmentListMessageType,
+		/** Patient Appointment response message type. */
+		MedicationListMessageType,
+		/** Patient Appointment response message type. */
+		AllergiesListMessageType,
+		/** Patient Appointment response message type. */
+		DiagnosisListMessageType,
+		/** Patient Appointment response message type. */
+		VitalStatisticsMessageType,
+		/** Patient Appointment response message type. */
+		PatientListMessageType,
+		/** Patient Appointment response message type. */
+		DoctorListMessageType,
+		/** upcoming events response message type. */
+		UpcomingEventsMessageType,
+		/** Past events response message type. */
+		PastEventsMessageType,
+		/** Patient Appointment response message type. */
+		PatientNoteListMessageType,
+		/** Patient Appointment response message type. */
+		CommunicationEventCreatedMessageType,
+		/** Patient Appointment response message type. */
+		listCCRSharingMessageType,
+		CommunicationEventListMessageType,
+		PushCCREventListMessageType,
+		/** The Error response message type. */
+		ErrorResponseMessageType;
+
+		/**
+		 * Gets the hash map.
+		 * 
+		 * @return the hash map
+		 */
+		public static HashMap<ResponseMesssagType, String> getHashMap() {
+			HashMap<ResponseMesssagType, String> hm = new HashMap<ResponseMesssagType, String>();
+			hm.put(UnknownResponseMessageType, "unknown");
+			hm.put(LoginMessageType, "login");
+			hm.put(UserRegistrationMessageType, "registered");
+			hm.put(DoctorLoginMessageType, "doctorlogin");
+			hm.put(SponsorLoginMessageType, "sponsorlogin");
+			hm.put(PatientNoteMessageType, "patientnote");
+			hm.put(HospitalListMessageType, "hospitallist");
+			hm.put(PatientNoteListMessageType, "noteslist");
+			hm.put(MedicationListMessageType, "PATIENT_MEDICATION_LIST");
+			hm.put(AllergiesListMessageType, "PATIENT_PROCEDURE_LIST");
+			hm.put(ErrorResponseMessageType, "Error");
+			hm.put(DoctorListMessageType, "doctorlist");
+			hm.put(HospitalListMessageType, "hospitalslist");
+			hm.put(DiagnosisListMessageType, "PATIENT_DIAGNOSIS_LIST");
+			hm.put(VitalStatisticsMessageType, "PATIENT_VITALSTATS_LIST");
+			hm.put(PatientAppointmentListMessageType,"APPOINTMENT_PATIENT_APPNT_LIST");
+			hm.put(UpcomingEventsMessageType, "upcoming_event");
+			hm.put(PastEventsMessageType, "past_event");
+			hm.put(UpcomingEventsMessageType, "upcoming_event");
+			hm.put(PastEventsMessageType, "past_event");
+			hm.put(CommunicationEventCreatedMessageType, "CommunicationEventCreated");
+			hm.put(CommunicationEventListMessageType, "CommunicationEventList");
+			hm.put(PatientListMessageType, "patientlist");
+			hm.put(UpcomingEventsMessageType, "upcoming_event");
+			hm.put(PastEventsMessageType, "past_event");
+			hm.put(listCCRSharingMessageType, "listCCRSharing");
+			hm.put(PushCCREventListMessageType, "PushCCR");
+			
+			
+			return hm;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.lang.Enum#toString()
+		 */
+		public String toString() {
+			HashMap<ResponseMesssagType, String> hm = getHashMap();
+			return hm.get(this);
+		}
+
+		/**
+		 * To enum.
+		 * 
+		 * @param text
+		 *            the text
+		 * @return the response header type
+		 */
+		public static ResponseMesssagType toEnum(String text) {
+			HashMap<ResponseMesssagType, String> hm = getHashMap();
+			for (ResponseMesssagType item : hm.keySet()) {
+				if (hm.get(item).equals(text)) {
+					return item;
+				}
+			}
+
+			return UnknownResponseMessageType;
+		}
+	}
+
+	public enum LoginType {
+		Patient, Doctor, Sponsor,
+	}
+
+	public enum HospitalSearchType {
+
+		GeoLocation(0), PostalCode(1), HospitalName(2), City(3), State(4);
+		private int _value;
+
+		HospitalSearchType(int Value) {
+			this._value = Value;
+		}
+
+		public int getValue() {
+			return _value;
+		}
+	}
+}

@@ -1,0 +1,109 @@
+package app.nichepro.util;
+
+
+
+import java.util.HashMap;
+
+/**
+ * A factory for creating Enum objects.
+ */
+public class EnumFactory {
+
+	/**
+	 * The Enum ResponseHeaderType.
+	 */
+	public enum ResponseHeaderType {
+
+		/** The Unknown response header type. */
+		UnknownResponseHeaderType,
+		/** The Product list response header type. */
+		ProductListResponseHeaderType,
+		/** The Product detail response header type. */
+		ProductDetailResponseHeaderType,
+		/** The Category list response header type. */
+		CategoryListResponseHeaderType,
+		/** The Sign up response header type. */
+		SignUpResponseHeaderType,
+		/** The Store list response header type. */
+		StoreListResponseHeaderType,
+		/** The More store info response header type. */
+		MoreStoreInfoResponseHeaderType,
+		/** The Avail store list response header type. */
+		AvailStoreListResponseHeaderType,
+		/** The Ad category list response header type. */
+		AdCategoryListResponseHeaderType,
+		/** The Ad list response header type. */
+		AdListResponseHeaderType,
+		/** The Ad detail response header type. */
+		AdDetailResponseHeaderType,
+		/** The Ad store list response header type. */
+		AdStoreListResponseHeaderType,
+		/** The Product review response header type. */
+		ProductReviewResponseHeaderType,
+		/** The Review rating response header type. */
+		ReviewRatingResponseHeaderType,
+		/** The Review response header type. */
+		ReviewResponseHeaderType,
+		/** The Error response header type. */
+		ErrorResponseHeaderType;
+
+		/**
+		 * Gets the hash map.
+		 * 
+		 * @return the hash map
+		 */
+		public static HashMap<ResponseHeaderType, String> getHashMap() {
+			HashMap<ResponseHeaderType, String> hm = new HashMap<ResponseHeaderType, String>();
+			hm.put(UnknownResponseHeaderType, "unknown");
+			hm.put(ProductListResponseHeaderType, "productlist");
+			hm.put(ProductDetailResponseHeaderType, "productdetail");
+			hm.put(CategoryListResponseHeaderType, "categorylist");
+			hm.put(SignUpResponseHeaderType, "signup");
+			hm.put(StoreListResponseHeaderType, "storelist");
+			hm.put(MoreStoreInfoResponseHeaderType, "morestoreinfo");
+			hm.put(AvailStoreListResponseHeaderType, "availstorelist");
+			hm.put(AdCategoryListResponseHeaderType, "adcategorylist");
+			hm.put(AdListResponseHeaderType, "adlist");
+			hm.put(AdDetailResponseHeaderType, "addetail");
+			hm.put(AdStoreListResponseHeaderType, "adstorelist");
+			hm.put(ProductReviewResponseHeaderType, "productreview");
+			hm.put(ReviewResponseHeaderType, "reviewrating");
+			hm.put(ErrorResponseHeaderType, "Error");
+			return hm;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.lang.Enum#toString()
+		 */
+		public String toString() {
+			HashMap<ResponseHeaderType, String> hm = getHashMap();
+			return hm.get(this);
+		}
+
+		/**
+		 * To enum.
+		 * 
+		 * @param text
+		 *            the text
+		 * @return the response header type
+		 */
+		public static ResponseHeaderType toEnum(String text) {
+			HashMap<ResponseHeaderType, String> hm = getHashMap();
+			for (ResponseHeaderType item : hm.keySet()) {
+				if (hm.get(item).equals(text)) {
+					return item;
+				}
+			}
+			throw new AssertionError("Text <" + text
+					+ "> cannot be converted to enum");
+		}
+	}
+	
+	public enum LoginType{
+		Patient,
+		Doctor,
+		Sponsor,
+	}
+}

@@ -1,0 +1,127 @@
+package app.nichepro.fragmenttabpatient.info;
+
+import android.content.Context;
+import android.content.DialogInterface;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.TextView;
+import app.nichepro.activities.healthcare.R;
+import app.nichepro.model.HospitalResponseObject;
+import app.nichepro.util.UIUtilities;
+
+
+public class PatientInfoHospitalAdapter extends
+		ArrayAdapter<HospitalResponseObject> {
+	LayoutInflater minflater;
+	Context mContext;
+	static class ViewHolder {
+
+		/** The name view. */
+		TextView nameText;
+
+		/** The address name. */
+		TextView addressText;
+
+		/** The city name. */
+		TextView contactText;
+		
+		Button callBtn;
+
+		/**
+		 * Reset the content of cell to remove the flickering effect
+		 */
+		public void reset() {
+
+		}
+	}
+
+	public PatientInfoHospitalAdapter(Context context, LayoutInflater inflater,
+			int textViewResourceId) {
+		super(context, textViewResourceId);
+		minflater = inflater;
+		mContext = context;
+	}
+
+	@Override
+		public View getView(final int position, View convertView, ViewGroup parent) {
+		final ViewHolder holder;
+			if (convertView == null) {
+
+				convertView = minflater.inflate(R.layout.hospital_list_cell,
+						null);
+				holder = new ViewHolder();
+
+			
+				holder.nameText = ((TextView) convertView.findViewById(R.id.tvHospitalName));
+				holder.addressText = ((TextView) convertView.findViewById(R.id.tvHospitalAdderess));
+				holder.contactText = ((TextView) convertView.findViewById(R.id.tvHospitalContact));
+				holder.callBtn = ((Button) convertView.findViewById(R.id.bCall));
+
+				convertView.setTag(holder);
+			}else{
+				holder = (ViewHolder) convertView.getTag();
+			}
+
+			
+		
+			HospitalResponseObject hro = getItem(position);
+			
+			holder.nameText.setText(hro.facilityName);
+			String address = null;
+			if (hro.address1 != null && !hro.address1.isEmpty()) {
+				address = hro.address1;
+			}
+			
+			if (hro.address2 != null && !hro.address2.isEmpty()) {
+				if (address != null) {
+					address += "," + hro.address2;
+				}else
+					address = hro.address2;
+			}
+			if (hro.city != null && !hro.city.isEmpty()) {
+				address += " " + hro.city;
+			}
+			if (hro.state != null && !hro.state.isEmpty()) {
+				address += "," + hro.state;
+			}
+			
+			if (hro.postalCode != null && !hro.postalCode.isEmpty()) {
+				address += "  " + hro.postalCode;
+			}
+			
+			holder.addressText.setText(address);
+			holder.contactText.setText(hro.telephoneNo);
+			holder.callBtn.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					
+//					if (UIUtilities.isPhoneAvailable(mContext)) {
+//						UIUtilities.showCallConfirmationAlert(
+//								mContext, holder.contactText.getText().toString(),
+//								R.string.calling, R.string.callingMessage,
+//								R.string.nobtn, R.string.yesbtn);
+//						
+//					}else
+					
+					{
+						UIUtilities.showConfirmationAlert(mContext,
+								R.string.dialog_title_information, "Your device don't have call facility!",
+								R.string.dialog_button_Ok,
+								new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog, int which) {
+
+									}
+								});
+					}
+					// TODO Auto-generated method stub
+				}
+			});
+			
+			return convertView;
+	}
+}

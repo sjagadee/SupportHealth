@@ -1,0 +1,264 @@
+package app.nichepro.fragmenttabpatient.home;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
+import android.widget.TextView;
+import app.nichepro.activities.healthcare.R;
+import app.nichepro.model.PatientAppointmentListResponseObject;
+import app.nichepro.model.PatientAppointmentResponseObject;
+import app.nichepro.model.PatientMedicationListResponseObject;
+import app.nichepro.model.PatientMedicationResponseObject;
+
+public class PatientHomeListAdapter extends BaseExpandableListAdapter {
+
+	Context mContext;
+	private String mMedicationTitle;
+	private String mAppointmentTitle;
+	private PatientMedicationListResponseObject mMedicationListObject;
+	private PatientAppointmentListResponseObject mAppointmentList;
+
+	static class ViewHolder {
+
+		TextView title;
+
+		public void reset() {
+
+		}
+	}
+
+	static class ViewHolderMedication {
+
+		/** The note view. */
+		TextView medicineText;
+
+		TextView quantityText;
+
+		/** The date name. */
+		TextView startDateText;
+
+		TextView indicationText;
+		TextView indication;
+
+		TextView statusText;
+
+		Button setReminder;
+
+		/**
+		 * Reset the content of cell to remove the flickering effect
+		 */
+		public void reset() {
+
+		}
+	}
+
+	static class ViewHolderAppointment {
+		TextView dateTxt;
+		TextView statusTxt;
+		TextView reasonTxt;
+
+		/**
+		 * Reset the content of cell to remove the flickering effect
+		 */
+		public void reset() {
+
+		}
+	}
+
+	public PatientHomeListAdapter(Context context,
+			PatientMedicationListResponseObject medicationList,
+			PatientAppointmentListResponseObject appointmentList) {
+		mContext = context;
+		this.mAppointmentTitle = "Appointments";
+		this.mMedicationTitle = "Medication";
+		this.mMedicationListObject = medicationList;
+		this.mAppointmentList = appointmentList;
+	}
+
+	@Override
+	public Object getChild(int groupPosition, int childPosition) {
+		if (groupPosition == 0) {
+			return mAppointmentList.APPOINTMENT_LIST.get(childPosition);
+		} else {// for 2nd one
+			return mMedicationListObject.MEDICATION_LIST.get(childPosition);
+		}
+	}
+
+	@Override
+	public long getChildId(int groupPosition, int childPosition) {
+		return childPosition;
+	}
+
+	@Override
+	public View getChildView(int groupPosition, int childPosition,
+			boolean isLastChild, View convertView, ViewGroup parent) {
+
+		if (groupPosition == 0) {
+			ViewHolderAppointment holder;
+			if (convertView == null
+					|| convertView.getTag().getClass().getSimpleName()
+							.compareTo("ViewHolderMedication") == 0) {
+
+				LayoutInflater inflater = (LayoutInflater) mContext
+						.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				convertView = inflater.inflate(R.layout.patient_list_app_cell,
+						null);
+				holder = new ViewHolderAppointment();
+
+				holder.dateTxt = ((TextView) convertView
+						.findViewById(R.id.date));
+				holder.statusTxt = ((TextView) convertView
+						.findViewById(R.id.status));
+				holder.reasonTxt = ((TextView) convertView
+						.findViewById(R.id.reason));
+
+				convertView.setTag(holder);
+			} else {
+				String name = convertView.getTag().getClass().getSimpleName();
+
+				holder = (ViewHolderAppointment) convertView.getTag();
+			}
+
+			PatientAppointmentResponseObject paro = mAppointmentList.APPOINTMENT_LIST
+					.get(childPosition);
+
+			String[] d = null;
+			if (paro.createdDate != null && !paro.createdDate.isEmpty()) {
+				d = paro.createdDate.split("T");
+			}
+
+			if (d != null && d.length > 0) {
+				holder.dateTxt.setText(d[0]);
+			}
+
+			if (d != null && d.length > 1) {
+				holder.dateTxt.setText(d[0] + ":" + d[1]);
+			}
+			holder.reasonTxt.setText(paro.visitTypeId);
+		} else {
+			ViewHolderMedication medicationHolder;
+
+			if (convertView == null
+					|| convertView.getTag().getClass().getSimpleName()
+							.compareTo("ViewHolderAppointment") == 0) {
+
+				LayoutInflater inflater = (LayoutInflater) mContext
+						.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+				convertView = inflater.inflate(R.layout.medication_list_cell,
+						null);
+				medicationHolder = new ViewHolderMedication();
+
+				medicationHolder.medicineText = ((TextView) convertView
+						.findViewById(R.id.medicine));
+
+				medicationHolder.quantityText = ((TextView) convertView
+						.findViewById(R.id.quantity));
+				medicationHolder.startDateText = ((TextView) convertView
+						.findViewById(R.id.startdate));
+				medicationHolder.statusText = ((TextView) convertView
+						.findViewById(R.id.status));
+				medicationHolder.setReminder = (Button) convertView
+						.findViewById(R.id.btnSetReminder);
+
+				convertView.setTag(medicationHolder);
+			} else {
+				String name = convertView.getTag().getClass().getSimpleName();
+				medicationHolder = (ViewHolderMedication) convertView.getTag();
+			}
+
+			PatientMedicationResponseObject pmro = this.mMedicationListObject.MEDICATION_LIST
+					.get(childPosition);
+
+			String[] d = null;
+			if (pmro.fromDate != null && !pmro.fromDate.isEmpty()) {
+				d = pmro.fromDate.split("T");
+			}
+
+			if (d != null && d.length > 0) {
+				medicationHolder.startDateText.setText(d[0]);
+			}
+
+			medicationHolder.medicineText.setText(pmro.medicationName);
+			medicationHolder.quantityText.setText(pmro.strengthValue);
+			medicationHolder.statusText.setText(pmro.status);
+
+			medicationHolder.setReminder.setVisibility(View.GONE);
+
+		}
+
+		return convertView;
+	}
+
+	@Override
+	public int getChildrenCount(int groupPosition) {
+
+		if (groupPosition == 0) {
+			return mAppointmentList.APPOINTMENT_LIST.size();
+		} else {// for 2nd one
+			return mMedicationListObject.MEDICATION_LIST.size();
+		}
+
+	}
+
+	@Override
+	public Object getGroup(int groupPosition) {
+		if (groupPosition == 0) {
+			return mAppointmentTitle;
+		} else {
+			return mMedicationTitle;
+		}
+	}
+
+	@Override
+	public int getGroupCount() {
+		return 2;
+	}
+
+	@Override
+	public long getGroupId(int groupPosition) {
+		return groupPosition;
+	}
+
+	@Override
+	public View getGroupView(int groupPosition, boolean isLastChild,
+			View convertView, ViewGroup parent) {
+
+		ViewHolder holder;
+
+		if (convertView == null) {
+
+			LayoutInflater inflater = (LayoutInflater) mContext
+					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			convertView = inflater.inflate(R.layout.home_list_cell, null);
+			holder = new ViewHolder();
+
+			holder.title = ((TextView) convertView.findViewById(R.id.name));
+
+			convertView.setTag(holder);
+		} else {
+			holder = (ViewHolder) convertView.getTag();
+		}
+
+		if (groupPosition == 0) {
+			holder.title.setText(mAppointmentTitle);
+		} else {
+			holder.title.setText(mMedicationTitle);
+		}
+
+		return convertView;
+	}
+
+	@Override
+	public boolean hasStableIds() {
+		return true;
+	}
+
+	@Override
+	public boolean isChildSelectable(int groupPosition, int childPosition) {
+		return true;
+	}
+}

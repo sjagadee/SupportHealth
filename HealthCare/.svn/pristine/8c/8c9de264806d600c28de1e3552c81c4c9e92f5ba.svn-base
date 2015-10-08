@@ -1,0 +1,118 @@
+package app.nichepro.fragmenttabpatient.info;
+
+import java.util.ArrayList;
+
+import android.graphics.Color;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.ViewAnimator;
+import app.nichepro.activities.healthcare.BaseFragment;
+import app.nichepro.activities.healthcare.R;
+import app.nichepro.animation.AnimationFactory;
+import app.nichepro.animation.AnimationFactory.FlipDirection;
+import app.nichepro.model.HospitalListResponseObject;
+import app.nichepro.model.HospitalResponseObject;
+
+public class PatientInfoHospitalListFragment extends BaseFragment implements
+		OnClickListener {
+	Boolean isToggle;
+	Button btn1, btn2;
+
+	ViewAnimator viewAnimator;
+
+	ArrayList<String> infoData;
+
+	HospitalListResponseObject mHospitalData;
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+
+		View view = inflater.inflate(
+				R.layout.patient_info_hospital_list_screen, container, false);
+
+		isToggle = true;
+		
+		viewAnimator = (ViewAnimator) view.findViewById(R.id.viewFlipper);
+		
+		infoData = new ArrayList<String>();
+
+		infoData.add("GPS");
+		infoData.add("Cancer");
+		infoData.add("Zip Code");
+		infoData.add("Hospetal Name");
+		infoData.add("Location");
+
+
+		ListView list = (ListView) view.findViewById(R.id.lvHospetalSearch);
+		ListView list1 = (ListView) view.findViewById(R.id.lvHospetalList);
+		
+		
+		ArrayAdapter<String> listAdapter = new PatientInfoListAdapter(
+				inflater.getContext(), inflater, R.layout.patient_list_cell);
+		for (String element : infoData) {
+			listAdapter.add(element);
+		}
+		list.setAdapter(listAdapter);
+		
+		
+
+		// Creating the list adapter and populating the hospital list
+		ArrayAdapter<HospitalResponseObject> listAdapter1 = new PatientInfoHospitalAdapter(
+				inflater.getContext(), inflater, R.layout.hospital_list_cell);
+
+		for (HospitalResponseObject lospitals : mHospitalData.lospitals) {
+			listAdapter1.add(lospitals);
+
+		}
+		list1.setAdapter(listAdapter1);
+		
+		
+		
+		btn1 = (Button) view.findViewById(R.id.bListOfHospetals);
+		btn2 = (Button) view.findViewById(R.id.bSearchHospetal);
+		btn1.setSelected(true);
+		btn1.setOnClickListener(this);
+		btn2.setOnClickListener(this);
+
+		return view;
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+
+		case R.id.bListOfHospetals:
+			if (isToggle == false) {
+				AnimationFactory.flipTransition(viewAnimator,
+						FlipDirection.LEFT_RIGHT);
+				btn1.setTextColor(Color.BLACK);
+				btn2.setTextColor(Color.WHITE);
+				btn1.setSelected(true);
+				btn2.setSelected(false);
+			}
+			isToggle = true;
+			break;
+
+		case R.id.bSearchHospetal:
+			if (isToggle == true) {
+				AnimationFactory.flipTransition(viewAnimator,
+						FlipDirection.LEFT_RIGHT);
+				btn2.setTextColor(Color.BLACK);
+				btn1.setTextColor(Color.WHITE);
+				btn2.setSelected(true);
+				btn1.setSelected(false);
+			}
+			isToggle = false;
+			break;
+		}
+
+	}
+
+}

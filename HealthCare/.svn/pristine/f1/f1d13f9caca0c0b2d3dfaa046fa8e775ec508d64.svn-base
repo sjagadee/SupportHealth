@@ -1,0 +1,85 @@
+package app.nichepro.fragmenttabpatient.queries;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.TextView;
+import app.nichepro.activities.healthcare.R;
+import app.nichepro.model.db.EmailMessage;
+
+public class EmailListAdapter extends ArrayAdapter<EmailMessage> {
+
+	LayoutInflater minflater;
+	Context mContext;
+
+	static class ViewHolder {
+
+		/** The note view. */
+		TextView user;
+
+		/** The date name. */
+		CheckBox cBox;
+
+		/** The date name. */
+		TextView quantity;
+
+		TextView subject;
+
+		Button shareBtn;
+		Button msgBtn;
+
+		/**
+		 * Reset the content of cell to remove the flickering effect
+		 */
+		public void reset() {
+
+		}
+	}
+
+	public EmailListAdapter(Context context, LayoutInflater inflater,
+			int textViewResourceId) {
+		super(context, textViewResourceId);
+
+		minflater = inflater;
+		mContext = context;
+	}
+
+	@Override
+	public View getView(final int position, View convertView, ViewGroup parent) {
+		ViewHolder holder;
+
+		if (convertView == null) {
+
+			convertView = minflater.inflate(R.layout.email_message_list_cell, null);
+			holder = new ViewHolder();
+			holder.user = ((TextView) convertView
+					.findViewById(R.id.user));
+			holder.subject = ((TextView) convertView
+					.findViewById(R.id.subject));
+			holder.cBox = ((CheckBox) convertView
+					.findViewById(R.id.chkBox));
+			holder.quantity = ((TextView) convertView
+					.findViewById(R.id.qty));
+			convertView.setTag(holder);
+		} else {
+			holder = (ViewHolder) convertView.getTag();
+		}
+		
+	EmailMessage msg = getItem(position);
+	holder.user.setText(msg.getUSERNAME().toString());
+	holder.subject.setText(msg.getSUBJECT().toString());
+	if (msg.getQTY() != null && !msg.getQTY().isEmpty() ) {
+		holder.quantity.setVisibility(View.VISIBLE);
+		holder.quantity.setText(msg.getQTY().toString());
+
+	}
+
+
+		return convertView;
+	}
+
+}

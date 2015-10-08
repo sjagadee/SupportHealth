@@ -1,0 +1,182 @@
+package app.nichepro.fragmenttabpatient.info;
+
+import java.util.ArrayList;
+
+import android.graphics.Color;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.ViewAnimator;
+import app.nichepro.HealthCareApp;
+import app.nichepro.activities.healthcare.BaseFragment;
+import app.nichepro.activities.healthcare.R;
+import app.nichepro.animation.AnimationFactory;
+import app.nichepro.animation.AnimationFactory.FlipDirection;
+import app.nichepro.fragmenttabpatient.home.PatientMyNotesListAdapter;
+import app.nichepro.model.BaseResponseObject;
+import app.nichepro.model.PatientNoteListResponseObject;
+import app.nichepro.model.PatientNoteResponseObject;
+import app.nichepro.responsehandler.ResponseParserListener;
+import app.nichepro.util.Constants;
+import app.nichepro.util.EnumFactory.ResponseMesssagType;
+import app.nichepro.util.WebLinks;
+import app.nichepro.util.WebRequestTask;
+
+public class PatientInfoMyNotesFragment extends BaseFragment implements
+		OnClickListener, ResponseParserListener {
+	Boolean isToggle;
+	Button btn1, btn2;
+	Button btnSave;
+	EditText titleTxt;
+	EditText titleUnfo;
+	ViewAnimator viewAnimator;
+	ListView listview;
+	ArrayList<PatientNoteResponseObject> mCancerData;
+	WebRequestTask myNoteRequestTask;
+	LayoutInflater mInflater;
+	
+	public void initializeHash(PatientNoteListResponseObject noteList) {
+		mCancerData = null;
+		mCancerData = new ArrayList<PatientNoteResponseObject>();
+		for (int i = 0; i < noteList.note.size(); i++) {
+			mCancerData.add(noteList.note.get(i));
+		}
+	}
+	
+	public void inflateAdapter(){
+		// Creating the list adapter and populating the list
+		ArrayAdapter<PatientNoteResponseObject> listAdapter = new PatientMyNotesListAdapter(
+				mInflater.getContext(), mInflater,
+				R.layout.patient_home_list_cell);
+
+		for (PatientNoteResponseObject element : mCancerData) {
+			listAdapter.add(element);
+
+		}
+		listview.setEnabled(false);
+		listview.setAdapter(listAdapter);
+	}
+	
+
+	@Override
+	public View onCreateView(final LayoutInflater inflater,
+			ViewGroup container, Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.patient_info_mynotes_screen,
+				container, false);
+		mInflater = inflater;
+		isToggle = true;
+
+		viewAnimator = (ViewAnimator) view.findViewById(R.id.viewFlipper);
+
+		btn1 = (Button) view.findViewById(R.id.bAddNewNotes);
+		btn2 = (Button) view.findViewById(R.id.bMyNotes);
+
+		btn1.setSelected(true);
+		btn1.setOnClickListener(this);
+		btn2.setOnClickListener(this);
+
+		listview = (ListView) view.findViewById(R.id.patientmynoteslist);
+
+		titleTxt = (EditText) view.findViewById(R.id.noteTitleEditTx);
+		titleUnfo = (EditText) view.findViewById(R.id.noteInfoEditTxt);
+
+		btnSave = (Button) view.findViewById(R.id.btnSave);
+		btnSave.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				addNote();
+			}
+		});
+
+		viewNote();
+		return view;
+
+	}
+
+	public void viewNote() {
+		myNoteRequestTask = new WebRequestTask(
+				WebLinks.getLink(WebLinks.LIST_OF_NOTES), getActivity(), this);
+		HealthCareApp myApp = (HealthCareApp) getActivity().getApplication();
+		myNoteRequestTask.AddParam(Constants.PARAM_partyId, myApp
+				.getLoggedInUser().getPartyId());
+		myNoteRequestTask.execute();
+	}
+
+	public void addNote() {
+		myNoteRequestTask = new WebRequestTask(
+				WebLinks.getLink(WebLinks.CREATE_NOTE), getActivity(), this);
+		HealthCareApp myApp = (HealthCareApp) getActivity().getApplication();
+		myNoteRequestTask.AddParam(Constants.PARAM_noteName, titleTxt.getText()
+				.toString());
+		myNoteRequestTask.AddParam(Constants.PARAM_partyId, myApp
+				.getLoggedInUser().getPartyId());
+		myNoteRequestTask.AddParam(Constants.PARAM_noteInfo, titleUnfo
+				.getText().toString());
+		myNoteRequestTask.execute();
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+
+		case R.id.bAddNewNotes:
+			if (isToggle == false) {
+				AnimationFactory.flipTransition(viewAnimator,
+						FlipDirection.LEFT_RIGHT);
+				btn1.setTextColor(Color.BLACK);
+				btn2.setTextColor(Color.WHITE);
+				btn1.setSelected(true);
+				btn2.setSelected(false);
+			}
+			isToggle = true;
+			break;
+
+		case R.id.bMyNotes:
+			if (isToggle == true) {
+				AnimationFactory.flipTransition(viewAnimator,
+						FlipDirection.LEFT_RIGHT);
+				btn2.setTextColor(Color.BLACK);
+				btn1.setTextColor(Color.WHITE);
+				btn2.setSelected(true);
+				btn1.setSelected(false);
+			}
+			isToggle = false;
+			break;
+		}
+	}
+
+	@Override
+	public void onEndParsingMsgType(ResponseMesssagType msgType) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onEndParsingResponse(ArrayList<BaseResponseObject> items) {
+		// TODO Auto-generated method stub
+		if (items != null && !items.isEmpty() && items.size() > 0) {
+			initializeHash((PatientNoteListResponseObject) items.get(0));
+			inflateAdapter();
+		}
+	}
+
+	@Override
+	public void onErrorResponse(ArrayList<BaseResponseObject> items) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onError(Exception ex) {
+		// TODO Auto-generated method stub
+
+	}
+}

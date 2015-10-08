@@ -1,0 +1,240 @@
+package app.nichepro.model.db;
+
+import java.io.Serializable;
+
+import com.j256.ormlite.field.DatabaseField;
+
+public class AlarmData implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public static String MESSAGE = "message";
+	public static Boolean MONDAY = false;
+	public static Boolean TUESDAY = false;
+	public static Boolean WEDNESDAY = false;
+	public static Boolean THURSDAY = false;
+	public static Boolean FRIDAY = false;
+	public static Boolean SATURDAY = false;
+	public static Boolean SUNDAY = false;
+	public static long TIME = -1;
+	public static int REQUESTEDCODE = -1;
+
+	public static long getTIME() {
+		return TIME;
+	}
+
+	public static void setTIME(long tIME) {
+		TIME = tIME;
+	}
+
+	public static Boolean getMONDAY() {
+		return MONDAY;
+	}
+
+	public static void setMONDAY(Boolean mONDAY) {
+		MONDAY = mONDAY;
+	}
+
+	public static Boolean getTUESDAY() {
+		return TUESDAY;
+	}
+
+	public static void setTUESDAY(Boolean tUESDAY) {
+		TUESDAY = tUESDAY;
+	}
+
+	public static Boolean getWEDNESDAY() {
+		return WEDNESDAY;
+	}
+
+	public static void setWEDNESDAY(Boolean wEDNESDAY) {
+		WEDNESDAY = wEDNESDAY;
+	}
+
+	public static Boolean getTHURSDAY() {
+		return THURSDAY;
+	}
+
+	public static void setTHURSDAY(Boolean tHURSDAY) {
+		THURSDAY = tHURSDAY;
+	}
+
+	public static Boolean getFRIDAY() {
+		return FRIDAY;
+	}
+
+	public static void setFRIDAY(Boolean fRIDAY) {
+		FRIDAY = fRIDAY;
+	}
+
+	public static Boolean getSATURDAY() {
+		return SATURDAY;
+	}
+
+	public static void setSATURDAY(Boolean sATURDAY) {
+		SATURDAY = sATURDAY;
+	}
+
+	public static Boolean getSUNDAY() {
+		return SUNDAY;
+	}
+
+	public static void setSUNDAY(Boolean sUNDAY) {
+		SUNDAY = sUNDAY;
+	}
+
+	public Boolean getMonday() {
+		return monday;
+	}
+
+	public void setMonday(Boolean monday) {
+		this.monday = monday;
+	}
+
+	public Boolean getTuesday() {
+		return tuesday;
+	}
+
+	public void setTuesday(Boolean tuesday) {
+		this.tuesday = tuesday;
+	}
+
+	public Boolean getWednesday() {
+		return wednesday;
+	}
+
+	public void setWednesday(Boolean wednesday) {
+		this.wednesday = wednesday;
+	}
+
+	public Boolean getThursday() {
+		return thursday;
+	}
+
+	public void setThursday(Boolean thursday) {
+		this.thursday = thursday;
+	}
+
+	public Boolean getFriday() {
+		return friday;
+	}
+
+	public void setFriday(Boolean friday) {
+		this.friday = friday;
+	}
+
+	public Boolean getSaturday() {
+		return saturday;
+	}
+
+	public void setSaturday(Boolean saturday) {
+		this.saturday = saturday;
+	}
+
+	public Boolean getSunday() {
+		return sunday;
+	}
+
+	public void setSunday(Boolean sunday) {
+		this.sunday = sunday;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	public static String getMESSAGE() {
+		return MESSAGE;
+	}
+
+	public static void setMESSAGE(String mESSAGE) {
+		MESSAGE = mESSAGE;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	@DatabaseField(generatedId = true)
+	int id;
+	@DatabaseField
+	Boolean monday;
+	@DatabaseField
+	Boolean tuesday;
+	@DatabaseField
+	Boolean wednesday;
+	@DatabaseField
+	Boolean thursday;
+	@DatabaseField
+	Boolean friday;
+	@DatabaseField
+	Boolean saturday;
+	@DatabaseField
+	Boolean sunday;
+	@DatabaseField
+	String message;
+	@DatabaseField
+	long time;
+	@DatabaseField
+	int requestedcode;
+	
+	public static int getREQUESTEDCODE() {
+		return REQUESTEDCODE;
+	}
+
+	public static void setREQUESTEDCODE(int rEQUESTEDCODE) {
+		REQUESTEDCODE = rEQUESTEDCODE;
+	}
+
+	public int getRequestedcode() {
+		return requestedcode;
+	}
+
+	public void setRequestedcode(int requestedcode) {
+		this.requestedcode = requestedcode;
+	}
+
+	public boolean isDeleteAlarm;
+	public long getTime() {
+		return time;
+	}
+
+	public void setTime(long time) {
+		this.time = time;
+	}
+
+	public AlarmData() {
+		// needed by ormlite
+		this.message = "";
+		this.monday = false;
+		this.tuesday = false;
+		this.wednesday = false;
+		this.thursday = false;
+		this.friday = false;
+		this.saturday = false;
+		this.sunday = false;
+		this.time = -1;
+		this.isDeleteAlarm = false;
+		this.requestedcode = -1;
+	}
+
+	public AlarmData(String username, String subject, String msg) {
+
+		this.message = msg;
+	}
+}

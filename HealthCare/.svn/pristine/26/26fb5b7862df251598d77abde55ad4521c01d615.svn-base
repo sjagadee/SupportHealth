@@ -1,0 +1,115 @@
+package app.nichepro.fragmenttabdoctor.appointments;
+
+import java.util.ArrayList;
+
+import android.graphics.Color;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import app.nichepro.activities.healthcare.BaseFragment;
+import app.nichepro.activities.healthcare.R;
+import app.nichepro.fragmenttabdoctor.home.DoctorAppointmentListAdapter;
+import app.nichepro.model.KeyValue;
+public class DoctorAppointmentsFragment extends BaseFragment implements OnClickListener{
+
+
+	ArrayList<KeyValue> mCancerData;
+	Button btnToday;
+	Button btnWeek;
+	Button btnMonth;
+
+	public void initializeHash() {
+		mCancerData = new ArrayList<KeyValue>();
+		KeyValue kv = new KeyValue();
+
+		kv.setKey("Mrs. Andria");
+		kv.setValue("10.30");
+		mCancerData.add(kv);
+
+		kv = new KeyValue();
+		kv.setKey("Mrs. Kate");
+		kv.setValue("11.00");
+		mCancerData.add(kv);
+
+		kv = new KeyValue();
+		kv.setKey("Mrs. Terra");
+		kv.setValue("11.30");
+		mCancerData.add(kv);
+
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		initializeHash();
+		View view = inflater.inflate(R.layout.doctor_appointments_tab_first_screen,
+				container, false);
+		btnToday = (Button) view.findViewById(R.id.today);
+		btnWeek = (Button) view.findViewById(R.id.week);
+		btnMonth = (Button) view.findViewById(R.id.month);
+
+		btnToday.setSelected(true);
+		btnToday.setOnClickListener(this);
+		btnWeek.setOnClickListener(this);
+		btnMonth.setOnClickListener(this);
+		btnWeek.setTextColor(Color.WHITE);
+		btnMonth.setTextColor(Color.WHITE);
+
+		ListView list = (ListView) view.findViewById(R.id.doctorappointmentlist);
+
+
+		// Creating the list adapter and populating the list
+		ArrayAdapter<KeyValue> listAdapter = new DoctorAppointmentListAdapter(
+				inflater.getContext(), inflater, R.layout.doctor_home_list_cell);
+
+		for (KeyValue element : mCancerData) {
+			listAdapter.add(element);
+
+		}
+		list.setAdapter(listAdapter);
+
+
+		return view;
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.today: {
+			btnToday.setTextColor(Color.BLACK);
+			btnWeek.setTextColor(Color.WHITE);
+			btnMonth.setTextColor(Color.WHITE);
+			btnToday.setSelected(true);
+			btnWeek.setSelected(false);
+			btnMonth.setSelected(false);
+		}
+			break;
+		case R.id.week: {
+			btnToday.setTextColor(Color.WHITE);
+			btnWeek.setTextColor(Color.BLACK);
+			btnMonth.setTextColor(Color.WHITE);
+			btnToday.setSelected(false);
+			btnWeek.setSelected(true);
+			btnMonth.setSelected(false);
+		}
+			break;
+		case R.id.month: {
+			btnToday.setTextColor(Color.WHITE);
+			btnWeek.setTextColor(Color.WHITE);
+			btnMonth.setTextColor(Color.BLACK);
+			btnToday.setSelected(false);
+			btnWeek.setSelected(false);
+			btnMonth.setSelected(true);
+		}
+			break;
+
+		}
+
+	}
+
+}

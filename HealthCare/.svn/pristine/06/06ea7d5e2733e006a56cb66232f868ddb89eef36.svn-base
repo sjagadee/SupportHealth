@@ -1,0 +1,154 @@
+package app.nichepro.fragmenttabpatient.community;
+
+import java.util.ArrayList;
+
+import android.graphics.Color;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.ViewAnimator;
+import app.nichepro.activities.healthcare.BaseFragment;
+import app.nichepro.activities.healthcare.R;
+import app.nichepro.animation.AnimationFactory;
+import app.nichepro.animation.AnimationFactory.FlipDirection;
+import app.nichepro.model.EventsResponseObject;
+
+public class PatientCommunityEventsFragments extends BaseFragment implements
+		OnClickListener {
+
+	ArrayList<EventsResponseObject> mData;
+	ArrayList<EventsResponseObject> mPostData;
+
+	Button btnUpEvents;
+	Button btnPrevEvents;
+	Boolean isToggle;
+	ViewAnimator viewAnimator;
+
+	public void initializeHash() {
+		mData = new ArrayList<EventsResponseObject>();
+		EventsResponseObject ero = new EventsResponseObject();
+
+		ero.setName("Free Check Up");
+		ero.setDate("12/3/2013");
+		ero.setLocation("Arizona");
+		ero.setContact("288411475");
+		mData.add(ero);
+
+		ero = new EventsResponseObject();
+		ero.setName("Free Check Up");
+		ero.setDate("12/3/2013");
+		ero.setLocation("Texas");
+		ero.setContact("288411475");
+		mData.add(ero);
+
+		ero = new EventsResponseObject();
+		ero.setName("Free Check Up");
+		ero.setDate("12/3/2013");
+		ero.setLocation("New York");
+		ero.setContact("288411475");
+		mData.add(ero);
+
+		mPostData = new ArrayList<EventsResponseObject>();
+		ero = new EventsResponseObject();
+
+		ero.setName("Post Free Check Up");
+		ero.setDate("12/3/2013");
+		ero.setLocation("Arizona");
+		ero.setContact("288411475");
+		mPostData.add(ero);
+
+		ero = new EventsResponseObject();
+		ero.setName("Post Free Check Up");
+		ero.setDate("12/3/2013");
+		ero.setLocation("Texas");
+		ero.setContact("288411475");
+		mPostData.add(ero);
+
+		ero = new EventsResponseObject();
+		ero.setName("Post Free Check Up");
+		ero.setDate("12/3/2013");
+		ero.setLocation("New York");
+		ero.setContact("288411475");
+		mPostData.add(ero);
+
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		initializeHash();
+		View view = inflater.inflate(R.layout.patient_events_screen, container,
+				false);
+
+		ListView list = (ListView) view.findViewById(R.id.upcomingeventlist);
+		ListView list1 = (ListView) view.findViewById(R.id.posteventlist);
+
+		// Creating the list adapter and populating the list
+		ArrayAdapter<EventsResponseObject> listAdapter = new UpcommingEventsListAdapter(
+				inflater.getContext(), inflater,
+				R.layout.upcoming_events_list_cell);
+
+		for (EventsResponseObject element : mData) {
+			listAdapter.add(element);
+
+		}
+		list.setAdapter(listAdapter);
+
+		ArrayAdapter<EventsResponseObject> listAdapter1 = new UpcommingEventsListAdapter(
+				inflater.getContext(), inflater,
+				R.layout.upcoming_events_list_cell);
+
+		for (EventsResponseObject element : mPostData) {
+			listAdapter1.add(element);
+
+		}
+		list1.setAdapter(listAdapter1);
+
+		viewAnimator = (ViewAnimator) view.findViewById(R.id.viewFlipper);
+
+		btnUpEvents = (Button) view.findViewById(R.id.up_events);
+		btnPrevEvents = (Button) view.findViewById(R.id.prev_events);
+		btnUpEvents.setSelected(true);
+		isToggle = true;
+		btnUpEvents.setOnClickListener(this);
+		btnPrevEvents.setOnClickListener(this);
+
+		return view;
+
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.up_events:
+			if (isToggle == false) {
+				AnimationFactory.flipTransition(viewAnimator,
+						FlipDirection.LEFT_RIGHT);
+				btnUpEvents.setTextColor(Color.BLACK);
+				btnPrevEvents.setTextColor(Color.WHITE);
+				btnUpEvents.setSelected(true);
+				btnPrevEvents.setSelected(false);
+			}
+			isToggle = true;
+			break;
+		case R.id.prev_events:
+			if (isToggle == true) {
+				AnimationFactory.flipTransition(viewAnimator,
+						FlipDirection.LEFT_RIGHT);
+				btnUpEvents.setTextColor(Color.WHITE);
+				btnPrevEvents.setTextColor(Color.BLACK);
+				btnUpEvents.setSelected(false);
+				btnPrevEvents.setSelected(true);
+
+			}
+			isToggle = false;
+			break;
+		}
+
+	}
+}

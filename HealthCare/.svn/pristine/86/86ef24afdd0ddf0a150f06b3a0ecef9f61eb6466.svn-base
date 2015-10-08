@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/aaa"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:text="Hello Mr. John Bose"
+        android:textSize="25sp" />
+
+    <TextView
+        android:id="@+id/newRequest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:text="New &amp; Pending Request For Sponsorship(Nil)"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/sponsoredRequest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:text="Number of Sponsored patient(Nil)"
+        android:textSize="20sp" />
+
+</LinearLayout>

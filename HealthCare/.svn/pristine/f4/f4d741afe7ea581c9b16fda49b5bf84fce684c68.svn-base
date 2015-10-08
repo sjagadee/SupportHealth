@@ -1,0 +1,133 @@
+package app.nichepro.fragmenttabpatient.info;
+
+import java.util.ArrayList;
+
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import app.nichepro.activities.healthcare.BaseFragment;
+import app.nichepro.activities.healthcare.R;
+import app.nichepro.model.BaseResponseObject;
+import app.nichepro.model.HospitalListResponseObject;
+import app.nichepro.responsehandler.ResponseParserListener;
+import app.nichepro.util.Constants;
+import app.nichepro.util.EnumFactory.ResponseMesssagType;
+import app.nichepro.util.UIUtilities;
+import app.nichepro.util.WebLinks;
+import app.nichepro.util.WebRequestTask;
+
+public class PatientInfoFragment extends BaseFragment implements
+		ResponseParserListener {
+
+	ArrayList<String> infoData;
+	WebRequestTask infoRequestTask;
+	private ResponseMesssagType msgType;
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		infoData = new ArrayList<String>();
+		infoData.add("Profile");
+		infoData.add("Doctor");
+		infoData.add("Cancer Information");
+		infoData.add("My Notes");
+		infoData.add("Hospetal Locator");
+		infoData.add("Symptom Tracker");
+
+		View view = inflater.inflate(R.layout.info_first_screen, container,
+				false);
+
+		ListView list = (ListView) view.findViewById(R.id.lvInfoItems);
+		ArrayAdapter<String> listAdapter = new PatientInfoListAdapter(
+				inflater.getContext(), inflater, R.layout.patient_list_cell);
+		for (String element : infoData) {
+			listAdapter.add(element);
+		}
+		list.setAdapter(listAdapter);
+
+		// Creating an item click listener, to open/close our toolbar for each
+		// item
+		list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, final View view,
+					int position, long id) {
+				if (position == 0) {
+					mActivity.pushFragments(Constants.TAB_INFO,
+							new PatientInfoProfileFragment(), true, true);
+				} else if (position == 3) {
+					mActivity.pushFragments(Constants.TAB_INFO,
+							new PatientInfoMyNotesFragment(), true, true);
+				} else if (position == 4) {
+					// mActivity.pushFragments(Constants.TAB_INFO, new
+					// PatientInfoHospetalList(), true, true);
+					listOfHospitals();
+				}
+
+			}
+		});
+		return view;
+	}
+
+	public void listOfHospitals() {
+
+		infoRequestTask = new WebRequestTask(
+				WebLinks.getLink(WebLinks.HOSPITAL_LIST), getActivity(), this);
+
+		infoRequestTask.AddParam(Constants.PARAM_facilityName, "abc");
+		infoRequestTask.execute();
+
+	}
+
+	@Override
+	public void onEndParsingMsgType(ResponseMesssagType msgType) {
+		// TODO Auto-generated method stub
+		this.msgType = msgType;
+	}
+
+	@Override
+	public void onEndParsingResponse(ArrayList<BaseResponseObject> items) {
+		// TODO Auto-generated method stub
+		if (this.msgType == ResponseMesssagType.HospitalListMessageType) {
+			BaseResponseObject bro = items.get(0);
+			if (bro instanceof HospitalListResponseObject) {
+				PatientInfoHospitalListFragment pihlf = new PatientInfoHospitalListFragment();
+				pihlf.mHospitalData = (HospitalListResponseObject) bro;
+				mActivity.pushFragments(Constants.TAB_INFO, pihlf, true, true);
+			} else {
+				UIUtilities.showConfirmationAlert(getActivity(),
+						R.string.dialog_title_information, bro.getResult(),
+						R.string.dialog_button_Ok,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int which) {
+
+							}
+						});
+			}
+		}
+	}
+
+	@Override
+	public void onErrorResponse(ArrayList<BaseResponseObject> items) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onError(Exception ex) {
+		// TODO Auto-generated method stub
+	UIUtilities.showConfirmationAlert(getActivity(),
+				R.string.dialog_title_information,ex.getMessage(),
+				R.string.dialog_button_Ok,
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+
+					}
+				});	
+
+	}
+}

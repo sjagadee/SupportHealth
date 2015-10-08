@@ -1,0 +1,47 @@
+package app.nichepro.responsehandler;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+
+import app.nichepro.model.ErrorResponseObject;
+import app.nichepro.util.Constants;
+import app.nichepro.util.EnumFactory.ResponseHeaderType;
+
+public class ErrorResonseParser extends ResponseParserBase {
+
+	/** The err obj. */
+	ErrorResponseObject errObj;
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.xml.sax.helpers.DefaultHandler#endElement(java.lang.String,
+	 * java.lang.String, java.lang.String)
+	 */
+	@Override
+	public void endElement(String uri, String localName, String name)
+			throws SAXException {
+		super.endElement(uri, localName, name);
+		if (localName.compareTo(Constants.TAG_msgtype) == 0) {
+			parsedType(ResponseHeaderType.toEnum(currentString.toString()));
+		}
+		isStoringCharacters = false;
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.xml.sax.helpers.DefaultHandler#startElement(java.lang.String,
+	 * java.lang.String, java.lang.String, org.xml.sax.Attributes)
+	 */
+	@Override
+	public void startElement(String uri, String localName, String name,
+			Attributes attributes) throws SAXException {
+		super.startElement(uri, localName, name, attributes);
+		if (localName.compareTo(Constants.TAG_msgtype) == 0) {
+			currentString.setLength(0);
+			isStoringCharacters = true;
+		}
+	}
+}

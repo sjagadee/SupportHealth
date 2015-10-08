@@ -1,0 +1,20 @@
+package app.nichepro.fragmenttabpatient.home;
+
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import app.nichepro.activities.healthcare.BaseFragment;
+import app.nichepro.activities.healthcare.R;
+
+
+public class AppTabCSecondFragment extends BaseFragment {
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+        View view       =   inflater.inflate(R.layout.app_tab_c_second_screen, container, false);
+        return view;
+	}
+}

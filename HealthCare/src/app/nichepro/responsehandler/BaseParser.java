@@ -1,0 +1,646 @@
+package app.nichepro.responsehandler;
+
+import java.util.ArrayList;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import app.nichepro.model.BaseResponseObject;
+import app.nichepro.model.CommunicationListResponseObject;
+import app.nichepro.model.ErrorResponseObject;
+import app.nichepro.model.HospitalListResponseObject;
+import app.nichepro.model.HtmlPageLinkListResponseObject;
+import app.nichepro.model.LoginResponseObject;
+import app.nichepro.model.PartyListResponseObject;
+import app.nichepro.model.PartySharingListResponseObject;
+import app.nichepro.model.PatientAllergiesListResponseObject;
+import app.nichepro.model.PatientAppointmentListResponseObject;
+import app.nichepro.model.PatientDiagnosisListResponseObject;
+import app.nichepro.model.PatientMedicationListResponseObject;
+import app.nichepro.model.PatientNoteListResponseObject;
+import app.nichepro.model.PatientUpEventsListResponseObject;
+import app.nichepro.model.PatientVitalStatListResponseObject;
+import app.nichepro.model.SponsorShipListResponseObject;
+import app.nichepro.model.SymtomListResponseObject;
+import app.nichepro.model.SymtomPatientListResponseObject;
+
+import com.google.gson.Gson;
+
+public interface BaseParser {
+	ArrayList<BaseResponseObject> getParsedData(String data);
+}
+
+class UnknownParser implements BaseParser {
+
+	@Override
+	public ArrayList<BaseResponseObject> getParsedData(String data) {
+		// TODO Auto-generated method stub
+		ArrayList<BaseResponseObject> items = new ArrayList<BaseResponseObject>();
+		ErrorResponseObject ero = new ErrorResponseObject();
+		ero.setErrorText("Server returned and error");
+		items.add(ero);
+		return items;
+	}
+}
+
+class ErrorParser implements BaseParser {
+
+	@Override
+	public ArrayList<BaseResponseObject> getParsedData(String data) {
+		// TODO Auto-generated method stub
+		ArrayList<BaseResponseObject> items = new ArrayList<BaseResponseObject>();
+		ErrorResponseObject ero = new ErrorResponseObject();
+		ero.setErrorText(data);
+		items.add(ero);
+		return items;
+	}
+}
+
+class LoginParser implements BaseParser {
+
+	@Override
+	public ArrayList<BaseResponseObject> getParsedData(String data) {
+		// TODO Auto-generated method stub
+		ArrayList<BaseResponseObject> items = new ArrayList<BaseResponseObject>();
+		LoginResponseObject lro = new LoginResponseObject();
+		lro.setLoggedIn(false);
+		JSONObject json = null;
+
+		try {
+			json = new JSONObject(data);
+			if (json != null) {
+
+				if (json.has("LOGIN_DETAILS")) {
+					Gson gson = new Gson();
+					lro = gson.fromJson(data, LoginResponseObject.class);
+				}
+
+				if (json.has("_LOGIN_PASSED_")) {
+					lro.setLoggedIn(Boolean.parseBoolean(json
+							.getString("_LOGIN_PASSED_")));
+				}
+				if (json.has("partyId")) {
+					lro.setPartyId(json.getString("partyId"));
+				}
+
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		items.add(lro);
+		return items;
+	}
+
+}
+
+class RegistrationParser implements BaseParser {
+
+	@Override
+	public ArrayList<BaseResponseObject> getParsedData(String data) {
+		// TODO Auto-generated method stub
+		ArrayList<BaseResponseObject> items = new ArrayList<BaseResponseObject>();
+		LoginResponseObject lro = new LoginResponseObject();
+		lro.setLoggedIn(false);
+
+		JSONObject json = null;
+
+		try {
+			json = new JSONObject(data);
+			if (json != null) {
+				if (json.has("_LOGIN_PASSED_")) {
+					lro.setLoggedIn(Boolean.parseBoolean(json
+							.getString("_LOGIN_PASSED_")));
+					lro.setNewlyRegistered(true);
+				}
+				if (json.has("partyId")) {
+					lro.setPartyId(json.getString("partyId"));
+				}
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		items.add(lro);
+		return items;
+	}
+
+}
+
+class AddPatientNoteParser implements BaseParser {
+
+	@Override
+	public ArrayList<BaseResponseObject> getParsedData(String data) {
+		// TODO Auto-generated method stub
+		ArrayList<BaseResponseObject> items = new ArrayList<BaseResponseObject>();
+		LoginResponseObject lro = new LoginResponseObject();
+		lro.setLoggedIn(false);
+
+		JSONObject json = null;
+
+		try {
+			json = new JSONObject(data);
+			if (json != null) {
+				if (json.has("_LOGIN_PASSED_")) {
+					lro.setLoggedIn(Boolean.parseBoolean(json
+							.getString("_LOGIN_PASSED_")));
+					lro.setNewlyRegistered(true);
+				}
+				if (json.has("partyId")) {
+					lro.setPartyId(json.getString("partyId"));
+				}
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		items.add(lro);
+		return items;
+	}
+
+}
+
+class ListPatientNoteParser implements BaseParser {
+
+	@Override
+	public ArrayList<BaseResponseObject> getParsedData(String data) {
+		// TODO Auto-generated method stub
+		ArrayList<BaseResponseObject> items = new ArrayList<BaseResponseObject>();
+
+		JSONObject json = null;
+
+		try {
+			json = new JSONObject(data);
+			if (json != null) {
+				if (json.has("note")) {
+					Gson gson = new Gson();
+					PatientNoteListResponseObject pnlro = gson.fromJson(data,
+							PatientNoteListResponseObject.class);
+					items.add(pnlro);
+				}
+
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return items;
+	}
+
+}
+
+class PatientMedicationListParser implements BaseParser {
+
+	@Override
+	public ArrayList<BaseResponseObject> getParsedData(String data) {
+		ArrayList<BaseResponseObject> items = new ArrayList<BaseResponseObject>();
+
+		JSONObject json = null;
+
+		try {
+			json = new JSONObject(data);
+			if (json != null) {
+				if (json.has("MEDICATION_LIST")) {
+					Gson gson = new Gson();
+					PatientMedicationListResponseObject pmlro = gson.fromJson(
+							data, PatientMedicationListResponseObject.class);
+					items.add(pmlro);
+				}
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return items;
+	}
+
+}
+
+class PatientNoteParser implements BaseParser {
+
+	@Override
+	public ArrayList<BaseResponseObject> getParsedData(String data) {
+		// TODO Auto-generated method stub
+		ArrayList<BaseResponseObject> items = new ArrayList<BaseResponseObject>();
+		BaseResponseObject bro = new BaseResponseObject();
+		JSONObject json = null;
+
+		try {
+			json = new JSONObject(data);
+			if (json != null) {
+				if (json.has("patientnote")) {
+					bro.setResult("Success");
+				}
+
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		items.add(bro);
+		return items;
+	}
+
+}
+
+class PartyListPareser implements BaseParser {
+
+	@Override
+	public ArrayList<BaseResponseObject> getParsedData(String data) {
+		// TODO Auto-generated method stub
+		ArrayList<BaseResponseObject> items = new ArrayList<BaseResponseObject>();
+		JSONObject json = null;
+
+		try {
+			json = new JSONObject(data);
+			if (json != null) {
+				if (json.has("party")) {
+					Gson gson = new Gson();
+					PartyListResponseObject plro = gson.fromJson(data,
+							PartyListResponseObject.class);
+					items.add(plro);
+				}
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return items;
+	}
+
+}
+
+class PatientListPareser implements BaseParser {
+
+	@Override
+	public ArrayList<BaseResponseObject> getParsedData(String data) {
+		// TODO Auto-generated method stub
+		ArrayList<BaseResponseObject> items = new ArrayList<BaseResponseObject>();
+		JSONObject json = null;
+
+		try {
+			json = new JSONObject(data);
+			if (json != null) {
+				if (json.has("party")) {
+					Gson gson = new Gson();
+					PartyListResponseObject plro = gson.fromJson(data,
+							PartyListResponseObject.class);
+					items.add(plro);
+				}
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return items;
+	}
+
+}
+
+class HospitalListPareser implements BaseParser {
+
+	@Override
+	public ArrayList<BaseResponseObject> getParsedData(String data) {
+		// TODO Auto-generated method stub
+		ArrayList<BaseResponseObject> items = new ArrayList<BaseResponseObject>();
+		JSONObject json = null;
+
+		try {
+			json = new JSONObject(data);
+			if (json != null) {
+				if (json.has("lospitals")) {
+					JSONArray jArray = json.getJSONArray("lospitals");
+					if (jArray != null && jArray.length() > 0) {
+						Gson gson = new Gson();
+						HospitalListResponseObject hlro = gson.fromJson(data,
+								HospitalListResponseObject.class);
+						items.add(hlro);
+					} else {
+						BaseResponseObject bro = new BaseResponseObject();
+						bro.setResult("No Hospital found");
+						items.add(bro);
+					}
+				} else {
+					BaseResponseObject bro = new BaseResponseObject();
+					bro.setResult("No Hospital found");
+					items.add(bro);
+				}
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return items;
+	}
+
+}
+
+class PatientDiagnosisListParser implements BaseParser {
+
+	@Override
+	public ArrayList<BaseResponseObject> getParsedData(String data) {
+		ArrayList<BaseResponseObject> items = new ArrayList<BaseResponseObject>();
+
+		JSONObject json = null;
+
+		try {
+			json = new JSONObject(data);
+			if (json != null) {
+				if (json.has("DIAGNOSIS_LIST")) {
+					Gson gson = new Gson();
+					PatientDiagnosisListResponseObject pmlro = gson.fromJson(
+							data, PatientDiagnosisListResponseObject.class);
+					items.add(pmlro);
+				}
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return items;
+	}
+
+}
+
+class PatientVitalStatListParser implements BaseParser {
+
+	@Override
+	public ArrayList<BaseResponseObject> getParsedData(String data) {
+		ArrayList<BaseResponseObject> items = new ArrayList<BaseResponseObject>();
+
+		JSONObject json = null;
+
+		try {
+			json = new JSONObject(data);
+			if (json != null) {
+				if (json.has("VITALSTATS_LIST")) {
+					Gson gson = new Gson();
+					PatientVitalStatListResponseObject pmlro = gson.fromJson(
+							data, PatientVitalStatListResponseObject.class);
+					items.add(pmlro);
+				}
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return items;
+	}
+
+}
+
+class AppointmentListParser implements BaseParser {
+
+	@Override
+	public ArrayList<BaseResponseObject> getParsedData(String data) {
+		ArrayList<BaseResponseObject> items = new ArrayList<BaseResponseObject>();
+
+		JSONObject json = null;
+
+		try {
+			json = new JSONObject(data);
+			if (json != null) {
+				if (json.has("APPOINTMENT_LIST")) {
+					Gson gson = new Gson();
+					PatientAppointmentListResponseObject pmlro = gson.fromJson(
+							data, PatientAppointmentListResponseObject.class);
+					items.add(pmlro);
+				}
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return items;
+	}
+
+}
+
+class CommunicationListParser implements BaseParser {
+
+	@Override
+	public ArrayList<BaseResponseObject> getParsedData(String data) {
+		ArrayList<BaseResponseObject> items = new ArrayList<BaseResponseObject>();
+
+		JSONObject json = null;
+
+		try {
+			json = new JSONObject(data);
+			if (json != null) {
+				if (json.has("CommunicationEventList")) {
+					Gson gson = new Gson();
+					CommunicationListResponseObject pmlro = gson.fromJson(data,
+							CommunicationListResponseObject.class);
+					items.add(pmlro);
+				}
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return items;
+	}
+
+}
+
+class CommunicationSendParser implements BaseParser {
+
+	@Override
+	public ArrayList<BaseResponseObject> getParsedData(String data) {
+		// TODO Auto-generated method stub
+		ArrayList<BaseResponseObject> items = new ArrayList<BaseResponseObject>();
+		BaseResponseObject bro = new BaseResponseObject();
+		bro.setResult("Success");
+
+		items.add(bro);
+		return items;
+	}
+
+}
+
+class PatientUpEventsListParser implements BaseParser {
+
+	@Override
+	public ArrayList<BaseResponseObject> getParsedData(String data) {
+		ArrayList<BaseResponseObject> items = new ArrayList<BaseResponseObject>();
+
+		JSONObject json = null;
+
+		try {
+			json = new JSONObject(data);
+			if (json != null) {
+				if (json.has("Event")) {
+					Gson gson = new Gson();
+					PatientUpEventsListResponseObject pmlro = gson.fromJson(
+							data, PatientUpEventsListResponseObject.class);
+					items.add(pmlro);
+				}
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return items;
+	}
+
+}
+
+class PartySharingListParser implements BaseParser {
+
+	@Override
+	public ArrayList<BaseResponseObject> getParsedData(String data) {
+		ArrayList<BaseResponseObject> items = new ArrayList<BaseResponseObject>();
+
+		JSONObject json = null;
+
+		try {
+			json = new JSONObject(data);
+			if (json != null) {
+				if (json.has("CCRSharingList")) {
+					Gson gson = new Gson();
+					PartySharingListResponseObject pmlro = gson.fromJson(data,
+							PartySharingListResponseObject.class);
+					items.add(pmlro);
+				}
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return items;
+	}
+}
+
+class AllergiesListParser implements BaseParser {
+
+	@Override
+	public ArrayList<BaseResponseObject> getParsedData(String data) {
+		ArrayList<BaseResponseObject> items = new ArrayList<BaseResponseObject>();
+
+		JSONObject json = null;
+
+		try {
+			json = new JSONObject(data);
+			if (json != null) {
+				if (json.has("PROCEDURE_LIST")) {
+					Gson gson = new Gson();
+					PatientAllergiesListResponseObject pmlro = gson.fromJson(
+							data, PatientAllergiesListResponseObject.class);
+					items.add(pmlro);
+				}
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return items;
+	}
+
+}
+
+class HtmlLinkParser implements BaseParser {
+
+	@Override
+	public ArrayList<BaseResponseObject> getParsedData(String data) {
+		ArrayList<BaseResponseObject> items = new ArrayList<BaseResponseObject>();
+
+		JSONObject json = null;
+
+		try {
+			json = new JSONObject(data);
+			if (json != null) {
+				if (json.has("RESPONSE")) {
+					Gson gson = new Gson();
+					HtmlPageLinkListResponseObject pmlro = gson.fromJson(data,
+							HtmlPageLinkListResponseObject.class);
+					items.add(pmlro);
+				}
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return items;
+	}
+
+}
+
+class SponsorRequestListParser implements BaseParser {
+
+	@Override
+	public ArrayList<BaseResponseObject> getParsedData(String data) {
+		ArrayList<BaseResponseObject> items = new ArrayList<BaseResponseObject>();
+
+		JSONObject json = null;
+
+		try {
+			json = new JSONObject(data);
+			if (json != null) {
+				if (json.has("RESPONSE")) {
+					Gson gson = new Gson();
+					SponsorShipListResponseObject pmlro = gson.fromJson(data,
+							SponsorShipListResponseObject.class);
+					items.add(pmlro);
+				}
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return items;
+	}
+
+}
+
+class SymtomsRequestListParser implements BaseParser {
+
+	@Override
+	public ArrayList<BaseResponseObject> getParsedData(String data) {
+		ArrayList<BaseResponseObject> items = new ArrayList<BaseResponseObject>();
+
+		JSONObject json = null;
+
+		try {
+			json = new JSONObject(data);
+			if (json != null) {
+				if (json.has("RESPONSE")) {
+					Gson gson = new Gson();
+					SymtomListResponseObject pmlro = gson.fromJson(data,
+							SymtomListResponseObject.class);
+					items.add(pmlro);
+				}
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return items;
+	}
+
+}
+class SymtomsRequestPatientListParser implements BaseParser {
+
+	@Override
+	public ArrayList<BaseResponseObject> getParsedData(String data) {
+		ArrayList<BaseResponseObject> items = new ArrayList<BaseResponseObject>();
+
+		JSONObject json = null;
+
+		try {
+			json = new JSONObject(data);
+			if (json != null) {
+				if (json.has("_PATIENT_SYMOTOM_LIST_")) {
+					Gson gson = new Gson();
+					SymtomPatientListResponseObject pmlro = gson.fromJson(data,
+							SymtomPatientListResponseObject.class);
+					items.add(pmlro);
+				}
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return items;
+	}
+
+}

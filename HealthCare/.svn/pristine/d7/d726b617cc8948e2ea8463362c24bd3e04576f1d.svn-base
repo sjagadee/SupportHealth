@@ -1,0 +1,40 @@
+package app.nichepro.fragmenttabpatient.ehr;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
+import app.nichepro.activities.healthcare.R;
+import app.nichepro.model.PatientMedicationResponseObject;
+import app.nichepro.model.PatientMedicationtResponseObject;
+
+/**
+ * A simple implementation of list adapter.
+ */
+class PatientMedicationListAdapter extends ArrayAdapter<PatientMedicationResponseObject> {
+	LayoutInflater minflater;
+	
+    public PatientMedicationListAdapter(Context context, LayoutInflater inflater, int textViewResourceId) {
+        super(context,textViewResourceId);
+        minflater = inflater;
+    }
+    
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+
+        if (convertView == null) {
+            convertView = minflater.inflate(R.layout.medication_list_cell, null) ;
+        }
+        PatientMedicationResponseObject pmro = getItem(position);
+        String d = pmro.createdDate.date + "/" + pmro.createdDate.month+ "/" + pmro.createdDate.year;
+        ((TextView) convertView.findViewById(R.id.medicine)).setText(pmro.medicationId);
+		((TextView) convertView.findViewById(R.id.quantity)).setText("500mg");
+		((TextView) convertView.findViewById(R.id.startdate)).setText(d);
+		((TextView) convertView.findViewById(R.id.diagnosis)).setText(pmro.diognosisId);
+		((TextView) convertView.findViewById(R.id.enddate)).setText("set date");
+        return convertView;
+    }
+}
+

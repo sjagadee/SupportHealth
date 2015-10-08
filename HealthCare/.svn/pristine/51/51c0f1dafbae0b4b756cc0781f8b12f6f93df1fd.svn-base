@@ -1,0 +1,173 @@
+package app.nichepro.activities.healthcare;
+
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.os.Bundle;
+import android.view.KeyEvent;
+import android.webkit.WebChromeClient;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+
+@SuppressLint("SetJavaScriptEnabled")
+public class AboutCancerActivity extends BaseDefaultActivity {
+	/* Your Tab host */
+	// private TabHost tHost;
+	private WebView mWebView;
+	ProgressDialog mProgress;
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (event.getAction() == KeyEvent.ACTION_DOWN) {
+			switch (keyCode) {
+			case KeyEvent.KEYCODE_BACK:
+				if (mWebView.canGoBack() == true) {
+					mWebView.goBack();
+				} else {
+					finish();
+				}
+				return true;
+			}
+
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.allaboutcancerwebview);
+		mProgress = ProgressDialog.show(this, "Loading",
+				"Please wait for a moment...");
+		WebViewClient yourWebClient = new WebViewClient() {
+			// Override page so it's load on my view only
+			@Override
+			public boolean shouldOverrideUrlLoading(WebView view, String url) {
+				// This line we let me load only pages inside Firstdroid Webpage
+				// if ( url.contains("firstdroid") == true )
+				// //Load new URL Don't override URL Link
+				// return false;
+				mProgress.show();
+
+				view.loadUrl(url);
+
+				// Return true to override url loading (In this case do
+				// nothing).
+				return true;
+
+			}
+
+			public void onPageFinished(WebView view, String url) {
+				if (mProgress.isShowing()) {
+					mProgress.dismiss();
+				}
+			}
+		};
+
+		mWebView = (WebView) findViewById(R.id.webView1);
+
+		mWebView.getSettings().setJavaScriptEnabled(true);
+		mWebView.getSettings().setBuiltInZoomControls(true);
+		mWebView.getSettings().setSupportZoom(true);
+		mWebView.setWebViewClient(yourWebClient);
+		final Activity activity = (Activity) this;
+
+		mWebView.setWebChromeClient(new WebChromeClient() {
+
+			public void onProgressChanged(WebView view, int progress) {
+				activity.setTitle("Loading...");
+				activity.setProgress(progress * 100);
+				if (progress == 100)
+					activity.setTitle("My title");
+			}
+		});
+		mWebView.loadUrl("http://192.168.1.117/cancer/cancer-info.html");
+
+	}
+}
+// protected void onCreate(Bundle savedInstanceState) {
+// super.onCreate(savedInstanceState);
+// setContentView(R.layout.aboutcancer);
+//
+// tHost = (TabHost) findViewById(android.R.id.tabhost);
+// tHost.setup();
+//
+// /**
+// * Defining Tab Change Listener event. This is invoked when tab is
+// * changed
+// */
+// TabHost.OnTabChangeListener tabChangeListener = new
+// TabHost.OnTabChangeListener() {
+//
+// @Override
+// public void onTabChanged(String tabId) {
+// android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+// AllAboutCancerFragment androidFragment = (AllAboutCancerFragment) fm
+// .findFragmentByTag("android");
+// TypesOfCancerFragment appleFragment = (TypesOfCancerFragment) fm
+// .findFragmentByTag("apple");
+// android.support.v4.app.FragmentTransaction ft = fm
+// .beginTransaction();
+//
+// /** Detaches the androidfragment if exists */
+// if (androidFragment != null)
+// ft.detach(androidFragment);
+//
+// /** Detaches the applefragment if exists */
+// if (appleFragment != null)
+// ft.detach(appleFragment);
+//
+// /** If current tab is android */
+// if (tabId.equalsIgnoreCase("android")) {
+//
+// if (androidFragment == null) {
+// /**
+// * Create AndroidFragment and adding to
+// * fragmenttransaction
+// */
+// ft.add(R.id.realtabcontent,
+// new AllAboutCancerFragment(), "android");
+// } else {
+// /**
+// * Bring to the front, if already exists in the
+// * fragmenttransaction
+// */
+// ft.attach(androidFragment);
+// }
+//
+// } else {
+// /** If current tab is apple */
+// if (appleFragment == null) {
+// /**
+// * Create AppleFragment and adding to
+// * fragmenttransaction
+// */
+// ft.add(R.id.realtabcontent,
+// new TypesOfCancerFragment(), "apple");
+// } else {
+// /**
+// * Bring to the front, if already exists in the
+// * fragmenttransaction
+// */
+// ft.attach(appleFragment);
+// }
+// }
+// ft.commit();
+// }
+// };
+//
+// /** Setting tabchangelistener for the tab */
+// tHost.setOnTabChangedListener(tabChangeListener);
+// /** Defining tab builder for Apple tab */
+// TabHost.TabSpec tSpecApple = tHost.newTabSpec("apple");
+// tSpecApple.setIndicator("List of Cancers");
+//
+// tSpecApple.setContent(new DummyTabContent(getBaseContext()));
+// tHost.addTab(tSpecApple);
+//
+// /** Defining tab builder for Andriod tab */
+// TabHost.TabSpec tSpecAndroid = tHost.newTabSpec("android");
+// tSpecAndroid.setIndicator("Cancer Awareness");
+// tSpecAndroid.setContent(new DummyTabContent(getBaseContext()));
+// tHost.addTab(tSpecAndroid);
+//
+// }

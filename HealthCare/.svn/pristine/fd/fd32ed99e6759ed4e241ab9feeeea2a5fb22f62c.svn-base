@@ -1,0 +1,64 @@
+package app.nichepro.fragmenttabpatient.home;
+
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import app.nichepro.activities.healthcare.BaseFragment;
+import app.nichepro.activities.healthcare.R;
+import app.nichepro.util.UIUtilities;
+
+public class PatientHomeFragment extends BaseFragment implements
+		View.OnClickListener {
+
+	Button sync, skip;
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.home_tab_first_screen, container,
+				false);
+
+		sync = (Button) view.findViewById(R.id.bSync);
+		skip = (Button) view.findViewById(R.id.bSkip);
+		sync.setOnClickListener(this);
+		skip.setOnClickListener(this);
+		return view;
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		switch (v.getId()) {
+		case R.id.bSync:
+			//mActivity.pushFragments(Constants.TAB_INFO,	new PatientHomeFirstScreenFragment(), true, true);
+			
+			UIUtilities.showConfirmationAlert(getActivity(),
+					R.string.dialog_title_information, R.string.under_construction, R.string.dialog_button_Ok,
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog,
+								int which) {
+							
+						}
+					});	
+			
+			break;
+			
+		case R.id.bSkip:
+			UIUtilities.showConfirmationAlert(getActivity(),
+					R.string.dialog_title_information, R.string.under_construction, R.string.dialog_button_Ok,
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog,
+								int which) {
+							
+						}
+					});	
+			break;
+
+		}
+	}
+
+}
+	

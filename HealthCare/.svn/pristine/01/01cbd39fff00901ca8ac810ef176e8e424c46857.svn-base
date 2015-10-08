@@ -1,0 +1,348 @@
+package app.nichepro.fragmenttabpatient.info;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Spinner;
+import app.nichepro.HealthCareApp;
+import app.nichepro.activities.healthcare.BaseFragment;
+import app.nichepro.activities.healthcare.R;
+import app.nichepro.model.BaseResponseObject;
+import app.nichepro.model.SymtomListResponseObject;
+import app.nichepro.model.SymtomPatientListResponseObject;
+import app.nichepro.model.SymtomResponseObject;
+import app.nichepro.responsehandler.ResponseParserListener;
+import app.nichepro.util.Constants;
+import app.nichepro.util.EnumFactory.ResponseMesssagType;
+import app.nichepro.util.EnumFactory.SymTomType;
+import app.nichepro.util.MenuDialog;
+import app.nichepro.util.UIUtilities;
+import app.nichepro.util.UpdateUiFromAdapterListener;
+import app.nichepro.util.WebLinks;
+import app.nichepro.util.WebRequestTask;
+
+public class PatientInfoSymptomFragment extends BaseFragment implements
+		ResponseParserListener, UpdateUiFromAdapterListener {
+	private SymtomListResponseObject mSymtomsList;
+	private SymtomPatientListResponseObject mPatientSymtomsList;
+	private SymtomResponseObject mSelectedSymtom;
+	private boolean isFromEHR;
+
+	public SymtomPatientListResponseObject getmPatientSymtomsList() {
+		return mPatientSymtomsList;
+	}
+
+	public void setmPatientSymtomsList(
+			SymtomPatientListResponseObject mPatientSymtomsList) {
+		this.mPatientSymtomsList = mPatientSymtomsList;
+	}
+
+	private WebRequestTask symtomRequestTask;
+	private ResponseMesssagType msgType;
+	private HealthCareApp myApp;
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.patient_info_symptoms, container,
+				false);
+		myApp = (HealthCareApp) getActivity().getApplication();
+		ListView list = (ListView) view.findViewById(R.id.symptomslist);
+
+		// Creating the list adapter and populating the list
+		ArrayAdapter<SymtomResponseObject> listAdapter = new SymptomListAdapter(
+				inflater.getContext(), inflater, R.layout.symptom_list_cell,
+				isFromEHR, this);
+
+		if (mSymtomsList != null) {
+			for (SymtomResponseObject element : getmSymtomsList().RESPONSE) {
+				listAdapter.add(element);
+
+			}
+		}
+
+		if (mPatientSymtomsList != null) {
+			for (SymtomResponseObject element : mPatientSymtomsList._PATIENT_SYMOTOM_LIST_) {
+				listAdapter.add(element);
+
+			}
+		}
+
+		list.setAdapter(listAdapter);
+		Button btn = (Button) view.findViewById(R.id.bSubmit);
+		if (isFromEHR) {
+			btn.setVisibility(View.GONE);
+		} else {
+			btn.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					requestForSubmit();
+				}
+			});
+		}
+		return view;
+	}
+
+	void requestForSubmit() {
+		symtomRequestTask = new WebRequestTask(
+				WebLinks.getLink(WebLinks.CreatePatientSymtom), getActivity(),
+				this);
+		symtomRequestTask.AddParam(Constants.PARAM_patientId, myApp
+				.getLoggedInUser().getPartyId());
+		String description = null;
+		String symId = null;
+		String severityLevel = null;
+		String thruDate = null;
+		String fromDate = null;
+		String trackDescription = null;
+		for (SymtomResponseObject element : getmSymtomsList().RESPONSE) {
+
+			if (element.isSelected == true) {
+				if (description == null) {
+					description = element.description;
+					symId = element.symptomId;
+					severityLevel = element.getmSymtomType().toString();
+					thruDate = element.getmThroughDate();
+					fromDate = element.getmFromDate();
+					trackDescription = element.getmDescription();
+
+				} else {
+					description += "," + element.description;
+					symId += "," + element.symptomId;
+
+					severityLevel += "," + element.getmSymtomType().toString();
+					thruDate += "," + element.getmThroughDate();
+					fromDate += "," + element.getmFromDate();
+					trackDescription += "," + element.getmDescription();
+
+				}
+
+			}
+		}
+
+		if (description != null) {
+			symtomRequestTask
+					.AddParam(Constants.PARAM_description, description);
+			symtomRequestTask.AddParam(Constants.PARAM_symptomId, symId);
+			symtomRequestTask.AddParam(Constants.PARAM_severityLevel,
+					severityLevel);
+			symtomRequestTask.AddParam(Constants.PARAM_fromDate, fromDate);
+			symtomRequestTask.AddParam(Constants.PARAM_thruDate, thruDate);
+			symtomRequestTask.AddParam(Constants.PARAM_trackDescription,
+					trackDescription);
+
+			symtomRequestTask.execute();
+
+		} else {
+			UIUtilities.showConfirmationAlert(getActivity(),
+					R.string.dialog_title_information,
+					"You have not selected any symtoms fromt he list!",
+					R.string.dialog_button_Ok,
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+
+						}
+					});
+		}
+	}
+
+	@Override
+	public void onEndParsingMsgType(ResponseMesssagType msgType) {
+		// TODO Auto-generated method stub
+		this.msgType = msgType;
+	}
+
+	@Override
+	public void onEndParsingResponse(ArrayList<BaseResponseObject> items) {
+		// TODO Auto-generated method stub
+		if (this.msgType == ResponseMesssagType.PatientSymtomsCreatedMessageType) {
+			UIUtilities.showConfirmationAlert(getActivity(),
+					R.string.dialog_title_information,
+					"Your Symtoms has been updated in to the system!",
+					R.string.dialog_button_Ok,
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+
+						}
+					});
+		} else {
+			UIUtilities.showConfirmationAlert(getActivity(),
+					R.string.dialog_title_information, R.string.server_error,
+					R.string.dialog_button_Ok,
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+
+						}
+					});
+		}
+	}
+
+	@Override
+	public void onErrorResponse(ArrayList<BaseResponseObject> items) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onError(Exception ex) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public SymtomListResponseObject getmSymtomsList() {
+		return mSymtomsList;
+	}
+
+	public void setmSymtomsList(SymtomListResponseObject mSymtomsList) {
+		this.mSymtomsList = mSymtomsList;
+	}
+
+	public boolean isFromEHR() {
+		return isFromEHR;
+	}
+
+	public void setFromEHR(boolean isFromEHR) {
+		this.isFromEHR = isFromEHR;
+	}
+
+	static final MenuDialog.MenuItem[] MAIN_MENU_LIST = {
+			new MenuDialog.MenuItem(0, R.string.mild),
+			new MenuDialog.MenuItem(0, R.string.severe),
+			new MenuDialog.MenuItem(0, R.string.high), };
+
+	@Override
+	public void updateUI(String message) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void updateUI(String message, int position) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void updateUI(int position) {
+		// TODO Auto-generated method stub
+		mSelectedSymtom = this.mSymtomsList.RESPONSE.get(position);
+		LayoutInflater factory = LayoutInflater.from(getActivity());
+		View textEntryView = factory.inflate(R.layout.alert_symtom_cell, null);
+
+		AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+
+		alert.setTitle("Select Symtoms");
+		// Set an EditText view to get user input
+		alert.setView(textEntryView);
+
+		final Spinner input = (Spinner) textEntryView
+				.findViewById(R.id.sSymtoms);
+
+		final DatePicker fromDate = (DatePicker) textEntryView
+				.findViewById(R.id.fromDatePicker);
+
+		final DatePicker throughDate = (DatePicker) textEntryView
+				.findViewById(R.id.toDatePicker);
+
+		final EditText desctription = (EditText) textEntryView
+				.findViewById(R.id.description);
+
+		if (mSelectedSymtom.mSymtomType != null) {
+			if (mSelectedSymtom.getmSymtomType() == SymTomType.Mild) {
+				input.setSelection(0);
+			} else if (mSelectedSymtom.getmSymtomType() == SymTomType.Moderate) {
+				input.setSelection(1);
+			} else if (mSelectedSymtom.getmSymtomType() == SymTomType.Severe) {
+				input.setSelection(2);
+			}
+		}
+
+		alert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+
+				if (compareDates(fromDate, throughDate)) {
+					if (desctription.getText().toString() != null
+							&& desctription.getText().toString().length() > 0) {
+						int pos = input.getSelectedItemPosition();
+						if (pos == 0) {
+							mSelectedSymtom.setmSymtomType(SymTomType.Mild);
+						} else if (pos == 1)
+							mSelectedSymtom.setmSymtomType(SymTomType.Moderate);
+						else if (pos == 2) {
+							mSelectedSymtom.setmSymtomType(SymTomType.Severe);
+						}
+						mSelectedSymtom.setmFromDate(fromDate.toString());
+						mSelectedSymtom.setmThroughDate(throughDate.toString());
+						mSelectedSymtom.setmDescription(desctription.getText()
+								.toString());
+					} else {
+						showAlert("Please add description!");
+					}
+				} else {
+					showAlert("From date is greater than the to date!");
+
+				}
+
+			}
+		});
+
+		alert.setNegativeButton("Cancel",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						// Canceled.
+					}
+				});
+
+		alert.show();
+	}
+
+	public void showAlert(String name) {
+		UIUtilities.showConfirmationAlert(getActivity(),
+				R.string.dialog_title_information, name,
+				R.string.dialog_button_Ok,
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+
+					}
+				});
+	}
+
+	public boolean compareDates(DatePicker fromDatePicker,
+			DatePicker toDatePicker) {
+		Calendar curCal = Calendar.getInstance();
+
+		Calendar fromCal = Calendar.getInstance();
+		fromCal.set(Calendar.DAY_OF_MONTH, fromDatePicker.getDayOfMonth());
+		fromCal.set(Calendar.MONTH, fromDatePicker.getMonth());
+		fromCal.set(Calendar.YEAR, fromDatePicker.getYear());
+
+		Calendar toCal = Calendar.getInstance();
+		toCal.set(Calendar.DAY_OF_MONTH, toDatePicker.getDayOfMonth());
+		toCal.set(Calendar.MONTH, toDatePicker.getMonth());
+		toCal.set(Calendar.YEAR, toDatePicker.getYear());
+
+		boolean isCorrect = fromCal.getTimeInMillis() < toCal.getTimeInMillis() ? true
+				: false;
+
+		toCal.set(Calendar.DAY_OF_MONTH, curCal.get(Calendar.DAY_OF_MONTH));
+		toCal.set(Calendar.MONTH, curCal.get(Calendar.MONTH));
+		toCal.set(Calendar.YEAR, curCal.get(Calendar.YEAR));
+
+		return isCorrect;
+	}
+
+}

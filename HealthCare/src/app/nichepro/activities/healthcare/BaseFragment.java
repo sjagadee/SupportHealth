@@ -1,0 +1,45 @@
+package app.nichepro.activities.healthcare;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.KeyEvent;
+
+public class BaseFragment extends Fragment {
+	public PatientTabActivity mActivity;
+	public DoctorTabActivity mDoctorActivity;
+	public SponsorTabActivity mSponsorActivity;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		if (this.getActivity().getLocalClassName()
+				.compareTo("PatientTabActivity") == 0) {
+			mActivity = (PatientTabActivity) this.getActivity();
+		}
+		if (this.getActivity().getLocalClassName()
+				.compareTo("DoctorTabActivity") == 0) {
+			mDoctorActivity = (DoctorTabActivity) this.getActivity();
+		}
+		if (this.getActivity().getLocalClassName()
+				.compareTo("SponsorTabActivity") == 0) {
+			mSponsorActivity = (SponsorTabActivity) this.getActivity();
+		}
+	}
+
+	
+
+	public boolean onBackPressed() {
+		return false;
+	}
+
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+	}
+
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+}

@@ -1,0 +1,114 @@
+package app.nichepro;
+
+import java.lang.ref.WeakReference;
+
+import org.acra.ACRA;
+import org.acra.annotation.ReportsCrashes;
+
+import android.app.Application;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.location.LocationManager;
+import app.nichepro.model.db.DoctorRegistrationInfo;
+import app.nichepro.model.db.UserRegistrationInfo;
+import app.nichepro.util.Log;
+
+/**
+ * The Class HealthCareApp. App object for maintaining the global application
+ * state.
+ */
+@ReportsCrashes(formKey = "dDI5cHhBSVc1UkdqZkZwN19kRGI5SGc6MQ")
+public class HealthCareApp extends Application {
+
+	/** The TAG. */
+	private static String TAG = HealthCareApp.class.getSimpleName();
+
+	private UserRegistrationInfo patientLoginInfo;
+	private DoctorRegistrationInfo doctorLoginInfo;
+
+	/** The location manager. */
+	private LocationManager locationManager = null;
+
+	/** The Dialog. Hold the reference for the progress dialog */
+	public WeakReference<ProgressDialog> Dialog = null;
+
+	/**
+	 * The weekly dialog. Hold the reference for the progress dialog as there
+	 * are two separate request for weekly ad fetching
+	 * */
+	public WeakReference<ProgressDialog> weeklyDialog = null;
+
+	/** The waiting. */
+	public Boolean waiting = false;
+
+	/** The waiting on pause. */
+	public Boolean waitingOnPause = false;
+
+	/** The is from store list. */
+	public Boolean isFromStoreList = false;
+
+	/** Check sneak peak when store is not set */
+
+	public Boolean isCheckSneakPeak = false;
+
+	/**
+	 * Gets the location manager.
+	 * 
+	 * @return the location manager
+	 */
+	public LocationManager getLocationManager() {
+		if (locationManager == null)
+			locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		return locationManager;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.app.Application#onCreate()
+	 */
+	@Override
+	public void onCreate() {
+		Log.d(TAG, "In OnCreate");
+		ACRA.init(this);
+		super.onCreate();
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.app.Application#onLowMemory()
+	 */
+	@Override
+	public void onLowMemory() {
+		super.onLowMemory();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.app.Application#onTerminate() clean up the timer on app end
+	 */
+	@Override
+	public void onTerminate() {
+
+		super.onTerminate();
+	}
+
+	public UserRegistrationInfo getPatientLoginInfo() {
+		return patientLoginInfo;
+	}
+
+	public void setPatientLoginInfo(UserRegistrationInfo patientLoginInfo) {
+		this.patientLoginInfo = patientLoginInfo;
+	}
+
+	public DoctorRegistrationInfo getDoctorLoginInfo() {
+		return doctorLoginInfo;
+	}
+
+	public void setDoctorLoginInfo(DoctorRegistrationInfo doctorLoginInfo) {
+		this.doctorLoginInfo = doctorLoginInfo;
+	}
+}

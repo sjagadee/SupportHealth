@@ -1,0 +1,31 @@
+package app.nichepro.model;
+
+import android.os.Parcel;
+
+public class LoginResponseObject extends BaseResponseObject{
+	
+
+	private boolean isLoggedIn;
+	@Override
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public boolean isLoggedIn() {
+		return isLoggedIn;
+	}
+
+	public void setLoggedIn(boolean isLoggedIn) {
+		this.isLoggedIn = isLoggedIn;
+	}
+
+	
+
+}

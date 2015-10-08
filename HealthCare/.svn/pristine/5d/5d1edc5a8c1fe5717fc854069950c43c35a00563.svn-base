@@ -1,0 +1,201 @@
+package app.nichepro.model.db;
+
+import java.io.Serializable;
+
+import com.j256.ormlite.field.DatabaseField;
+
+public class AlarmData implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public static String MESSAGE = "message";
+	public static long MONDAY = -1;
+	public static long TUESDAY = -1;
+	public static long WEDNESDAY = -1;
+	public static long THURSDAY = -1;
+	public static long FRIDAY = -1;
+	public static long SATURDAY = -1;
+	public static long SUNDAY = -1;
+
+	public static long getMONDAY() {
+		return MONDAY;
+	}
+
+	public static void setMONDAY(long mONDAY) {
+		MONDAY = mONDAY;
+	}
+
+	public static long getTUESDAY() {
+		return TUESDAY;
+	}
+
+	public static void setTUESDAY(long tUESDAY) {
+		TUESDAY = tUESDAY;
+	}
+
+	public static long getWEDNESDAY() {
+		return WEDNESDAY;
+	}
+
+	public static void setWEDNESDAY(long wEDNESDAY) {
+		WEDNESDAY = wEDNESDAY;
+	}
+
+	public static long getTHURSDAY() {
+		return THURSDAY;
+	}
+
+	public static void setTHURSDAY(long tHURSDAY) {
+		THURSDAY = tHURSDAY;
+	}
+
+	public static long getFRIDAY() {
+		return FRIDAY;
+	}
+
+	public static void setFRIDAY(long fRIDAY) {
+		FRIDAY = fRIDAY;
+	}
+
+	public static long getSATURDAY() {
+		return SATURDAY;
+	}
+
+	public static void setSATURDAY(long sATURDAY) {
+		SATURDAY = sATURDAY;
+	}
+
+	public static long getSUNDAY() {
+		return SUNDAY;
+	}
+
+	public static void setSUNDAY(long sUNDAY) {
+		SUNDAY = sUNDAY;
+	}
+
+	public long getMonday() {
+		return monday;
+	}
+
+	public void setMonday(long monday) {
+		this.monday = monday;
+	}
+
+	public long getTuesday() {
+		return tuesday;
+	}
+
+	public void setTuesday(long tuesday) {
+		this.tuesday = tuesday;
+	}
+
+	public long getWednesday() {
+		return wednesday;
+	}
+
+	public void setWednesday(long wednesday) {
+		this.wednesday = wednesday;
+	}
+
+	public long getThursday() {
+		return thursday;
+	}
+
+	public void setThursday(long thursday) {
+		this.thursday = thursday;
+	}
+
+	public long getFriday() {
+		return friday;
+	}
+
+	public void setFriday(long friday) {
+		this.friday = friday;
+	}
+
+	public long getSaturday() {
+		return saturday;
+	}
+
+	public void setSaturday(long saturday) {
+		this.saturday = saturday;
+	}
+
+	public long getSunday() {
+		return sunday;
+	}
+
+	public void setSunday(long sunday) {
+		this.sunday = sunday;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+
+
+	public static String getMESSAGE() {
+		return MESSAGE;
+	}
+
+	public static void setMESSAGE(String mESSAGE) {
+		MESSAGE = mESSAGE;
+	}
+
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	@DatabaseField(generatedId = true)
+	int id;
+	@DatabaseField
+	long monday;
+	@DatabaseField
+	long tuesday;
+	@DatabaseField
+	long wednesday;
+	@DatabaseField
+	long thursday;
+	@DatabaseField
+	long friday;
+	@DatabaseField
+	long saturday;
+	@DatabaseField
+	long sunday;
+	@DatabaseField
+	String message;
+	public AlarmData() {
+		// needed by ormlite
+		this.message = "";
+		this.monday = -1;
+		this.tuesday = -1;
+		this.wednesday = -1;
+		this.thursday = -1;
+		this.friday = -1;
+		this.saturday = -1;
+		this.sunday = -1;
+	}
+
+	public AlarmData(String username, String subject, String msg) {
+	
+		this.message = msg;
+	}
+}

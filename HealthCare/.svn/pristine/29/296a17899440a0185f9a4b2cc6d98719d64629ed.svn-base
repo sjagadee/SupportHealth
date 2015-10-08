@@ -1,0 +1,41 @@
+package app.nichepro.fragmenttabpatient.ehr;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
+import app.nichepro.activities.healthcare.R;
+import app.nichepro.model.KeyValue;
+import app.nichepro.model.PatientAppointmentResponseObject;
+
+public class PatientEhrAppointmentAdapter extends ArrayAdapter<PatientAppointmentResponseObject>  {
+	LayoutInflater minflater;
+
+	public PatientEhrAppointmentAdapter(Context context,
+			LayoutInflater inflater, int textViewResourceId) {
+		super(context, textViewResourceId);
+		minflater = inflater;
+	}
+
+	@Override
+	public View getView(final int position, View convertView, ViewGroup parent) {
+
+		if (convertView == null) {
+
+			convertView = minflater.inflate(R.layout.patient_ehr_list_cell,
+					null);
+		}
+
+		PatientAppointmentResponseObject paro = getItem(position);
+		((TextView) convertView.findViewById(R.id.date)).setText(paro.getAppointmentDate());
+		((TextView) convertView.findViewById(R.id.time)).setText(paro.getAppointmentTime());
+		((TextView) convertView.findViewById(R.id.doctor)).setText(paro.getDoctor());
+		((TextView) convertView.findViewById(R.id.reason)).setText(paro.getReason());
+		((TextView) convertView.findViewById(R.id.status)).setText(paro.getStatus());
+		
+		return convertView;
+	}
+}

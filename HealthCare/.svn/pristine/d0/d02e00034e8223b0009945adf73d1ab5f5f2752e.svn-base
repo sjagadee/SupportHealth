@@ -1,0 +1,68 @@
+package app.nichepro.fragmenttabpatient.info;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.TextView;
+import app.nichepro.activities.healthcare.R;
+
+public class SymptomListAdapter extends ArrayAdapter<String> implements OnCheckedChangeListener{
+	LayoutInflater minflater;
+	Context mContext;
+
+	static class ViewHolder {
+
+		/** The note view. */
+		TextView symtomText;
+
+		/** The date name. */
+		CheckBox chkBox;
+
+		public void reset() {
+
+		}
+	}
+
+	public SymptomListAdapter(Context context, LayoutInflater inflater,
+			int textViewResourceId) {
+		super(context, textViewResourceId);
+		minflater = inflater;
+		mContext = context;
+
+	}
+
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		ViewHolder holder;
+		if (convertView == null) {
+			convertView = minflater
+					.inflate(R.layout.symptom_list_cell, null);
+			holder = new ViewHolder();
+
+			holder.symtomText = ((TextView) convertView
+					.findViewById(R.id.txSymtom));
+			holder.chkBox = ((CheckBox) convertView.findViewById(R.id.chkBox));
+			convertView.setTag(holder);
+		} else {
+			holder = (ViewHolder) convertView.getTag();
+		}
+
+		String value = getItem(position);
+
+		holder.symtomText.setText(value);
+		holder.chkBox.setOnCheckedChangeListener(this);
+
+		return convertView;
+	}
+
+	@Override
+	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		// TODO Auto-generated method stub
+		
+	}
+}

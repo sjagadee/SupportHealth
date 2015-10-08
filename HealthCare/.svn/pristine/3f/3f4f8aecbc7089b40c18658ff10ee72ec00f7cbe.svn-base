@@ -1,0 +1,519 @@
+
+package app.nichepro;
+
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import org.acra.ACRA;
+import org.acra.annotation.ReportsCrashes;
+
+import android.app.Application;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.location.LocationManager;
+import android.os.AsyncTask;
+import android.os.Handler;
+import app.nichepro.model.BaseResponseObject;
+import app.nichepro.model.db.DoctorRegistrationInfo;
+import app.nichepro.model.db.UserRegistrationInfo;
+import app.nichepro.responsehandler.ResponseParserBase;
+import app.nichepro.util.Constants;
+import app.nichepro.util.EnumFactory.ResponseHeaderType;
+import app.nichepro.util.Log;
+import app.nichepro.util.UIUtilities;
+import app.nichepro.util.WebRequestClient;
+import app.nichepro.util.WebRequestClient.RequestMethod;
+import app.nichepro.util.WebRequestTask;
+/**
+ * The Class HealthCareApp. App object for maintaining the global application
+ * state.
+ */
+@ReportsCrashes(formKey = "dDI5cHhBSVc1UkdqZkZwN19kRGI5SGc6MQ")
+public class HealthCareApp extends Application  {
+
+	/** The TAG. */
+	private static String TAG = HealthCareApp.class.getSimpleName();
+	
+	private UserRegistrationInfo patientLoginInfo;
+	private DoctorRegistrationInfo doctorLoginInfo;
+
+	/** The location manager. */
+	private LocationManager locationManager = null;
+
+
+	/** The m request task. */
+	private WebRequestTask mRequestTask = null;
+
+	/** The m request client. */
+	private WebRequestClient mRequestClient = null;
+
+	/** The m request task1. */
+	private WebRequestTask mRequestTask1 = null;
+
+	/** The m request client1. */
+	private WebRequestClient mRequestClient1 = null;
+
+	/** The msgtype. */
+	private ResponseHeaderType msgtype;
+
+	/** The handler. */
+	private Handler handler = new Handler();
+
+	/** The first level category data. */
+	private ArrayList<BaseResponseObject> firstLevelCategoryData;
+
+	/** The static hash. */
+	private HashMap<String, String> staticHash;
+
+	/** The hash from db. */
+	private HashMap<String, String> hashFromDb;
+
+	/** The hash from web. */
+	private HashMap<String, String> hashFromWeb;
+
+	/**
+	 * The is hash from web loaded. Will be used for auto web services link
+	 * switching in production release
+	 */
+	private boolean isHashFromWebLoaded = false;
+
+
+	/** The Dialog. Hold the reference for the progress dialog */
+	public WeakReference<ProgressDialog> Dialog = null;
+
+	/**
+	 * The weekly dialog. Hold the reference for the progress dialog as there
+	 * are two separate request for weekly ad fetching
+	 * */
+	public WeakReference<ProgressDialog> weeklyDialog = null;
+
+	/** The waiting. */
+	public Boolean waiting = false;
+
+	/** The waiting on pause. */
+	public Boolean waitingOnPause = false;
+
+	/** The is from store list. */
+	public Boolean isFromStoreList = false;
+
+	/** Check sneak peak when store is not set */
+
+	public Boolean isCheckSneakPeak = false;
+
+
+
+	/**
+	 * Gets the first level category data.
+	 * 
+	 * @return the first level category data
+	 */
+	public ArrayList<BaseResponseObject> getFirstLevelCategoryData() {
+		return firstLevelCategoryData;
+	}
+
+	/**
+	 * Sets the first level category data.
+	 * 
+	 * @param firstLevelCategoryData
+	 *            the new first level category data
+	 */
+	public void setFirstLevelCategoryData(
+			ArrayList<BaseResponseObject> firstLevelCategoryData) {
+		this.firstLevelCategoryData = firstLevelCategoryData;
+	}
+
+	/**
+	 * Gets the location manager.
+	 * 
+	 * @return the location manager
+	 */
+	public LocationManager getLocationManager() {
+		if (locationManager == null)
+			locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		return locationManager;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.app.Application#onCreate()
+	 */
+	@Override
+	public void onCreate() {
+		Log.d(TAG, "In OnCreate");
+		ACRA.init(this);
+		super.onCreate();
+
+		// setup web services links
+		initializeStaticHash();
+
+		// initialize links from db, which are ssaved in the last request
+		initializeLinksFromDbHash();
+
+		
+	}
+
+	
+
+		
+	/**
+	 * The link service trial count. we dont do more then 2 test for secondary
+	 * service
+	 */
+	int linkServiceTrialCount = 1;
+
+	// initialize with hard coded links
+	/** The Constant APP_MODE_PROD. */
+	private static final String APP_MODE_PROD = "production";
+
+	/** The Constant APP_MODE_BACKUP. */
+	private static final String APP_MODE_BACKUP = "backup";
+
+	/** The Constant CATEGORY. */
+	public static final String CATEGORY = "category";
+
+	/** The Constant INSTOREAVAIL. */
+	public static final String INSTOREAVAIL = "instoreavail";
+
+	/** The Constant PRODUCT. */
+	public static final String PRODUCT = "product";
+
+	/** The Constant STORELOCATOR. */
+	public static final String STORELOCATOR = "storelocator";
+
+	/** The Constant SECONDARY_DIR. */
+	public static final String SECONDARY_DIR = "secondarydirectory";
+
+	/** The Constant SIGNUP. */
+	public static final String SIGNUP = "signup";
+
+	/** The Constant REPORTS. */
+	public static final String REPORTS = "reports";
+
+	/** The Constant REVIEWS. */
+	public static final String REVIEWS = "reviews";
+
+	/** The Constant ANALYTICS. */
+	public static final String ANALYTICS = "analytics";
+
+	/** The Constant WEEKLYADS. */
+	public static final String WEEKLYADS = "weeklyads";
+
+	/** The Constant PRIMARY_DIR. */
+	public static final String PRIMARY_DIR = "primarydirectory";
+
+	/** The Constant AUTOCOMPLETE. */
+	public static final String AUTOCOMPLETE = "autocomplete";
+
+	/** The Constant ADDTOCART. */
+	public static final String ADDTOCART = "addtocart";
+
+	/** The Constant REORDER. */
+	public static final String REORDER = "reorder";
+
+	public static final String DEVHOST = "";
+	public static final String PRIMARYHOST = "";
+	public static final String SECONDARYHOST = "";
+	
+	/** The Constant CATEGORY_LINK. */
+	public static final String CATEGORY_LINK =  DEVHOST + "category/";
+
+	/** The Constant INSTOREAVAIL_LINK. */
+	public static final String INSTOREAVAIL_LINK = DEVHOST + "instoreavail/";
+
+	/** The Constant PRODUCT_LINK. */
+	public static final String PRODUCT_LINK = DEVHOST + "product/";
+
+	/** The Constant STORELOCATOR_LINK. */
+	public static final String STORELOCATOR_LINK = DEVHOST + "storelocator/";
+
+	/** The Constant SIGNUP_LINK. */
+	public static final String SIGNUP_LINK = DEVHOST + "signup/";
+
+	/** The Constant REPORTS_LINK. */
+	public static final String REPORTS_LINK = DEVHOST + "reports/";
+
+	/** The Constant REVIEWS_LINK. */
+	public static final String REVIEWS_LINK = DEVHOST + "reviews/";
+
+	/** The Constant ANALYTICS_LINK. */
+	public static final String ANALYTICS_LINK = DEVHOST + "analytics/";
+
+	/** The Constant WEEKLYADS_LINK. */
+	public static final String WEEKLYADS_LINK = DEVHOST + "weeklyad/";
+
+	/** The Constant AUTOCOMPLETE_LINK. */
+	public static final String AUTOCOMPLETE_LINK = DEVHOST + "autocomplete/";
+
+	/** The Constant ADDTOCART_LINK. */
+	public static final String ADDTOCART_LINK = DEVHOST + "addtocart/";
+
+	/** The Constant REORDER_LINK. */
+	public static final String REORDER_LINK = DEVHOST + "reorder/";
+
+	/** The Constant PRIMARY_DIR_LINK. */
+	public static final String PRIMARY_DIR_LINK = PRIMARYHOST + "links/";
+
+	/** The Constant SECONDARY_DIR_LINK. */
+	public static final String SECONDARY_DIR_LINK = SECONDARYHOST + "links/";
+
+	/**
+	 * Initialize static hash.
+	 */
+	private void initializeStaticHash() {
+		if (staticHash == null)
+			staticHash = new HashMap<String, String>();
+
+		staticHash.put(CATEGORY, CATEGORY_LINK);
+		staticHash.put(INSTOREAVAIL, INSTOREAVAIL_LINK);
+		staticHash.put(PRODUCT, PRODUCT_LINK);
+		staticHash.put(STORELOCATOR, STORELOCATOR_LINK);
+		staticHash.put(SECONDARY_DIR, SECONDARY_DIR_LINK);
+		staticHash.put(SIGNUP, SIGNUP_LINK);
+		staticHash.put(REPORTS, REPORTS_LINK);
+		staticHash.put(REVIEWS, REVIEWS_LINK);
+		staticHash.put(ANALYTICS, ANALYTICS_LINK);
+		staticHash.put(WEEKLYADS, WEEKLYADS_LINK);
+		staticHash.put(PRIMARY_DIR, PRIMARY_DIR_LINK);
+		staticHash.put(AUTOCOMPLETE, AUTOCOMPLETE_LINK);
+		staticHash.put(ADDTOCART, ADDTOCART_LINK);
+		staticHash.put(REORDER, REORDER_LINK);
+
+	}
+
+	/**
+	 * Initialize links from db hash.
+	 */
+	private void initializeLinksFromDbHash() {
+		if (UIUtilities.isLinksSet(this)) {
+			// if links are already set then just read the latest links
+			SharedPreferences settings = getSharedPreferences(
+					Constants.SHAREDPREF_links, 0);
+			if (hashFromDb == null)
+				hashFromDb = new HashMap<String, String>();
+
+			hashFromDb.put(CATEGORY,
+					settings.getString(CATEGORY, CATEGORY_LINK));
+			hashFromDb.put(INSTOREAVAIL,
+					settings.getString(INSTOREAVAIL, INSTOREAVAIL_LINK));
+			hashFromDb.put(PRODUCT, settings.getString(PRODUCT, PRODUCT_LINK));
+			hashFromDb.put(STORELOCATOR,
+					settings.getString(STORELOCATOR, STORELOCATOR_LINK));
+			hashFromDb.put(SECONDARY_DIR,
+					settings.getString(SECONDARY_DIR, SECONDARY_DIR_LINK));
+			hashFromDb.put(SIGNUP, settings.getString(SIGNUP, SIGNUP_LINK));
+			hashFromDb.put(REPORTS, settings.getString(REPORTS, REPORTS_LINK));
+			hashFromDb.put(REVIEWS, settings.getString(REVIEWS, REVIEWS_LINK));
+			hashFromDb.put(ANALYTICS,
+					settings.getString(ANALYTICS, ANALYTICS_LINK));
+			hashFromDb.put(WEEKLYADS,
+					settings.getString(WEEKLYADS, WEEKLYADS_LINK));
+			hashFromDb.put(PRIMARY_DIR,
+					settings.getString(PRIMARY_DIR, PRIMARY_DIR_LINK));
+			hashFromDb.put(AUTOCOMPLETE,
+					settings.getString(AUTOCOMPLETE, AUTOCOMPLETE_LINK));
+			hashFromDb.put(ADDTOCART,
+					settings.getString(ADDTOCART, ADDTOCART_LINK));
+			hashFromDb.put(REORDER, settings.getString(REORDER, REORDER_LINK));
+
+		} else {
+			// if links are not set then set the links and fill hashFromDb
+			SharedPreferences settings = getSharedPreferences(
+					Constants.SHAREDPREF_links, 0);
+			SharedPreferences.Editor editor = settings.edit();
+			if (hashFromDb == null)
+				hashFromDb = new HashMap<String, String>(staticHash);
+			editor.putString(CATEGORY, CATEGORY_LINK);
+			editor.putString(INSTOREAVAIL, INSTOREAVAIL_LINK);
+			editor.putString(PRODUCT, PRODUCT_LINK);
+			editor.putString(STORELOCATOR, STORELOCATOR_LINK);
+			editor.putString(SECONDARY_DIR, SECONDARY_DIR_LINK);
+			editor.putString(SIGNUP, SIGNUP_LINK);
+			editor.putString(REPORTS, REPORTS_LINK);
+			editor.putString(REVIEWS, REVIEWS_LINK);
+			editor.putString(ANALYTICS, ANALYTICS_LINK);
+			editor.putString(WEEKLYADS, WEEKLYADS_LINK);
+			editor.putString(PRIMARY_DIR, PRIMARY_DIR_LINK);
+			editor.putString(AUTOCOMPLETE, AUTOCOMPLETE_LINK);
+			editor.putString(ADDTOCART, ADDTOCART_LINK);
+			editor.putString(REORDER, REORDER_LINK);
+
+			editor.putBoolean(Constants.SHAREDPREF_is_links_set, true);
+			editor.commit();
+		}
+	}
+
+	/**
+	 * Start web service link refresh.
+	 * 
+	 * @param dir
+	 *            the web service link
+	 * @param appMode
+	 *            the production or backup
+	 */
+	private void startWebServiceLinkRefresh(String dir, String appMode) {
+		isHashFromWebLoaded = false;
+
+		Log.d(TAG, "In startWebServiceLinkRefresh with:" + appMode + " mode");
+		WebRequestClient wrc = new WebRequestClient(dir,
+				getApplicationContext());
+		wrc.AddParam(Constants.PARAM_mode, appMode);
+
+		new DoWebServiceLinkRefreshTask().execute(wrc);
+	}
+
+	private class DoWebServiceLinkRefreshTask extends
+			AsyncTask<WebRequestClient, String, Void> {
+		private WebRequestClient mWebRequestClient = null;
+		@Override
+		protected Void doInBackground(WebRequestClient... params) {
+			mWebRequestClient = params[0];
+			try {
+				mWebRequestClient.Execute(RequestMethod.GET);
+			} catch (Exception e) {
+				// ignore the exception
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			
+		}
+	}
+
+	/**
+	 * Gets the link.
+	 * 
+	 * @param linkKey
+	 *            the link key
+	 * @return the web service link for the link key
+	 */
+	public String getLink(String linkKey) {
+		String linkValue = null;
+
+		/*HashMap<String, String> mapToUse;
+
+		if (isHashFromWebLoaded)
+			mapToUse = hashFromWeb;
+		else
+			mapToUse = hashFromDb;
+
+		linkValue = mapToUse.get(linkKey);*/
+
+		if (linkValue == null)
+			linkValue = staticHash.get(linkKey);
+
+		return linkValue;
+	};
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * app.nichepro.responsehandler.ResponseParserBase.ResponseParserListener
+	 * #onEndParsingMsgType(app.nichepro.util.EnumFactory.ResponseHeaderType)
+	 */
+	public void onEndParsingMsgType(ResponseHeaderType msgType) {
+		this.msgtype = msgType;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * app.nichepro.responsehandler.ResponseParserBase.ResponseParserListener
+	 * #onEndParsingResponse(java.util.ArrayList,
+	 * app.nichepro.responsehandler.ResponseParserBase)
+	 */
+	public void onEndParsingResponse(ArrayList<BaseResponseObject> items,
+			ResponseParserBase rpb) {
+		if (items.size() > 0) {
+			
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * app.nichepro.responsehandler.ResponseParserBase.ResponseParserListener
+	 * #onEndParsingItemCount(int)
+	 */
+	public void onEndParsingItemCount(int itemCount) {
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * app.nichepro.responsehandler.ResponseParserBase.ResponseParserListener
+	 * #onParseError(java.lang.Exception)
+	 */
+	public void onParseError(Exception ex) {
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * app.nichepro.responsehandler.ResponseParserBase.ResponseParserListener
+	 * #onEndParsingOmnitureTags(java.util.HashMap)
+	 */
+	public void onEndParsingOmnitureTags(HashMap<String, String> omnitureTags) {
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * app.nichepro.responsehandler.ResponseParserBase.ResponseParserListener
+	 * #onEndParsingSortOptions(java.util.ArrayList, java.util.ArrayList)
+	 */
+	public void onEndParsingSortOptions(ArrayList<String> keyArr,
+			ArrayList<String> valArr) {
+	}
+
+	
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.app.Application#onLowMemory()
+	 */
+	@Override
+	public void onLowMemory() {
+		super.onLowMemory();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.app.Application#onTerminate() clean up the timer on app end
+	 */
+	@Override
+	public void onTerminate() {
+
+		
+
+		super.onTerminate();
+	}
+
+	public UserRegistrationInfo getPatientLoginInfo() {
+		return patientLoginInfo;
+	}
+
+	public void setPatientLoginInfo(UserRegistrationInfo patientLoginInfo) {
+		this.patientLoginInfo = patientLoginInfo;
+	}
+
+	public DoctorRegistrationInfo getDoctorLoginInfo() {
+		return doctorLoginInfo;
+	}
+
+	public void setDoctorLoginInfo(DoctorRegistrationInfo doctorLoginInfo) {
+		this.doctorLoginInfo = doctorLoginInfo;
+	}
+}

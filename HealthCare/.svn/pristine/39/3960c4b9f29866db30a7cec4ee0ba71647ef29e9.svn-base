@@ -1,0 +1,35 @@
+package app.nichepro.activities.healthcare;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+
+public class PatientForgotPasswordActivity extends Activity implements OnClickListener{
+
+	EditText sendEmail;
+	Button send;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.forgot_password);
+		sendEmail = (EditText) findViewById(R.id.etSendToMail);
+		send = (Button) findViewById(R.id.send_to_server);
+		send.setOnClickListener(this);
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch(v.getId()){
+		case R.id.send_to_server:
+			
+			break;
+		}
+		
+	}
+
+}

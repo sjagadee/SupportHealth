@@ -1,0 +1,106 @@
+package app.nichepro.fragmenttabpatient.community;
+
+import android.graphics.Color;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.ViewAnimator;
+import app.nichepro.activities.healthcare.BaseFragment;
+import app.nichepro.activities.healthcare.R;
+import app.nichepro.animation.AnimationFactory;
+import app.nichepro.animation.AnimationFactory.FlipDirection;
+import app.nichepro.model.PatientUpEventsListResponseObject;
+import app.nichepro.model.PatientUpEventsResponseObject;
+
+public class PatientCommunityEventsFragments extends BaseFragment implements
+		OnClickListener {
+
+	PatientUpEventsListResponseObject upEventsResponseObject;
+	PatientUpEventsListResponseObject pastEventsResponseObject;
+	
+
+
+	Button btnUpEvents;
+	Button btnPrevEvents;
+	Boolean isToggle;
+	ViewAnimator viewAnimator;
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.patient_events_screen, container,
+				false);
+
+		ListView list = (ListView) view.findViewById(R.id.upcomingeventlist);
+		ListView list1 = (ListView) view.findViewById(R.id.posteventlist);
+
+		// Creating the list adapter and populating the list
+		ArrayAdapter<PatientUpEventsResponseObject> listAdapter = new UpcommingEventsListAdapter(
+				inflater.getContext(), inflater,
+				R.layout.upcoming_events_list_cell);
+
+		for (PatientUpEventsResponseObject element : upEventsResponseObject.Event) {
+			
+			listAdapter.add(element);
+
+		}
+		list.setAdapter(listAdapter);
+
+		ArrayAdapter<PatientUpEventsResponseObject> listAdapter1 = new UpcommingEventsListAdapter(
+				inflater.getContext(), inflater,
+				R.layout.upcoming_events_list_cell);
+
+		for (PatientUpEventsResponseObject element : pastEventsResponseObject.Event) {
+			listAdapter1.add(element);
+
+		}
+		list1.setAdapter(listAdapter1);
+
+		viewAnimator = (ViewAnimator) view.findViewById(R.id.viewFlipper);
+
+		btnUpEvents = (Button) view.findViewById(R.id.up_events);
+		btnPrevEvents = (Button) view.findViewById(R.id.prev_events);
+		btnUpEvents.setSelected(true);
+		isToggle = true;
+		btnUpEvents.setOnClickListener(this);
+		btnPrevEvents.setOnClickListener(this);
+
+		return view;
+
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.up_events:
+			if (isToggle == false) {
+				AnimationFactory.flipTransition(viewAnimator,
+						FlipDirection.LEFT_RIGHT);
+				btnUpEvents.setTextColor(Color.BLACK);
+				btnPrevEvents.setTextColor(Color.WHITE);
+				btnUpEvents.setSelected(true);
+				btnPrevEvents.setSelected(false);
+			}
+			isToggle = true;
+			break;
+		case R.id.prev_events:
+			if (isToggle == true) {
+				AnimationFactory.flipTransition(viewAnimator,
+						FlipDirection.LEFT_RIGHT);
+				btnUpEvents.setTextColor(Color.WHITE);
+				btnPrevEvents.setTextColor(Color.BLACK);
+				btnUpEvents.setSelected(false);
+				btnPrevEvents.setSelected(true);
+
+			}
+			isToggle = false;
+			break;
+		}
+
+	}
+}

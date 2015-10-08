@@ -1,0 +1,143 @@
+package app.nichepro.fragmenttabpatient.ehr;
+
+import java.util.ArrayList;
+
+import android.graphics.Color;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.ViewAnimator;
+import app.nichepro.activities.healthcare.BaseFragment;
+import app.nichepro.activities.healthcare.R;
+import app.nichepro.animation.AnimationFactory;
+import app.nichepro.animation.AnimationFactory.FlipDirection;
+import app.nichepro.model.BaseResponseObject;
+import app.nichepro.model.PatientMedicationListResponseObject;
+import app.nichepro.model.PatientMedicationResponseObject;
+import app.nichepro.model.PatientMedicationtResponseObject;
+import app.nichepro.responsehandler.ResponseParserListener;
+import app.nichepro.util.EnumFactory.ResponseMesssagType;
+
+public class PatientEhrMedicationFragment extends BaseFragment implements
+		OnClickListener, ResponseParserListener {
+	Boolean isToggle;
+	Button btn1, btn2;
+
+	ViewAnimator viewAnimator;
+	PatientMedicationListResponseObject medicationListObject;
+
+	public void initializeHash() {
+
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.patient_ehr_medication,
+				container, false);
+
+		initializeHash();
+
+		ListView list = (ListView) view
+				.findViewById(R.id.currentmedicationlist);
+
+		// Creating the list adapter and populating the list
+		ArrayAdapter<PatientMedicationResponseObject> listAdapter = new PatientMedicationListAdapter(
+				inflater.getContext(), inflater, R.layout.medication_list_cell);
+
+		for (PatientMedicationResponseObject element : medicationListObject.element) {
+			listAdapter.add(element);
+
+		}
+		list.setEnabled(false);
+		list.setAdapter(listAdapter);
+
+		ListView listview = (ListView) view
+				.findViewById(R.id.previousmedicationlist);
+
+		// Creating the list adapter and populating the list
+		ArrayAdapter<PatientMedicationResponseObject> previousListAdapter = new PatientMedicationListAdapter(
+				inflater.getContext(), inflater,
+				R.layout.previous_medication_list_cell);
+
+		for (PatientMedicationResponseObject element : medicationListObject.element) {
+			previousListAdapter.add(element);
+
+		}
+		listview.setEnabled(false);
+		listview.setAdapter(listAdapter);
+
+		isToggle = true;
+
+		viewAnimator = (ViewAnimator) view.findViewById(R.id.viewFlipper);
+
+		btn1 = (Button) view.findViewById(R.id.bCurrentMedication);
+		btn2 = (Button) view.findViewById(R.id.bPreviousMedication);
+		btn1.setSelected(true);
+		btn1.setOnClickListener(this);
+		btn2.setOnClickListener(this);
+
+		return view;
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+
+		case R.id.bCurrentMedication:
+			if (isToggle == false) {
+				AnimationFactory.flipTransition(viewAnimator,
+						FlipDirection.LEFT_RIGHT);
+				btn1.setTextColor(Color.BLACK);
+				btn2.setTextColor(Color.WHITE);
+				btn1.setSelected(true);
+				btn2.setSelected(false);
+			}
+			isToggle = true;
+			break;
+
+		case R.id.bPreviousMedication:
+			if (isToggle == true) {
+				AnimationFactory.flipTransition(viewAnimator,
+						FlipDirection.LEFT_RIGHT);
+				btn2.setTextColor(Color.BLACK);
+				btn1.setTextColor(Color.WHITE);
+				btn2.setSelected(true);
+				btn1.setSelected(false);
+			}
+			isToggle = false;
+			break;
+		}
+
+	}
+
+	@Override
+	public void onEndParsingMsgType(ResponseMesssagType msgType) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onEndParsingResponse(ArrayList<BaseResponseObject> items) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onErrorResponse(ArrayList<BaseResponseObject> items) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onError(Exception ex) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

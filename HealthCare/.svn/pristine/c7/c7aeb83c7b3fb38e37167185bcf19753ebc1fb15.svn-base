@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/healderlayout"
+        style="@style/fillWidth"
+        android:layout_height="40dip"
+        android:background="@drawable/header" >
+
+        <TextView
+            android:id="@+id/heading1"
+            style="@style/Headertitle"
+            android:layout_centerInParent="true"
+            android:text="@string/symptom_tracker" />
+
+        <Button
+            android:id="@+id/bSubmit"
+            android:layout_width="wrap_content"
+            android:layout_height="25dip"
+            android:layout_alignBaseline="@+id/heading1"
+            android:layout_alignBottom="@+id/heading1"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/btn_yellow_clickable"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:text="@string/submit" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <ListView
+            android:id="@+id/symptomslist"
+            style="@style/listStyle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="#FCFCFC" />
+    </RelativeLayout>
+
+</LinearLayout>

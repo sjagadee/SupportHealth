@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/aaa"
+    android:orientation="vertical"
+    android:padding="25dp" >
+
+    <Button
+        android:id="@+id/bAddDoctor"
+        android:layout_width="100dp"
+        android:layout_height="80dp"
+        android:layout_alignLeft="@+id/bCancerInfo"
+        android:layout_alignTop="@+id/bHospetalLocator"
+        android:background="@drawable/btn_blue_clickable"
+        android:text="Add Doctors" />
+
+    <Button
+        android:id="@+id/bProfile"
+        android:layout_width="100dp"
+        android:layout_height="80dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/btn_blue_clickable"
+        android:text="Profile" />
+
+    <Button
+        android:id="@+id/bSymptomTracker"
+        android:layout_width="100dp"
+        android:layout_height="80dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/btn_blue_clickable"
+        android:text="Symptom Tracker" />
+
+    <Button
+        android:id="@+id/bCancerInfo"
+        android:layout_width="100dp"
+        android:layout_height="80dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/btn_blue_clickable"
+        android:text="Cancer Info" />
+
+    <Button
+        android:id="@+id/bHospetalLocator"
+        android:layout_width="100dp"
+        android:layout_height="80dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/bProfile"
+        android:layout_marginTop="46dp"
+        android:background="@drawable/btn_blue_clickable"
+        android:text="Hospetal Locator" />
+
+</RelativeLayout>

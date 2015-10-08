@@ -1,0 +1,151 @@
+package app.nichepro.fragmenttabpatient.info;
+
+import java.util.ArrayList;
+
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.webkit.WebView.FindListener;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
+import app.nichepro.HealthCareApp;
+import app.nichepro.activities.healthcare.BaseFragment;
+import app.nichepro.activities.healthcare.R;
+import app.nichepro.model.BaseResponseObject;
+import app.nichepro.model.db.UserRegistrationInfo;
+import app.nichepro.responsehandler.ResponseParserListener;
+import app.nichepro.util.EnumFactory.ResponseMesssagType;
+
+public class PatientInfoProfileFragment extends BaseFragment implements
+		OnClickListener, ResponseParserListener {
+
+	Button editProfile, cancelProfile, confirmProfile;
+	EditText middleName, firstName, lastName, zipCode, phone;
+	Spinner state, city;
+	TextView txtMiddleName, txtFirstName, txtLastName, txtState, txtCity, txtZipCode, txtPhone;
+	String strFirstName, strMiddleName, strLastName, strState, strCity, strZipCode, strPhone;
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.patient_info_profile_screen,
+				container, false);
+
+		HealthCareApp myApp = (HealthCareApp) getActivity()
+				.getApplication();
+		
+		editProfile = (Button) view.findViewById(R.id.bPatientEdit);
+		middleName = (EditText) view.findViewById(R.id.etMiddleName);
+		firstName = (EditText) view.findViewById(R.id.etFirstName);
+		lastName = (EditText) view.findViewById(R.id.etLastName);
+		zipCode = (EditText) view.findViewById(R.id.etZipCode);
+		phone = (EditText) view.findViewById(R.id.etMobile);
+		state = (Spinner) view.findViewById(R.id.sState);
+		city = (Spinner) view.findViewById(R.id.sCity);
+		cancelProfile = (Button) view.findViewById(R.id.bPatientCancel);
+		confirmProfile = (Button) view.findViewById(R.id.bPatientConfirm);
+		txtMiddleName = (TextView) view.findViewById(R.id.tvMiddleName);
+		txtFirstName = (TextView) view.findViewById(R.id.tvFirstName);
+		txtLastName = (TextView) view.findViewById(R.id.tvLastName);
+		txtState = (TextView) view.findViewById(R.id.tvState);
+		txtCity = (TextView) view.findViewById(R.id.tvCity);
+		txtZipCode = (TextView) view.findViewById(R.id.tvZipCode);
+		txtPhone = (TextView) view.findViewById(R.id.tvMobile);
+		editProfile.setOnClickListener(this);
+		cancelProfile.setOnClickListener(this);
+		confirmProfile.setOnClickListener(this);
+
+	
+		txtFirstName.setText(myApp.getLoggedInUser().LOGIN_DETAILS.firstName);
+		txtLastName.setText(myApp.getLoggedInUser().LOGIN_DETAILS.lastName);
+		txtState.setText(myApp.getLoggedInUser().LOGIN_DETAILS.state);
+		txtCity.setText(myApp.getLoggedInUser().LOGIN_DETAILS.city);
+		txtZipCode.setText(myApp.getLoggedInUser().LOGIN_DETAILS.pinCode);
+		txtMiddleName.setText(myApp.getLoggedInUser().LOGIN_DETAILS.middleName);
+		txtPhone.setText(myApp.getLoggedInUser().LOGIN_DETAILS.mobileNo);
+		
+		return view;
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.bPatientEdit:
+			middleName.setVisibility(View.VISIBLE);
+			firstName.setVisibility(View.VISIBLE);
+			lastName.setVisibility(View.VISIBLE);
+			zipCode.setVisibility(View.VISIBLE);
+			phone.setVisibility(View.VISIBLE);
+			state.setVisibility(View.VISIBLE);
+			city.setVisibility(View.VISIBLE);
+			editProfile.setVisibility(View.INVISIBLE);
+			cancelProfile.setVisibility(View.VISIBLE);
+			confirmProfile.setVisibility(View.VISIBLE);
+			break;
+		case R.id.bPatientCancel:
+			middleName.setVisibility(View.INVISIBLE);
+			firstName.setVisibility(View.INVISIBLE);
+			lastName.setVisibility(View.INVISIBLE);
+			zipCode.setVisibility(View.INVISIBLE);
+			phone.setVisibility(View.INVISIBLE);
+			state.setVisibility(View.INVISIBLE);
+			city.setVisibility(View.INVISIBLE);
+			editProfile.setVisibility(View.VISIBLE);
+			cancelProfile.setVisibility(View.INVISIBLE);
+			confirmProfile.setVisibility(View.INVISIBLE);
+			break;
+		case R.id.bPatientConfirm:
+			middleName.setVisibility(View.INVISIBLE);
+			firstName.setVisibility(View.INVISIBLE);
+			lastName.setVisibility(View.INVISIBLE);
+			zipCode.setVisibility(View.INVISIBLE);
+			phone.setVisibility(View.INVISIBLE);
+			state.setVisibility(View.INVISIBLE);
+			city.setVisibility(View.INVISIBLE);
+			editProfile.setVisibility(View.VISIBLE);
+			cancelProfile.setVisibility(View.INVISIBLE);
+			confirmProfile.setVisibility(View.INVISIBLE);
+			txtMiddleName.setText(strMiddleName = middleName.getText().toString());
+			txtFirstName.setText(strFirstName = firstName.getText().toString());
+			txtLastName.setText(strLastName = lastName.getText().toString());
+			txtState.setText(strState = state.getSelectedItem().toString());
+			txtCity.setText(strCity = city.getSelectedItem().toString());
+			txtZipCode.setText(strZipCode = zipCode.getText().toString());
+			txtPhone.setText(strPhone = phone.getText().toString());
+
+			
+			
+			break;
+		}
+
+	}
+
+	@Override
+	public void onEndParsingMsgType(ResponseMesssagType msgType) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onEndParsingResponse(ArrayList<BaseResponseObject> items) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onErrorResponse(ArrayList<BaseResponseObject> items) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onError(Exception ex) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

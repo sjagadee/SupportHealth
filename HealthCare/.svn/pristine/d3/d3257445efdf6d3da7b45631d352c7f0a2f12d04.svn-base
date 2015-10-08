@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Alarm Time:"
+        android:textSize="20sp" />
+
+    <TimePicker
+        android:id="@+id/timePicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+
+    <Button
+        android:id="@+id/bSelect"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Set Time" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/bMonday"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_low_white_clickable"
+            android:text="M" />
+
+        <Button
+            android:id="@+id/bTuesday"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_low_white_clickable"
+            android:text="T" />
+
+        <Button
+            android:id="@+id/bWednesday"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_low_white_clickable"
+            android:text="W" />
+
+        <Button
+            android:id="@+id/bThursday"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_low_white_clickable"
+            android:text="T" />
+
+        <Button
+            android:id="@+id/bFriday"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_low_white_clickable"
+            android:text="F" />
+
+        <Button
+            android:id="@+id/bSaturday"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_low_white_clickable"
+            android:text="S" />
+
+        <Button
+            android:id="@+id/bSunday"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_low_white_clickable"
+            android:text="S"
+            android:textColor="#FF0000" />
+    </LinearLayout>
+
+</LinearLayout>

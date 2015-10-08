@@ -1,0 +1,115 @@
+package app.nichepro.fragmenttabpatient.community;
+
+import java.util.ArrayList;
+
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+import app.nichepro.HealthCareApp;
+import app.nichepro.activities.healthcare.BaseFragment;
+import app.nichepro.activities.healthcare.R;
+import app.nichepro.model.BaseResponseObject;
+import app.nichepro.responsehandler.ResponseParserListener;
+import app.nichepro.util.Constants;
+import app.nichepro.util.UIUtilities;
+import app.nichepro.util.WebLinks;
+import app.nichepro.util.WebRequestTask;
+import app.nichepro.util.EnumFactory.ResponseMesssagType;
+
+public class PatientCommunityRequestSponsorFragment extends BaseFragment
+		implements ResponseParserListener, OnClickListener {
+
+	EditText sponsorRequest;
+	Button sendRequest;
+	private WebRequestTask sponsorRequestTask;
+	private ResponseMesssagType msgType;
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+
+		View view = inflater.inflate(R.layout.patient_request_for_sponsor,
+				container, false);
+
+		sponsorRequest = (EditText) view.findViewById(R.id.etRequestSponsor);
+		sendRequest = (Button) view.findViewById(R.id.bSendRequest);
+		sendRequest.setOnClickListener(this);
+		return view;
+	}
+
+	@Override
+	public void onEndParsingMsgType(ResponseMesssagType msgType) {
+		// TODO Auto-generated method stub
+		this.msgType = msgType;
+	}
+
+	@Override
+	public void onEndParsingResponse(ArrayList<BaseResponseObject> items) {
+		// TODO Auto-generated method stub
+		if (this.msgType == ResponseMesssagType.RequstForSponsor) {
+			UIUtilities.showConfirmationAlert(getActivity(),
+					R.string.dialog_title_information, "Your request is submitted!",
+					R.string.dialog_button_Ok,
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+
+						}
+					});
+		} else {
+			UIUtilities.showConfirmationAlert(getActivity(),
+					R.string.dialog_title_information, R.string.server_error,
+					R.string.dialog_button_Ok,
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+
+						}
+					});
+		}
+	}
+
+	@Override
+	public void onErrorResponse(ArrayList<BaseResponseObject> items) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onError(Exception ex) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		sponsorRequestTask = new WebRequestTask(
+				WebLinks.getLink(WebLinks.RequestForSponsor), getActivity(),
+				this);
+		String message = null;
+		message = sponsorRequest.getText().toString();
+		HealthCareApp myApp = (HealthCareApp) getActivity().getApplication();
+		if (message != null && !message.isEmpty()) {
+			sponsorRequestTask.AddParam(Constants.PARAM_partyId,
+					myApp.getLoggedInUser().getPartyId());
+			sponsorRequestTask.AddParam(Constants.PARAM_description,
+					message);
+			sponsorRequestTask.execute();
+		}else{
+			UIUtilities.showConfirmationAlert(getActivity(),
+					R.string.dialog_title_information,"Please enter description!",
+					R.string.dialog_button_Ok,
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+
+						}
+					});
+		}
+
+	}
+
+}

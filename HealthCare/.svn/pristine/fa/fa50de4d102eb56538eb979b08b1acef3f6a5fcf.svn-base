@@ -1,0 +1,557 @@
+package app.nichepro.fragmenttabdoctor.queries;
+
+import java.util.ArrayList;
+
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.text.InputType;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.ViewAnimator;
+import app.nichepro.HealthCareApp;
+import app.nichepro.activities.healthcare.BaseFragment;
+import app.nichepro.activities.healthcare.R;
+import app.nichepro.animation.AnimationFactory;
+import app.nichepro.animation.AnimationFactory.FlipDirection;
+import app.nichepro.fragmenttabpatient.queries.EmailListAdapter;
+import app.nichepro.fragmenttabpatient.queries.EmailListFragment;
+import app.nichepro.model.BaseResponseObject;
+import app.nichepro.model.CommunicationListResponseObject;
+import app.nichepro.model.CommunicationResponseObject;
+import app.nichepro.model.KeyValue;
+import app.nichepro.model.MessageListResponseObject;
+import app.nichepro.model.PartyListResponseObject;
+import app.nichepro.model.PartyResponseObject;
+import app.nichepro.model.PartySharingListResponseObject;
+import app.nichepro.model.PartySharingResponseObject;
+import app.nichepro.model.db.EmailMessage;
+import app.nichepro.responsehandler.ResponseParserListener;
+import app.nichepro.util.Constants;
+import app.nichepro.util.EnumFactory.ResponseMesssagType;
+import app.nichepro.util.UIUtilities;
+import app.nichepro.util.WebLinks;
+import app.nichepro.util.WebRequestTask;
+
+public class DoctorQueryFragment extends BaseFragment implements
+		OnClickListener, ResponseParserListener, OnTouchListener {
+
+	private ArrayList<KeyValue> listOfDoctor;
+	private ArrayList<String> doctorName;
+	public PartyListResponseObject doctorListObject;
+	protected ArrayList<CharSequence> selectedDoctors = new ArrayList<CharSequence>();
+
+	private ArrayList<KeyValue> listOfPatient;
+	private ArrayList<String> patientName;
+	public PartySharingListResponseObject patientListObject;
+	protected ArrayList<CharSequence> selectedPatient = new ArrayList<CharSequence>();
+	Button btnMsgList;
+	Button btnSendMsg;
+	Boolean isToggle;
+	String tDoctorName, tSubject, tMessage;
+	Dialog progress;
+	TextView toPatientName;
+	TextView toDoctorName;
+
+	EditText selectPatientName;
+	EditText selectDoctorName;
+	EditText subject;
+	EditText message;
+	ViewAnimator viewAnimator;
+	ArrayList<MessageListResponseObject> msgArray;
+	WebRequestTask ehrRequestTask;
+	WebRequestTask patientRequestTask;
+
+	private ResponseMesssagType msgType;
+	private LayoutInflater mInflater;
+	private ListView mMessageList;
+	HealthCareApp myApp;
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.patient_query_screen, container,
+				false);
+		mInflater = inflater;
+		viewAnimator = (ViewAnimator) view.findViewById(R.id.viewFlipper);
+		myApp = (HealthCareApp) getActivity().getApplication();
+		btnMsgList = (Button) view.findViewById(R.id.msg_list);
+		btnSendMsg = (Button) view.findViewById(R.id.send_msg);
+		btnMsgList.setSelected(true);
+		isToggle = true;
+		btnMsgList.setOnClickListener(this);
+		btnSendMsg.setOnClickListener(this);
+
+		subject = (EditText) view.findViewById(R.id.etSubjectMessage);
+		message = (EditText) view.findViewById(R.id.etMessageCommunicate);
+		Button send = (Button) view.findViewById(R.id.bSendCommunicate);
+
+		mMessageList = (ListView) view.findViewById(R.id.patient_communication);
+
+		send.setOnClickListener(this);
+		selectDoctorName = (EditText) view.findViewById(R.id.bSelect);
+		selectDoctorName.setVisibility(view.GONE);
+		// selectDoctorName.setOnTouchListener(this);
+		// selectDoctorName.setInputType(InputType.TYPE_NULL); // disable soft
+
+		selectPatientName = (EditText) view.findViewById(R.id.bSelectPatient);
+		selectPatientName.setOnTouchListener(this);
+		selectPatientName.setInputType(InputType.TYPE_NULL); // disable soft//
+																// input
+		selectPatientName.setVisibility(View.VISIBLE);
+		toPatientName = (TextView) view.findViewById(R.id.tSelectPatient);
+		toPatientName.setVisibility(View.VISIBLE);
+
+		toDoctorName = (TextView) view.findViewById(R.id.tSelectDoctor);
+		toDoctorName.setVisibility(View.GONE);
+		subject = (EditText) view.findViewById(R.id.etSubjectMessage);
+		message = (EditText) view.findViewById(R.id.etMessageCommunicate);
+
+		requestForListMsg();
+		return view;
+	}
+
+	void createMessageList() {
+
+		// Creating the list adapter and populating the list
+		ArrayAdapter<EmailMessage> listAdapter = new EmailListAdapter(
+				mInflater.getContext(), mInflater,
+				R.layout.email_message_list_cell);
+
+		for (MessageListResponseObject msg : msgArray) {
+			EmailMessage eMsg = msg.msgList.get(0);
+			eMsg.setQTY("" + msg.msgList.size());
+			listAdapter.add(eMsg);
+
+		}
+		mMessageList.setAdapter(listAdapter);
+		mMessageList
+				.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+					public void onItemClick(AdapterView<?> parent,
+							final View view, int position, long id) {
+						MessageListResponseObject mlro = msgArray.get(position);
+						EmailListFragment edf = new EmailListFragment();
+						edf.msgList = mlro;
+						edf.isDoctor = true;
+						mDoctorActivity.pushFragments(Constants.TAB_QUERIES,
+								edf, true, true);
+					}
+				});
+	}
+
+	public void onChangeSelectedDoctors() {
+		StringBuilder stringBuilder = new StringBuilder();
+
+		for (CharSequence colour : selectedDoctors)
+			stringBuilder.append(colour + ";");
+
+		selectDoctorName.setText(stringBuilder.toString());
+	}
+
+	public void onChangeSelectedPatient() {
+		StringBuilder stringBuilder = new StringBuilder();
+
+		for (CharSequence colour : selectedPatient)
+			stringBuilder.append(colour + ";");
+
+		selectPatientName.setText(stringBuilder.toString());
+	}
+
+	public void showSelectDoctorDialog() {
+		boolean[] checkedColours = new boolean[listOfDoctor.size()];
+		int count = listOfDoctor.size();
+
+		for (int i = 0; i < count; i++) {
+			KeyValue kv = listOfDoctor.get(i);
+			checkedColours[i] = selectedDoctors.contains(kv.getKey());
+		}
+
+		DialogInterface.OnMultiChoiceClickListener coloursDialogListener = new DialogInterface.OnMultiChoiceClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which,
+					boolean isChecked) {
+				KeyValue kv = listOfDoctor.get(which);
+				if (isChecked) {
+
+					selectedDoctors.add(kv.getKey());
+				} else {
+					selectedDoctors.remove(kv.getKey());
+				}
+
+				onChangeSelectedDoctors();
+			}
+		};
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		builder.setTitle("Select Doctor");
+		CharSequence s[] = doctorName.toArray(new CharSequence[doctorName
+				.size()]);
+		builder.setMultiChoiceItems(s, checkedColours, coloursDialogListener);
+		builder.setPositiveButton("Select",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+
+					}
+				});
+
+		AlertDialog dialog = builder.create();
+		dialog.show();
+	}
+
+	public void showSelectPatientDialog() {
+		boolean[] checkedColours = new boolean[listOfPatient.size()];
+		int count = listOfPatient.size();
+
+		for (int i = 0; i < count; i++) {
+			KeyValue kv = listOfPatient.get(i);
+			checkedColours[i] = selectedPatient.contains(kv.getKey());
+		}
+
+		DialogInterface.OnMultiChoiceClickListener coloursDialogListener = new DialogInterface.OnMultiChoiceClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which,
+					boolean isChecked) {
+				KeyValue kv = listOfPatient.get(which);
+				if (isChecked) {
+
+					selectedPatient.add(kv.getKey());
+				} else {
+					selectedPatient.remove(kv.getKey());
+				}
+
+				onChangeSelectedPatient();
+			}
+		};
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		builder.setTitle("Select Patient");
+		CharSequence s[] = patientName.toArray(new CharSequence[patientName
+				.size()]);
+		builder.setMultiChoiceItems(s, checkedColours, coloursDialogListener);
+		builder.setPositiveButton("Select",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+
+					}
+				});
+
+		AlertDialog dialog = builder.create();
+		dialog.show();
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.msg_list:
+			if (isToggle == false) {
+				AnimationFactory.flipTransition(viewAnimator,
+						FlipDirection.LEFT_RIGHT);
+				btnMsgList.setTextColor(Color.BLACK);
+				btnSendMsg.setTextColor(Color.WHITE);
+				btnMsgList.setSelected(true);
+				btnSendMsg.setSelected(false);
+			}
+			isToggle = true;
+			break;
+		case R.id.send_msg:
+			if (isToggle == true) {
+				AnimationFactory.flipTransition(viewAnimator,
+						FlipDirection.LEFT_RIGHT);
+				btnMsgList.setTextColor(Color.WHITE);
+				btnSendMsg.setTextColor(Color.BLACK);
+				btnMsgList.setSelected(false);
+				btnSendMsg.setSelected(true);
+				// requestForDoctor();
+				requestForPatient();
+			}
+			isToggle = false;
+			break;
+
+		case R.id.bSendCommunicate: {
+			requestForSendMsg();
+
+		}
+			break;
+		}
+
+	}
+
+	@Override
+	public void onEndParsingMsgType(ResponseMesssagType msgType) {
+		// TODO Auto-generated method stub
+		this.msgType = msgType;
+	}
+
+	@Override
+	public void onEndParsingResponse(ArrayList<BaseResponseObject> items) {
+		// TODO Auto-generated method stub
+		if (this.msgType == ResponseMesssagType.CommunicationEventCreatedMessageType) {
+			UIUtilities.showConfirmationAlert(getActivity(),
+					R.string.dialog_title_information,
+					"Your message has sent successfully",
+					R.string.dialog_button_Ok,
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+
+						}
+					});
+		} else if (this.msgType == ResponseMesssagType.DoctorListMessageType) {
+			listOfDoctor = new ArrayList<KeyValue>();
+			doctorName = new ArrayList<String>();
+			if (items != null && !items.isEmpty() && items.size() > 0) {
+				this.doctorListObject = (PartyListResponseObject) items.get(0);
+				for (PartyResponseObject msg : this.doctorListObject.party) {
+					KeyValue kv = new KeyValue();
+					kv.setKey(msg.partyId);
+					if (msg.firstName != null) {
+						kv.setValue(msg.firstName);
+
+					} else
+						kv.setValue("Name not found");
+					doctorName.add(kv.getValue());
+
+					listOfDoctor.add(kv);
+
+				}
+
+			}
+		}
+
+		// else if (this.msgType == ResponseMesssagType.PatientListMessageType)
+		// {
+		// listOfPatient = new ArrayList<KeyValue>();
+		// patientName = new ArrayList<String>();
+		// if (items != null && !items.isEmpty() && items.size() > 0) {
+		// this.patientListObject = (PartyListResponseObject) items.get(0);
+		// for (PartyResponseObject msg : this.patientListObject.party) {
+		// KeyValue kv = new KeyValue();
+		// kv.setKey(msg.partyId);
+		// if (msg.firstName != null) {
+		// kv.setValue(msg.firstName);
+		//
+		// } else
+		// kv.setValue("Name not found");
+		// patientName.add(kv.getValue());
+		//
+		// listOfPatient.add(kv);
+		// }
+		// }
+		// }
+		else if (this.msgType == ResponseMesssagType.listCCRSharingMessageType) {
+			if (items != null && !items.isEmpty() && items.size() > 0) {
+				listOfPatient = new ArrayList<KeyValue>();
+				patientName = new ArrayList<String>();
+				this.patientListObject = (PartySharingListResponseObject) items
+						.get(0);
+				for (PartySharingResponseObject msg : this.patientListObject.CCRSharingList) {
+					KeyValue kv = new KeyValue();
+					kv.setKey(msg.partyId);
+					if (msg.firstName != null) {
+						kv.setValue(msg.firstName);
+
+					} else
+						kv.setValue("Name not found");
+					patientName.add(kv.getValue());
+
+					listOfPatient.add(kv);
+
+				}
+
+			}
+		} else if (this.msgType == ResponseMesssagType.CommunicationEventListMessageType) {
+			msgArray = new ArrayList<MessageListResponseObject>();
+			CommunicationListResponseObject clro = (CommunicationListResponseObject) items
+					.get(0);
+			if (items != null && !items.isEmpty() && items.size() > 0) {
+
+				for (CommunicationResponseObject element : clro.CommunicationEventList) {
+					EmailMessage em = new EmailMessage();
+					em.USERNAME = element.partyIdFrom;
+					em.MESSAGE = element.content;
+					em.SUBJECT = element.subject;
+					if (msgArray.size() == 0) {
+						MessageListResponseObject mlro = new MessageListResponseObject();
+						mlro.msgList = new ArrayList<EmailMessage>();
+						mlro.msgList.add(em);
+						msgArray.add(mlro);
+					} else {
+						MessageListResponseObject mlro = msgArray.get(msgArray
+								.size() - 1);
+						EmailMessage msg = mlro.msgList
+								.get(mlro.msgList.size() - 1);
+						if (msg.getSUBJECT().toString()
+								.compareTo(em.getSUBJECT().toString()) == 0) {
+							mlro.msgList.add(em);
+						} else {
+							MessageListResponseObject mlro1 = new MessageListResponseObject();
+							mlro1.msgList = new ArrayList<EmailMessage>();
+							mlro1.msgList.add(em);
+							msgArray.add(mlro1);
+						}
+					}
+					createMessageList();
+				}
+			}
+		}
+	}
+
+	public void requestForSendMsg() {
+
+		if (selectedPatient.size() == 0) {
+			UIUtilities.showConfirmationAlert(getActivity(),
+					R.string.dialog_title_information,
+					"Please select a doctor", R.string.dialog_button_Ok,
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+
+						}
+					});
+		} else if (subject.getText().toString().length() == 0) {
+			UIUtilities.showConfirmationAlert(getActivity(),
+					R.string.dialog_title_information, "Please add Subject",
+					R.string.dialog_button_Ok,
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+
+						}
+					});
+		} else if (message.getText().toString().length() == 0) {
+			UIUtilities.showConfirmationAlert(getActivity(),
+					R.string.dialog_title_information, "Please add Message",
+					R.string.dialog_button_Ok,
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+
+						}
+					});
+		} else {
+
+			String ccString = null;
+			int size = selectedPatient.size();
+			if (size > 1) {
+
+				for (int i = 1; i < size; i++) {
+					if (i == 1) {
+						ccString = selectedPatient.get(1).toString();
+					} else
+						ccString += ";" + selectedPatient.get(i).toString();
+				}
+			}
+
+			ehrRequestTask = new WebRequestTask(
+					WebLinks.getLink(WebLinks.CreateCommunication),
+					getActivity(), this);
+
+			HealthCareApp myApp = (HealthCareApp) getActivity()
+					.getApplication();
+
+			ehrRequestTask.AddParam(Constants.PARAM_partyIdFrom, myApp
+					.getLoggedInUser().getPartyId());
+			ehrRequestTask.AddParam(Constants.PARAM_partyIdTo, selectedPatient
+					.get(0).toString());
+			ehrRequestTask.AddParam(Constants.PARAM_subject, subject.getText()
+					.toString());
+			ehrRequestTask.AddParam(Constants.PARAM_content, message.getText()
+					.toString());
+
+			if (ccString != null) {
+				ehrRequestTask.AddParam(Constants.PARAM_ccString, ccString);
+
+			}
+			ehrRequestTask.execute();
+		}
+	}
+
+	public void requestForListMsg() {
+		ehrRequestTask = new WebRequestTask(
+				WebLinks.getLink(WebLinks.ListCommunication), getActivity(),
+				this);
+
+		ehrRequestTask.AddParam(Constants.PARAM_partyIdFrom, myApp
+				.getLoggedInUser().getPartyId());
+//		ehrRequestTask.AddParam(Constants.PARAM_partyIdTo, myApp
+//				.getLoggedInUser().getPartyId());
+		ehrRequestTask.execute();
+	}
+
+	// public void requestForDoctor() {
+	// ehrRequestTask = new WebRequestTask(
+	// WebLinks.getLink(WebLinks.ACTOR_LIST), getActivity(), this);
+	//
+	// ehrRequestTask.AddParam(Constants.PARAM_partyType, "Doctor");
+	// ehrRequestTask.AddParam(Constants.PARAM_roleTypeId, "HC_PROVIDER");
+	// ehrRequestTask.execute();
+	// }
+
+	public void requestForPatient() {
+		ehrRequestTask = new WebRequestTask(
+				WebLinks.getLink(WebLinks.ListOfCCRSharing), getActivity(),
+				this);
+		ehrRequestTask.AddParam(Constants.PARAM_partyIdTo, myApp
+				.getLoggedInUser().getPartyId());
+
+		ehrRequestTask.execute();
+	}
+
+	@Override
+	public void onErrorResponse(ArrayList<BaseResponseObject> items) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onError(Exception ex) {
+		// TODO Auto-generated method stub
+		UIUtilities.showConfirmationAlert(getActivity(),
+				R.string.dialog_title_information, ex.getMessage(),
+				R.string.dialog_button_Ok,
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+
+					}
+				});
+	}
+
+	public ResponseMesssagType getMsgType() {
+		return msgType;
+	}
+
+	public void setMsgType(ResponseMesssagType msgType) {
+		this.msgType = msgType;
+	}
+
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		// TODO Auto-generated method stub
+		switch (v.getId()) {
+		case R.id.bSelect: {
+			if (MotionEvent.ACTION_UP == event.getAction()) {
+				showSelectDoctorDialog();
+			}
+			break;
+		}
+		case R.id.bSelectPatient: {
+			if (MotionEvent.ACTION_UP == event.getAction()) {
+				showSelectPatientDialog();
+			}
+			break;
+		}
+		default:
+			break;
+		}
+
+		return false;
+	}
+}

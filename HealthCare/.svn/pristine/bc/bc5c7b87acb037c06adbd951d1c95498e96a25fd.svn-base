@@ -1,0 +1,530 @@
+package app.nichepro.fragmenttabpatient.info;
+
+import java.util.Calendar;
+
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.media.MediaPlayer;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.Button;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.TimePicker;
+import app.nichepro.activities.healthcare.AlarmReceiverActivity;
+import app.nichepro.activities.healthcare.BaseFragment;
+import app.nichepro.activities.healthcare.R;
+
+public class PatientAlarmFragment extends BaseFragment implements
+		OnClickListener {
+
+	private PendingIntent operation, operation1, operation2, operation3,
+			operation4, operation5, operation6;
+	private Intent intent;
+	private AlarmManager alarmManager;
+
+	private TimePicker timepicker;
+	private TextView text;
+	private Spinner alarmTone;
+	private Button btn_select;
+	private Button monday, tuesday, wednesday, thursday, friday, saturday,
+			sunday;
+	private Button selectAll, stopMusic;
+	private int changecolor = 0;
+	private MediaPlayer beatsMedia, morningMedia, oohaMedia, rainMedia;
+	private Boolean isFirstVisit;
+	private Boolean alarmStatusSunday;
+	private Boolean alarmStatusMonday;
+	private Boolean alarmStatusTuesday;
+	private Boolean alarmStatusWednesday;
+	private Boolean alarmStatusThursday;
+	private Boolean alarmStatusFriday;
+	private Boolean alarmStatusSaturday;
+	public void Initialization(View view) {
+		alarmStatusSunday = false;
+		alarmStatusMonday = false;
+		alarmStatusTuesday = false;
+		alarmStatusWednesday = false;
+		alarmStatusThursday = false;
+		alarmStatusFriday = false;
+		alarmStatusSaturday = false;
+		text = (TextView) view.findViewById(R.id.textView);
+
+		timepicker = (TimePicker) view.findViewById(R.id.timePicker);
+
+		btn_select = (Button) view.findViewById(R.id.bSelect);
+		btn_select.setOnClickListener(this);
+		alarmTone = (Spinner) view.findViewById(R.id.sAlarmTone);
+		stopMusic = (Button) view.findViewById(R.id.bStopMusic);
+		selectAll = (Button) view.findViewById(R.id.cbSelectAll);
+		monday = (Button) view.findViewById(R.id.bMonday);
+		tuesday = (Button) view.findViewById(R.id.bTuesday);
+		wednesday = (Button) view.findViewById(R.id.bWednesday);
+		thursday = (Button) view.findViewById(R.id.bThursday);
+		friday = (Button) view.findViewById(R.id.bFriday);
+		saturday = (Button) view.findViewById(R.id.bSaturday);
+		sunday = (Button) view.findViewById(R.id.bSunday);
+		monday.setOnClickListener(this);
+		tuesday.setOnClickListener(this);
+		wednesday.setOnClickListener(this);
+		thursday.setOnClickListener(this);
+		friday.setOnClickListener(this);
+		saturday.setOnClickListener(this);
+		sunday.setOnClickListener(this);
+		selectAll.setOnClickListener(this);
+		stopMusic.setOnClickListener(this);
+
+		beatsMedia = MediaPlayer.create(getActivity(), R.raw.beats);
+		morningMedia = MediaPlayer.create(getActivity(), R.raw.morning);
+		oohaMedia = MediaPlayer.create(getActivity(), R.raw.ooha);
+		rainMedia = MediaPlayer.create(getActivity(), R.raw.raindrop);
+	}
+
+	public void settingTone() {
+		alarmTone.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO Auto-generated method stub
+				String tone = alarmTone.getSelectedItem().toString();
+				if (tone != null && !tone.isEmpty()) {
+					if (tone.compareTo("Beats") == 0) {
+						beatsMedia = MediaPlayer.create(getActivity(),
+								R.raw.beats);
+						if (!isFirstVisit) {
+							beatsMedia.start();
+						} else
+							isFirstVisit = false;
+					} else if (tone.compareTo("Morning Music") == 0) {
+						morningMedia = MediaPlayer.create(getActivity(),
+								R.raw.morning);
+						if (!isFirstVisit) {
+							morningMedia.start();
+						} else
+							isFirstVisit = false;
+
+					} else if (tone.compareTo("Oohaa") == 0) {
+						oohaMedia = MediaPlayer.create(getActivity(),
+								R.raw.ooha);
+						if (!isFirstVisit) {
+							oohaMedia.start();
+						} else
+							isFirstVisit = false;
+
+					} else if (tone.compareTo("Rain Drop") == 0) {
+						rainMedia = MediaPlayer.create(getActivity(),
+								R.raw.raindrop);
+						if (!isFirstVisit) {
+							rainMedia.start();
+						} else
+							isFirstVisit = false;
+					}
+				}
+				Log.i("Hour", tone);
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+				// TODO Auto-generated method stub
+
+			}
+
+		});
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		isFirstVisit = true;
+		View view = inflater.inflate(R.layout.alarm, container, false);
+		Initialization(view);
+		settingTone();
+		intent = new Intent(getActivity(), AlarmReceiverActivity.class);
+
+		alarmManager = (AlarmManager) getActivity().getSystemService(
+				Context.ALARM_SERVICE);
+		return view;
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.bSelect: {
+			SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity()
+					);
+			SharedPreferences.Editor editor = settings.edit();
+			
+			
+			
+			// Calendar cal = Calendar.getInstance();
+			// cal.set(Calendar.SECOND, 0);
+			// cal.set(Calendar.MILLISECOND, 0);
+			// cal.set(Calendar.HOUR, timepicker.getCurrentHour());
+			// cal.set(Calendar.MINUTE, timepicker.getCurrentMinute());
+			//
+			// ViewGroup vg = (ViewGroup) timepicker.getChildAt(0);
+			// Button btn = (Button) vg.getChildAt(2);
+			// cal.set(Calendar.AM_PM, Calendar.AM);
+			// if (btn != null && btn.getText().toString().compareTo("AM") == 0)
+			// {
+			// cal.set(Calendar.AM_PM, Calendar.AM);
+			// } else
+			// cal.set(Calendar.AM_PM, Calendar.PM);
+			//
+			// Log.i("Hour", "AM/PM  values after user selection:"
+			// + btn.getText().toString());
+			// Log.i("Hour", "" + cal.get(Calendar.YEAR));
+			// Log.i("Hour", "" + cal.get(Calendar.MONTH));
+			// Log.i("Hour", "" + cal.get(Calendar.DAY_OF_MONTH));
+			// Log.i("Hour", "" + cal.get(Calendar.HOUR_OF_DAY));
+			// Log.i("Hour", "" + cal.get(Calendar.MINUTE));
+			//
+			// // Create a new PendingIntent and add it to the AlarmManager
+			// Intent intent = new Intent(getActivity(),
+			// AlarmReceiverActivity.class);
+			// PendingIntent pendingIntent = PendingIntent.getActivity(
+			// getActivity(), 12345, intent,
+			// PendingIntent.FLAG_CANCEL_CURRENT);
+			// alarmManager = (AlarmManager) getActivity().getSystemService(
+			// Context.ALARM_SERVICE);
+			// // am.setRepeating(AlarmManager.RTC_WAKEUP,
+			// cal.getTimeInMillis(),
+			// // intervalMillis, operation)
+			// alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
+			// pendingIntent);
+		}
+			text.setText("Alarm Time:" + timepicker.getCurrentHour() + " : "
+					+ timepicker.getCurrentMinute());
+			break;
+		case R.id.bMonday: {
+			setAlarmForMonday();
+			break;
+		}
+		case R.id.bTuesday: {
+			setAlarmForTuesday();
+		}
+			break;
+		case R.id.bWednesday: {
+			setAlarmForWednesday();
+		}
+			break;
+		case R.id.bThursday: {
+			setAlarmForThursday();
+		}
+			break;
+		case R.id.bFriday: {
+			setAlarmForFriday();
+		}
+			break;
+		case R.id.bSaturday: {
+			setAlarmForSaturday();
+		}
+			break;
+		case R.id.bSunday: {
+			setAlarmForSunday();
+		}
+			break;
+
+		case R.id.cbSelectAll: {
+			setAlarmForWholeWeek();
+		}
+			break;
+		case R.id.bStopMusic: {
+			beatsMedia.stop();
+			morningMedia.stop();
+			oohaMedia.stop();
+			rainMedia.stop();
+			break;
+		}
+		}
+	}
+
+	public void setAlarmForMonday() {
+		if (alarmStatusMonday == false) {
+			Bundle bundle = new Bundle();
+			bundle.putInt("Selected_day", 2);
+			intent.putExtras(bundle);
+			operation = PendingIntent.getActivity(getActivity(), 0, intent,
+					PendingIntent.FLAG_CANCEL_CURRENT);
+			forday(2, operation);
+			monday.setBackgroundResource(R.drawable.btn_blue_clickable);
+			alarmStatusMonday = true;
+		} else {
+			AlarmManager alarmManager = (AlarmManager) (AlarmManager) getActivity()
+					.getSystemService(Context.ALARM_SERVICE);
+			alarmManager.cancel(operation);
+			monday.setBackgroundResource(R.drawable.btn_low_white_clickable);
+			alarmStatusMonday = false;
+		}
+	}
+
+	public void setAlarmForTuesday() {
+		if (alarmStatusTuesday == false) {
+			Bundle bundle = new Bundle();
+			bundle.putInt("Selected_day", 3);
+			intent.putExtras(bundle);
+			operation1 = PendingIntent.getActivity(getActivity(), 1, intent,
+					PendingIntent.FLAG_CANCEL_CURRENT);
+			forday(3, operation1);
+			tuesday.setBackgroundResource(R.drawable.btn_blue_clickable);
+			alarmStatusTuesday = true;
+		} else {
+			AlarmManager alarmManager = (AlarmManager) (AlarmManager) getActivity()
+					.getSystemService(Context.ALARM_SERVICE);
+			alarmManager.cancel(operation1);
+			tuesday.setBackgroundResource(R.drawable.btn_low_white_clickable);
+			alarmStatusTuesday = false;
+		}
+	}
+
+	public void setAlarmForWednesday() {
+		if (alarmStatusWednesday == false) {
+			Bundle bundle = new Bundle();
+			bundle.putInt("Selected_day", 4);
+			intent.putExtras(bundle);
+			operation2 = PendingIntent.getActivity(getActivity(), 2, intent,
+					PendingIntent.FLAG_CANCEL_CURRENT);
+			forday(4, operation2);
+			wednesday.setBackgroundResource(R.drawable.btn_blue_clickable);
+			alarmStatusWednesday = true;
+		} else {
+			AlarmManager alarmManager = (AlarmManager) (AlarmManager) getActivity()
+					.getSystemService(Context.ALARM_SERVICE);
+			alarmManager.cancel(operation2);
+			wednesday.setBackgroundResource(R.drawable.btn_low_white_clickable);
+			alarmStatusWednesday = false;
+		}
+	}
+
+	public void setAlarmForThursday() {
+		if (alarmStatusThursday == false) {
+			Bundle bundle = new Bundle();
+			bundle.putInt("Selected_day", 5);
+			intent.putExtras(bundle);
+			operation3 = PendingIntent.getActivity(getActivity(), 3, intent,
+					PendingIntent.FLAG_CANCEL_CURRENT);
+			forday(5, operation3);
+			thursday.setBackgroundResource(R.drawable.btn_blue_clickable);
+			alarmStatusThursday = true;
+		} else {
+			AlarmManager alarmManager = (AlarmManager) (AlarmManager) getActivity()
+					.getSystemService(Context.ALARM_SERVICE);
+			alarmManager.cancel(operation3);
+			thursday.setBackgroundResource(R.drawable.btn_low_white_clickable);
+
+			alarmStatusThursday = false;
+		}
+	}
+
+	public void setAlarmForFriday() {
+		if (alarmStatusFriday == false) {
+			Bundle bundle = new Bundle();
+			bundle.putInt("Selected_day", 6);
+			intent.putExtras(bundle);
+			operation4 = PendingIntent.getActivity(getActivity(), 4, intent,
+					PendingIntent.FLAG_CANCEL_CURRENT);
+			forday(6, operation4);
+			friday.setBackgroundResource(R.drawable.btn_blue_clickable);
+			alarmStatusFriday = true;
+		} else {
+			AlarmManager alarmManager = (AlarmManager) (AlarmManager) getActivity()
+					.getSystemService(Context.ALARM_SERVICE);
+			alarmManager.cancel(operation4);
+			friday.setBackgroundResource(R.drawable.btn_low_white_clickable);
+
+			alarmStatusFriday = false;
+		}
+	}
+
+	public void setAlarmForSaturday() {
+		if (alarmStatusSaturday == false) {
+			Bundle bundle = new Bundle();
+			bundle.putInt("Selected_day", 7);
+			intent.putExtras(bundle);
+			operation5 = PendingIntent.getActivity(getActivity(), 5, intent,
+					PendingIntent.FLAG_CANCEL_CURRENT);
+			forday(7, operation5);
+			saturday.setBackgroundResource(R.drawable.btn_blue_clickable);
+			alarmStatusSaturday = true;
+		} else {
+			AlarmManager alarmManager = (AlarmManager) (AlarmManager) getActivity()
+					.getSystemService(Context.ALARM_SERVICE);
+			alarmManager.cancel(operation5);
+			saturday.setBackgroundResource(R.drawable.btn_low_white_clickable);
+
+			alarmStatusSaturday = false;
+		}
+	}
+
+	public void setAlarmForSunday() {
+		if (alarmStatusSunday == false) {
+			Bundle bundle = new Bundle();
+			bundle.putInt("Selected_day", 1);
+			intent.putExtras(bundle);
+			operation6 = PendingIntent.getActivity(getActivity(), 6, intent,
+					PendingIntent.FLAG_CANCEL_CURRENT);
+			forday(1, operation6);
+			sunday.setBackgroundResource(R.drawable.btn_blue_clickable);
+			alarmStatusSunday = true;
+		} else {
+			AlarmManager alarmManager = (AlarmManager) (AlarmManager) getActivity()
+					.getSystemService(Context.ALARM_SERVICE);
+			alarmManager.cancel(operation6);
+			sunday.setBackgroundResource(R.drawable.btn_low_white_clickable);
+
+			alarmStatusSunday = false;
+		}
+	}
+
+	public void setAlarmForWholeWeek() {
+		if (changecolor == 0) {
+			alarmStatusSunday = false;
+			alarmStatusMonday = false;
+			alarmStatusTuesday = false;
+			alarmStatusWednesday = false;
+			alarmStatusThursday = false;
+			alarmStatusFriday = false;
+			alarmStatusSaturday = false;
+			setAlarmForSunday();
+			setAlarmForMonday();
+			setAlarmForTuesday();
+			setAlarmForWednesday();
+			setAlarmForThursday();
+			setAlarmForSaturday();
+			setAlarmForFriday();
+
+			monday.setBackgroundResource(R.drawable.btn_blue_clickable);
+			tuesday.setBackgroundResource(R.drawable.btn_blue_clickable);
+			wednesday.setBackgroundResource(R.drawable.btn_blue_clickable);
+			thursday.setBackgroundResource(R.drawable.btn_blue_clickable);
+			friday.setBackgroundResource(R.drawable.btn_blue_clickable);
+			saturday.setBackgroundResource(R.drawable.btn_blue_clickable);
+			sunday.setBackgroundResource(R.drawable.btn_blue_clickable);
+			changecolor = 1;
+		} else {
+			alarmStatusSunday = true;
+			alarmStatusMonday = true;
+			alarmStatusTuesday = true;
+			alarmStatusWednesday = true;
+			alarmStatusThursday = true;
+			alarmStatusFriday = true;
+			alarmStatusSaturday = true;
+			setAlarmForSunday();
+			setAlarmForMonday();
+			setAlarmForTuesday();
+			setAlarmForWednesday();
+			setAlarmForThursday();
+			setAlarmForSaturday();
+			setAlarmForFriday();
+			monday.setBackgroundResource(R.drawable.btn_low_white_clickable);
+			tuesday.setBackgroundResource(R.drawable.btn_low_white_clickable);
+			wednesday.setBackgroundResource(R.drawable.btn_low_white_clickable);
+			thursday.setBackgroundResource(R.drawable.btn_low_white_clickable);
+			friday.setBackgroundResource(R.drawable.btn_low_white_clickable);
+			saturday.setBackgroundResource(R.drawable.btn_low_white_clickable);
+			sunday.setBackgroundResource(R.drawable.btn_low_white_clickable);
+			changecolor = 0;
+		}
+	}
+
+	public void forday(int week, PendingIntent pendingIntent) {
+		
+		
+		Calendar setCal = Calendar.getInstance();
+		Calendar curCal = Calendar.getInstance();
+		
+		if (week == curCal.get(Calendar.DAY_OF_WEEK)) {
+			setCal.set(Calendar.HOUR_OF_DAY, timepicker.getCurrentHour());
+			setCal.set(Calendar.MINUTE,timepicker.getCurrentMinute());
+		}else if(week > curCal.get(Calendar.DAY_OF_WEEK)){
+			setCal.add(Calendar.DAY_OF_WEEK, week - curCal.get(Calendar.DAY_OF_WEEK));
+			setCal.set(Calendar.HOUR_OF_DAY, timepicker.getCurrentHour());
+			setCal.set(Calendar.MINUTE,timepicker.getCurrentMinute());
+		}else{
+			setCal.add(Calendar.DAY_OF_WEEK, 7 + week - curCal.get(Calendar.DAY_OF_WEEK));
+			setCal.set(Calendar.HOUR_OF_DAY, timepicker.getCurrentHour());
+			setCal.set(Calendar.MINUTE,timepicker.getCurrentMinute());
+		}
+		
+		Log.i("Calender", "Week: " + setCal.get(Calendar.DAY_OF_WEEK));
+		Log.i("Calender", "Year: " + setCal.get(Calendar.YEAR));
+		Log.i("Calender", "Month: " + setCal.get(Calendar.MONTH));
+		Log.i("Calender", "Day of Month: " + setCal.get(Calendar.DAY_OF_MONTH));
+		Log.i("Calender", "Hour of Day: " + setCal.get(Calendar.HOUR_OF_DAY));
+		Log.i("Calender", "Minut: " + setCal.get(Calendar.MINUTE));
+
+		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
+				setCal.getTimeInMillis(), AlarmManager.INTERVAL_DAY * 7,
+				pendingIntent);
+		setCal.set(Calendar.DAY_OF_WEEK, curCal.get(Calendar.DAY_OF_WEEK));
+		setCal.set(Calendar.YEAR, curCal.get(Calendar.YEAR));
+		setCal.set(Calendar.MONTH, curCal.get(Calendar.MONTH));
+		setCal.set(Calendar.DAY_OF_MONTH, curCal.get(Calendar.DAY_OF_MONTH));
+		setCal.set(Calendar.HOUR_OF_DAY, curCal.get(Calendar.HOUR_OF_DAY));
+		setCal.set(Calendar.MINUTE, curCal.get(Calendar.MINUTE));
+
+		Log.i("Calender", "Week: " + setCal.get(Calendar.DAY_OF_WEEK));
+		Log.i("Calender", "Year: " + setCal.get(Calendar.YEAR));
+		Log.i("Calender", "Month: " + setCal.get(Calendar.MONTH));
+		Log.i("Calender", "Day of Month: " + setCal.get(Calendar.DAY_OF_MONTH));
+		Log.i("Calender", "Hour of Day: " + setCal.get(Calendar.HOUR_OF_DAY));
+		Log.i("Calender", "Minut: " + setCal.get(Calendar.MINUTE));
+		
+		
+	}
+}
+
+
+//
+//int sHr = timepicker.getCurrentHour();
+//int sMin = timepicker.getCurrentMinute();
+//int cWeek = setCal.get(Calendar.DAY_OF_WEEK);
+//int cHr = setCal.get(Calendar.HOUR_OF_DAY);
+//int cMin = setCal.get(Calendar.MINUTE);
+//int timeInMillis = 0;
+
+
+
+//if (sHr >= cHr ) {
+//	if (week >= cWeek) {
+//		if (sMin < cMin) {
+//			timeInMillis = (sHr - cHr - 1)*60 + (60 - sMin + cMin) + (week - cWeek)*24*60;
+//		}else
+//			timeInMillis = (sHr - cHr)*60 + (sMin - cMin) + (week - cWeek)*24*60;
+//	}else if(week < cWeek){
+//		if (sMin < cMin) {
+//			timeInMillis = (sHr - cHr - 1)*60 + (60 - sMin + cMin) + (7 + week - cWeek)*24*60;
+//		}else
+//			timeInMillis = (sHr - cHr)*60 + (sMin - cMin) + (7 + week - cWeek)*24*60;
+//	}
+//}else{
+//	if (week == cWeek) {
+//		if (sMin >= cMin) {
+//			timeInMillis = sMin - cMin;
+//		}else{
+//			//Not valid timer
+//		}
+//	}else if(week > cWeek){
+//		timeInMillis = (sHr - cHr)*60 + (60 - sMin + cMin) + (week - cWeek)*24*60;
+//	}else if(week < cWeek) {
+//		
+//	}
+//
+//}
+
+//ViewGroup vg = (ViewGroup) timepicker.getChildAt(0);
+//Button btn = (Button) vg.getChildAt(2);
+//if (btn != null && btn.getText().toString().compareTo("PM") == 0) {
+//	sHr += 12;
+//}

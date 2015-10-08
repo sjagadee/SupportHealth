@@ -1,0 +1,106 @@
+package app.nichepro.util;
+
+
+
+import java.util.HashMap;
+
+/**
+ * A factory for creating Enum objects.
+ */
+public class EnumFactory {
+
+	/**
+	 * The Enum ResponseMesssagType.
+	 */
+	public enum ResponseMesssagType {
+
+		/** The Unknown response message type. */
+		UnknownResponseMessageType,
+		/** The  login response message type. */
+		LoginMessageType,	
+		/** The Patient login response message type. */
+		PatientLoginMessageType,
+		/** The Doctor login response message type. */
+		DoctorLoginMessageType,
+		/** The Sponsor login response message type. */
+		SponsorLoginMessageType,
+		/** Patient Registration response message type. */
+		UserRegistrationMessageType,
+		/** The Patient Note response message type. */
+		PatientNoteMessageType,
+		/** The Hospital list response message type. */
+		HospitalListMessageType,
+		/** Patient Appointment response message type. */
+		AppointmentListMessageType,
+		/** Patient Appointment response message type. */
+		NotelistMessageType,
+		/** Patient Appointment response message type. */
+		PatientAppointmentListMessageType,
+		/** Patient Appointment response message type. */
+		MedicationListMessageType,
+		/** Patient Appointment response message type. */
+		AlergiesListMessageType,
+		/** Patient Appointment response message type. */
+		DiagnosisListMessageType,
+		/** Patient Appointment response message type. */
+		VitalStatisticsMessageType,
+		/** Patient Appointment response message type. */
+		PatientListMessageType,
+		/** Patient Appointment response message type. */
+		DoctorListMessageType,
+		/** The Error response message type. */
+		ErrorResponseMessageType;
+
+		/**
+		 * Gets the hash map.
+		 * 
+		 * @return the hash map
+		 */
+		public static HashMap<ResponseMesssagType, String> getHashMap() {
+			HashMap<ResponseMesssagType, String> hm = new HashMap<ResponseMesssagType, String>();
+			hm.put(UnknownResponseMessageType, "unknown");
+			hm.put(PatientLoginMessageType, "login");
+			hm.put(UserRegistrationMessageType, "registered");
+			hm.put(DoctorLoginMessageType, "doctorlogin");
+			hm.put(SponsorLoginMessageType, "sponsorlogin");
+			hm.put(PatientNoteMessageType, "patientnote");
+			hm.put(HospitalListMessageType, "hospitallist");
+			hm.put(ErrorResponseMessageType, "Error");
+			return hm;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.lang.Enum#toString()
+		 */
+		public String toString() {
+			HashMap<ResponseMesssagType, String> hm = getHashMap();
+			return hm.get(this);
+		}
+
+		/**
+		 * To enum.
+		 * 
+		 * @param text
+		 *            the text
+		 * @return the response header type
+		 */
+		public static ResponseMesssagType toEnum(String text) {
+			HashMap<ResponseMesssagType, String> hm = getHashMap();
+			for (ResponseMesssagType item : hm.keySet()) {
+				if (hm.get(item).equals(text)) {
+					return item;
+				}
+			}
+			throw new AssertionError("Text <" + text
+					+ "> cannot be converted to enum");
+		}
+	}
+	
+	public enum LoginType{
+		Patient,
+		Doctor,
+		Sponsor,
+	}
+}

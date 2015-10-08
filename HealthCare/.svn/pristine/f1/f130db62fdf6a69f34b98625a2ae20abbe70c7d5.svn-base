@@ -1,0 +1,91 @@
+package app.nichepro.fragmenttabpatient.ehr;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
+import app.nichepro.activities.healthcare.BaseFragment;
+import app.nichepro.activities.healthcare.R;
+import app.nichepro.model.PatientVitalStatResponseObject;
+
+public class VitalAdapter extends ArrayAdapter<PatientVitalStatResponseObject> {
+	LayoutInflater minflater;
+
+	BaseFragment mFragment;
+
+	static class ViewHolder {
+
+		
+		TextView height;
+
+		TextView weight;
+
+		TextView bloodPreasure;
+
+		TextView bmi;
+		TextView pulseRate;
+		TextView diabetiesFast;
+		TextView diabetiesPost;
+		
+		TextView diabetiesRbs;
+		
+		/**
+		 * Reset the content of cell to remove the flickering effect
+		 */
+		public void reset() {
+
+		}
+	}
+
+	public VitalAdapter(BaseFragment fragment, Context context,
+			LayoutInflater inflater, int textViewResourceId) {
+		super(context, textViewResourceId);
+		minflater = inflater;
+		mFragment = fragment;
+	}
+
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		ViewHolder holder;
+		if (convertView == null) {
+			convertView = minflater.inflate(R.layout.vital_data_cell, null);
+			holder = new ViewHolder();
+
+			holder.height = ((TextView) convertView
+					.findViewById(R.id.height));
+
+			holder.weight = ((TextView) convertView.findViewById(R.id.weight));
+
+			holder.bloodPreasure = ((TextView) convertView.findViewById(R.id.bloodPreasure));
+			
+			holder.bmi = ((TextView) convertView.findViewById(R.id.BMI));
+			holder.pulseRate = ((TextView) convertView.findViewById(R.id.pulse));
+			
+			holder.diabetiesFast = ((TextView) convertView.findViewById(R.id.diaFast));
+			holder.diabetiesPost = ((TextView) convertView.findViewById(R.id.diaPost));
+			holder.diabetiesRbs = ((TextView) convertView.findViewById(R.id.diaRbs));
+			
+
+			convertView.setTag(holder);
+		} else {
+			holder = (ViewHolder) convertView.getTag();
+		}
+
+		PatientVitalStatResponseObject pmro = getItem(position);
+
+		holder.height.setText(pmro.height);
+		holder.bloodPreasure.setText(pmro.bloodPressure);
+		holder.bmi.setText(pmro.bmi);
+		holder.weight.setText(pmro.weight);
+		holder.pulseRate.setText(pmro.pulseRate);
+		holder.diabetiesFast.setText(pmro.diabetiesFast);
+		holder.diabetiesPost.setText(pmro.diabetiesPost);
+		holder.diabetiesRbs.setText(pmro.diabetiesRandom);
+		
+
+		return convertView;
+	}
+
+}

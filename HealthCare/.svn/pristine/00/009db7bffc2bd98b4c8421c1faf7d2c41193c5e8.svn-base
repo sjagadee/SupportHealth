@@ -1,0 +1,287 @@
+
+package app.nichepro.util;
+
+import java.lang.ref.WeakReference;
+
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.os.AsyncTask;
+import app.nichepro.HealthCareApp;
+import app.nichepro.activities.healthcare.R;
+import app.nichepro.responsehandler.GenericResponseHandler;
+import app.nichepro.responsehandler.ResponseParserBase.ResponseParserListener;
+import app.nichepro.util.WebRequestClient.RequestMethod;
+
+
+public class WebRequestTask extends AsyncTask<WebRequestClient, String, Void> {
+
+	/** The Constant TAG_review_count. */
+	private final String TAG = WebRequestTask.class.getSimpleName();
+
+	/** The TA g_stars. */
+	private Context mContext;
+
+	/** The m listner. */
+	private ResponseParserListener mListner;
+
+	/** The m web request client. */
+	private WebRequestClient mWebRequestClient;
+
+	/** The is foreground. */
+	private boolean isForeground = true;
+	// if web request task fails from
+
+	/**
+	 * The cancel current activity. don't use this variable other than special
+	 * cases.
+	 * 
+	 * Scenario 1: First Level Category List fetched and user does back on it
+	 * then finish the activity and go back to home.
+	 * 
+	 * Scenario 2: In Weekly ad for dismissing the dialog if no weekly ad
+	 * avalable for the store.
+	 * */
+	private boolean cancelCurrentActivity = false;
+
+	/**
+	 * Sets the cancel current activity.
+	 * 
+	 * @param cancelCurrentActivity
+	 *            the new cancel current activity
+	 */
+	public void setCancelCurrentActivity(boolean cancelCurrentActivity) {
+		this.cancelCurrentActivity = cancelCurrentActivity;
+	}
+
+	/**
+	 * Checks if is cancel current activity.
+	 * 
+	 * @return true, if is cancel current activity
+	 */
+	public boolean isCancelCurrentActivity() {
+		return cancelCurrentActivity;
+	}
+
+	/**
+	 * Checks if is foreground.
+	 * 
+	 * @return true, if is foreground
+	 */
+	public boolean isForeground() {
+		return isForeground;
+	}
+
+	/**
+	 * Sets the foreground.
+	 * 
+	 * @param isForeground
+	 *            the new foreground
+	 */
+	public void setForeground(boolean isForeground) {
+		this.isForeground = isForeground;
+	}
+
+	/**
+	 * Instantiates a new web request task.
+	 * 
+	 * @param context
+	 *            the context
+	 * @param rpl
+	 *            the esponse listener
+	 */
+	public WebRequestTask(Context context, ResponseParserListener rpl) {
+		this.mContext = context;
+		this.mListner = rpl;
+	}
+
+	/**
+	 * Cancel task.
+	 */
+	private void cancelTask() {
+		if (WebRequestTask.this != null
+				&& (WebRequestTask.this.getStatus() == Status.RUNNING || WebRequestTask.this
+						.getStatus() == Status.PENDING)) {
+			WebRequestTask.this.cancel(true);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.os.AsyncTask#onPreExecute() gets called just before thread
+	 * begins, Here start showing the progress dialog
+	 */
+	@Override
+	protected void onPreExecute() {
+		Log.d(TAG, "In onPreExecute()");
+
+		if (isForeground) {
+			if (!UIUtilities.determineConnectivity(this.mContext)) {
+				UIUtilities.showConfirmationAlert(this.mContext,
+						R.string.dialog_title_information,
+						R.string.network_err_msg, R.string.dialog_button_Ok,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int which) {
+							}
+						});
+				WebRequestTask.this.cancelTask();
+
+			} else {
+				HealthCareApp app = (HealthCareApp) mContext.getApplicationContext();
+
+				if (app.Dialog == null) {
+					app.Dialog = new WeakReference<ProgressDialog>(
+							ProgressDialog.show(mContext, null,
+									"Loading. Please wait...", true, true,
+									new DialogInterface.OnCancelListener() {
+										public void onCancel(
+												DialogInterface dialog) {
+											WebRequestTask.this.cancelTask();
+										}
+									}));
+					app.waiting = true;
+				}
+
+				else if (app.weeklyDialog == null) {
+					app.weeklyDialog = new WeakReference<ProgressDialog>(
+							ProgressDialog.show(mContext, null,
+									"Loading. Please wait...", true, true,
+									new DialogInterface.OnCancelListener() {
+										public void onCancel(
+												DialogInterface dialog) {
+											WebRequestTask.this.cancelTask();
+										}
+									}));
+					app.waiting = true;
+				}
+			}
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.os.AsyncTask#doInBackground(Params[]) Start web service
+	 * request
+	 */
+	@Override
+	protected Void doInBackground(WebRequestClient... params) {
+		Log.d(TAG, "In doInBackground()");
+		mWebRequestClient = params[0];
+
+		try {
+			mWebRequestClient.Execute(RequestMethod.GET);
+		} catch (Exception e) {
+			Log.d("Error", e.toString());
+		}
+		return null;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.os.AsyncTask#onProgressUpdate(Progress[]) called from the
+	 * publish progress notice that the datatype of the second param gets passed
+	 * to this method
+	 */
+	@Override
+	protected void onProgressUpdate(String... values) {
+		Log.d(TAG, "In onProgressUpdate()");
+		super.onProgressUpdate(values);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.os.AsyncTask#onCancelled() called if the cancel button is
+	 * pressed
+	 */
+	@Override
+	protected void onCancelled() {
+		Log.d(TAG, "In onCancelled()");
+		super.onCancelled();
+		HealthCareApp app = (HealthCareApp) mContext.getApplicationContext();
+		if (app.Dialog != null) {
+			ProgressDialog refresher = (ProgressDialog) app.Dialog.get();
+			if (refresher != null)
+				refresher.dismiss();
+			app.waiting = false;
+			app.waitingOnPause = false;
+			app.Dialog = null;
+
+			
+			if (cancelCurrentActivity) {
+				Activity act = (Activity) mContext;
+				act.finish();
+			}
+		}
+
+		if (app.weeklyDialog != null) {
+			ProgressDialog refresher = (ProgressDialog) app.weeklyDialog.get();
+			if (refresher != null)
+				refresher.dismiss();
+			app.weeklyDialog = null;
+			app.waiting = false;
+			app.waitingOnPause = false;
+			if (cancelCurrentActivity) {
+				Activity act = (Activity) mContext;
+				act.finish();
+			}
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.os.AsyncTask#onPostExecute(java.lang.Object) called as soon
+	 * as doInBackground method completes notice that the third param gets
+	 * passed to this method Start parsing the xml and respond to the parsing
+	 * listener send responses when parsing is happening
+	 */
+	@Override
+	protected void onPostExecute(Void result) {
+		Log.d(TAG, "In onPostExecute()");
+		super.onPostExecute(result);
+
+		if (!isCancelled()) {
+			if (mWebRequestClient.getResponseCode() == 200) {
+				// Start parsing and return the response object
+				GenericResponseHandler.parseStart(mWebRequestClient
+						.getResponse(), mListner);
+			} else {
+				if (isForeground) {
+					UIUtilities.showConfirmationAlert(mContext,
+							R.string.dialog_title_error, R.string.server_error,
+							R.string.dialog_button_Ok,
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int which) {
+									Activity activity = (Activity) mContext;
+									if (cancelCurrentActivity)
+										activity.finish();
+								}
+							});
+				}
+			}
+		}
+		HealthCareApp app = (HealthCareApp) mContext.getApplicationContext();
+		if (app.Dialog != null) {
+			ProgressDialog refresher = (ProgressDialog) app.Dialog.get();
+			if (refresher != null)
+				refresher.dismiss();
+			app.waiting = false;
+			app.waitingOnPause = false;
+			app.Dialog = null;
+		} else if (app.weeklyDialog != null) {
+			ProgressDialog refresher = (ProgressDialog) app.weeklyDialog.get();
+			if (refresher != null)
+				refresher.dismiss();
+			app.waiting = false;
+			app.waitingOnPause = false;
+			app.weeklyDialog = null;
+		}
+	}
+}

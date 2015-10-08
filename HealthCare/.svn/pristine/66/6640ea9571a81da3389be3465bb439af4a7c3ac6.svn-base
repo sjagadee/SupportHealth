@@ -1,0 +1,39 @@
+package app.nichepro.model;
+
+import android.os.Parcel;
+
+import com.google.gson.annotations.SerializedName;
+
+public class SymtomResponseObject extends BaseResponseObject {
+
+	@SerializedName("patientId")
+	public String patientId;
+	@SerializedName("symptomId")
+	public String symptomId;
+	@SerializedName("description")
+	public String description;
+	@SerializedName("fromDate")
+	public String fromDate;
+	@SerializedName("lastUpdatedStamp")
+	public String lastUpdatedStamp;
+	@SerializedName("lastUpdatedTxStamp")
+	public String lastUpdatedTxStamp;
+	@SerializedName("createdStamp")
+	public String createdStamp;
+	@SerializedName("createdTxStamp")
+	public String createdTxStamp;
+
+	public boolean isSelected;
+	@Override
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

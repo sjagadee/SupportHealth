@@ -1,0 +1,87 @@
+package app.nichepro.fragmenttabpatient.ehr;
+
+import java.util.ArrayList;
+
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import app.nichepro.activities.healthcare.BaseFragment;
+import app.nichepro.activities.healthcare.ExpandAnimation;
+import app.nichepro.activities.healthcare.R;
+import app.nichepro.model.KeyValue;
+import app.nichepro.model.PatientMedicationListResponseObject;
+
+public class PatientEhrAllergiesFragment extends BaseFragment {
+
+	ArrayList<KeyValue> mCancerData;
+	PatientMedicationListResponseObject allergiesListObject;
+
+	public void initializeHash() {
+		mCancerData = new ArrayList<KeyValue>();
+		KeyValue kv = new KeyValue();
+		kv.setKey("Allergy Type: \t Environment");
+		kv.setValue("Cause: \t\t Dust \n\nResult: \t\t Rashes \n\nLocation: \t Skin \n\nStatus: \t\t Active");
+		mCancerData.add(kv);
+
+		kv = new KeyValue();
+		kv.setKey("Allergy Type: \t Drug");
+		kv.setValue("Cause: \t\t Amoxisalin \n\nResult: \t\t swelling \n\nLocation: \t Leg \n\nStatus: \t\t Active");
+		mCancerData.add(kv);
+
+		kv = new KeyValue();
+		kv.setKey("Allergy Type: \t Food");
+		kv.setValue("Cause: \t\t egg \n\nResult: \t\t Vomiting \n\nLocation: \t Abdomen \n\nStatus: \t\t cured");
+		mCancerData.add(kv);
+
+
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		
+		initializeHash();
+        View view       =   inflater.inflate(R.layout.allaboutcancer, container, false);
+
+		RelativeLayout hView = (RelativeLayout) view.findViewById(R.id.headings);
+		hView.setVisibility(View.VISIBLE);
+		TextView headerView = (TextView) view.findViewById(R.id.header);
+		headerView.setText("Allergies");
+
+		ListView list = (ListView) view.findViewById(R.id.lvCancerExpansion);
+
+		// Creating the list adapter and populating the list
+		ArrayAdapter<KeyValue> listAdapter = new PatientCustomListAdapter(inflater.getContext(),
+				inflater, R.layout.allaboutcancer_listitem);
+
+		for (KeyValue element : mCancerData) {
+			listAdapter.add(element);
+
+		}
+
+		list.setAdapter(listAdapter);
+
+		// Creating an item click listener, to open/close our toolbar for each
+		// item
+		list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, final View view,
+					int position, long id) {
+
+				TextView txtView = (TextView) view.findViewById(R.id.detail);
+
+				// Creating the expand animation for the item
+				ExpandAnimation expandAni = new ExpandAnimation(txtView, 500);
+
+				// Start the animation on the toolbar
+				txtView.startAnimation(expandAni);
+			}
+		});
+		return view;
+	}
+}

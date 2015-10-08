@@ -1,0 +1,135 @@
+package app.nichepro.model.db;
+
+import java.io.Serializable;
+
+import com.j256.ormlite.field.DatabaseField;
+
+public class EmailMessage implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public static String USERNAME = "username";
+	public static String SUBJECT = "subject";
+	public static String MESSAGE = "message";
+	public static String ISREAD = "isread";
+	public static String QTY = "qty";
+
+	
+
+	public static String getQTY() {
+		return QTY;
+	}
+
+	public static void setQTY(String qTY) {
+		QTY = qTY;
+	}
+
+	public static String getSUBJECT() {
+		return SUBJECT;
+	}
+
+	public static void setSUBJECT(String sUBJECT) {
+		SUBJECT = sUBJECT;
+	}
+
+	public static String getMESSAGE() {
+		return MESSAGE;
+	}
+
+	public static void setMESSAGE(String mESSAGE) {
+		MESSAGE = mESSAGE;
+	}
+
+	public static String getISREAD() {
+		return ISREAD;
+	}
+
+	public static void setISREAD(String iSREAD) {
+		ISREAD = iSREAD;
+	}
+
+	public String getSubject() {
+		return subject;
+	}
+
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	public String getIsread() {
+		return isread;
+	}
+
+	public void setIsread(String isread) {
+		this.isread = isread;
+	}
+
+	public static String getUSERNAME() {
+		return USERNAME;
+	}
+
+	public static void setUSERNAME(String uSERNAME) {
+		USERNAME = uSERNAME;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	@DatabaseField(generatedId = true)
+	int id;
+	@DatabaseField
+	String username;
+	@DatabaseField
+	String subject;
+	@DatabaseField
+	String message;
+	@DatabaseField
+	String isread;
+	@DatabaseField
+	String qty;
+	public String getQty() {
+		return qty;
+	}
+
+	public void setQty(String qty) {
+		this.qty = qty;
+	}
+
+	public EmailMessage() {
+		// needed by ormlite
+	}
+
+	public EmailMessage(String username, String subject, String msg) {
+		this.username = username;
+		this.subject = subject;
+		this.message = msg;
+	}
+}

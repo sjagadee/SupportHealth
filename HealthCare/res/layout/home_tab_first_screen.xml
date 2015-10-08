@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:background="@drawable/bg"
+    android:padding="25dp" >
+
+    <EditText
+                android:id="@+id/etEhrUserName"
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:background="@drawable/password1"
+                android:drawableLeft="@drawable/usernameicon"
+                android:ems="10"
+                android:hint="@string/ehrusername" >
+
+                <requestFocus />
+            </EditText>
+
+            <EditText
+                android:id="@+id/etEhrPassword"
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:background="@drawable/password1"
+                android:drawableLeft="@drawable/passwordicon"
+                android:ems="10"
+                android:hint="@string/ehrpassword"
+                android:inputType="textPassword" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="10dp" >
+
+        <Button
+            android:id="@+id/bSync"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_black_clickable"
+            android:textColor="@drawable/white"
+            android:text="@string/login" />
+
+        <Button
+            android:id="@+id/bSkip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_black_clickable"
+            android:textColor="@drawable/white"
+            android:text="@string/skip" />
+    </LinearLayout>
+
+   
+
+</LinearLayout>

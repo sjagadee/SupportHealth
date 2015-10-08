@@ -1,0 +1,7 @@
+package app.nichepro.fragmenttabpatient.community;
+
+import app.nichepro.activities.healthcare.BaseFragment;
+
+public class PatientOvarianCancerThread extends BaseFragment {
+
+}

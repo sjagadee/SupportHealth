@@ -1,0 +1,26 @@
+package app.nichepro.responsehandler;
+
+import app.nichepro.util.EnumFactory.ResponseMesssagType;
+
+public class ParserFactoryGenerator {
+	public static BaseParser createParser(ResponseMesssagType msgType) {
+		switch (msgType) {
+		case LoginMessageType: 
+			return new LoginParser();
+		case UserRegistrationMessageType:
+			return new RegistrationParser();
+		case ErrorResponseMessageType:
+			return new ErrorParser();
+		case PatientLoginMessageType:
+			return new AddPatientNoteParser();
+		case PatientNoteListMessageType:
+			return new ListPatientNoteParser();
+		case MedicationListMessageType:
+			return new PatientMedicationListParser();
+		case PatientNoteMessageType:
+			return new PatientNoteParser();
+		default:
+			return null;
+		}
+	}
+}

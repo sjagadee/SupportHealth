@@ -1,0 +1,543 @@
+package app.nichepro.util;
+
+
+public class Constants {
+	// XML Tag constants
+
+	// Common
+	/** The Constant TAG_msgtype. */
+	public static final String TAG_msgtype = "msgtype";
+
+	// autocomplete
+	/** The Constant TAG_items. */
+	public static final String TAG_items = "items";
+
+	// links service
+	/** The Constant TAG_links. */
+	public static final String TAG_links = "links";
+
+	// Sign up Response
+	/** The Constant TAG_root. */
+	public static final String TAG_root = "root";
+	
+	/** The Constant TAG_error. */
+	public static final String TAG_error = "error";
+	
+	/** The Constant TAG_status. */
+	public static final String TAG_status = "status";
+
+	// Category Response
+	/** The Constant TAG_item. */
+	public static final String TAG_item = "item";
+	
+	/** The Constant TAG_name. */
+	public static final String TAG_name = "name";
+	
+	/** The Constant TAG_follow_with. */
+	public static final String TAG_follow_with = "follow_with";
+	
+	/** The Constant TAG_visible. */
+	public static final String TAG_visible = "visible";
+	
+	/** The Constant TAG_link. */
+	public static final String TAG_link = "link";
+	
+	/** The Constant TAG_position. */
+	public static final String TAG_position = "position";
+
+	// Product Response
+	/** The Constant TAG_itemid. */
+	public static final String TAG_itemid = "itemid";
+	
+	/** The Constant TAG_img. */
+	public static final String TAG_img = "img";
+	
+	/** The Constant TAG_price. */
+	public static final String TAG_price = "price";
+	
+	/** The Constant TAG_model. */
+	public static final String TAG_model = "model";
+	
+	/** The Constant TAG_unit. */
+	public static final String TAG_unit = "unit";
+	
+	/** The Constant TAG_itemcount. */
+	public static final String TAG_itemcount = "itemcount";
+	
+	/** The Constant TAG_catentryid. */
+	public static final String TAG_catentryid = "catentryid";
+	
+	/** The Constant TAG_instoreavail. */
+	public static final String TAG_instoreavail = "instoreavail";
+	
+	/** The Constant TAG_description. */
+	public static final String TAG_description = "description";
+	
+	/** The Constant TAG_bullet. */
+	public static final String TAG_bullet = "bullet";
+	
+	/** The Constant TAG_info. */
+	public static final String TAG_info = "info";
+	
+	/** The Constant TAG_spec. */
+	public static final String TAG_spec = "spec";
+	
+	/** The Constant TAG_specs. */
+	public static final String TAG_specs = "specs";
+	
+	/** The Constant TAG_img_src. */
+	public static final String TAG_img_src = "img_src";
+	
+	/** The Constant TAG_regularprice. */
+	public static final String TAG_regularprice = "regularprice";
+	
+	/** The Constant TAG_priceitem. */
+	public static final String TAG_priceitem = "priceitem";
+	
+	/** The Constant TAG_sortby. */
+	public static final String TAG_sortby = "sortby";
+	
+	/** The Constant TAG_aslowas. */
+	public static final String TAG_aslowas = "aslowas";
+	
+	/** The Constant TAG_sortfield. */
+	public static final String TAG_sortfield = "sortfield";
+	
+	/** The Constant TAG_sortvalue. */
+	public static final String TAG_sortvalue = "sortvalue";
+	
+	/** The Constant TAG_option. */
+	public static final String TAG_option = "option";
+	
+	/** The Constant TAG_hotlink. */
+	public static final String TAG_hotlink = "hotlink";
+	
+	/** The Constant TAG_fineprint. */
+	public static final String TAG_fineprint = "fineprint";
+
+	// Product reviews
+	/** The Constant TAG_productname. */
+	public static final String TAG_productname = "productname";
+	
+	/** The Constant TAG_reviews. */
+	public static final String TAG_reviews = "reviews";
+	
+	/** The Constant TAG_review. */
+	public static final String TAG_review = "review";
+	
+	/** The Constant TAG_comment. */
+	public static final String TAG_comment = "comment";
+	
+	/** The Constant TAg_rating. */
+	public static final String TAg_rating = "rating";
+	
+	/** The Constant TAG_reviewername. */
+	public static final String TAG_reviewername = "reviewername";
+	
+	/** The Constant TAG_headline. */
+	public static final String TAG_headline = "headline";
+	
+	/** The Constant TAG_bottomline. */
+	public static final String TAG_bottomline = "bottomline";
+	
+	/** The Constant TAG_date. */
+	public static final String TAG_date = "date";
+	
+	/** The Constant TAG_pros. */
+	public static final String TAG_pros = "pros";
+	
+	/** The Constant TAG_cons. */
+	public static final String TAG_cons = "cons";
+	
+	/** The Constant TAG_bestuses. */
+	public static final String TAG_bestuses = "bestuses";
+	
+	/** The Constant TAG_describeyourself. */
+	public static final String TAG_describeyourself = "describeyourself";
+	
+	/** The Constant TAG_primaryuse. */
+	public static final String TAG_primaryuse = "primaryuse";
+
+	// Store Locator Response
+	/** The Constant TAG_store. */
+	public static final String TAG_store = "store";
+	
+	/** The Constant TAG_city. */
+	public static final String TAG_city = "city";
+	
+	/** The Constant TAG_county. */
+	public static final String TAG_county = "county";
+	
+	/** The Constant TAG_zipcode. */
+	public static final String TAG_zipcode = "zipcode";
+	
+	/** The Constant TAG_distance. */
+	public static final String TAG_distance = "distance";
+	
+	/** The Constant TAG_state. */
+	public static final String TAG_state = "state";
+	
+	/** The Constant TAG_address. */
+	public static final String TAG_address = "address";
+	
+	/** The Constant TAG_phone. */
+	public static final String TAG_phone = "phone";
+	
+	/** The Constant TAG_units. */
+	public static final String TAG_units = "units";
+	
+	/** The Constant TAG_weekday. */
+	public static final String TAG_weekday = "weekday";
+	
+	/** The Constant TAG_saturday. */
+	public static final String TAG_saturday = "saturday";
+	
+	/** The Constant TAG_sunday. */
+	public static final String TAG_sunday = "sunday";
+	
+	/** The void set min reviews( string min reviews). */
+	public static final String TAG_storenumber = "storenumber";
+	
+	/** The Constant TAG_fax. */
+	public static final String TAG_fax = "fax";
+	
+	/** The Constant TAG_latitude. */
+	public static final String TAG_latitude = "latitude";
+	
+	/** The String get stars(). */
+	public static final String TAG_longitude = "longitude";
+	
+	/** The Constant TAG_storeid. */
+	public static final String TAG_storeid = "storeid";
+
+	// Review Rating Response Tags
+	/** The Constant TAG_minreviews. */
+	public static final String TAG_minreviews = "minreviews";
+	
+	/** The Constant TAG_avg. */
+	public static final String TAG_avg = "avg";
+	
+	/** The Constant TAG_review_count. */
+	public static final String TAG_review_count = "review_count";
+	
+	/** The Constant TAG_stars. */
+	public static final String TAG_stars = "stars";
+	
+	/** The Constant TAG_reviewcount. */
+	public static final String TAG_reviewcount = "reviewcount";
+
+	// Weekly ad Category List Response Tags
+	/** The Constant TAG_upcoming. */
+	public static final String TAG_upcoming = "upcoming";
+
+	// Product detail delivery only text
+	/** The Constant Default_deliverytext. */
+	public static final String Default_deliverytext = "Delivery Only";
+	
+	/** The Constant Default_rating. */
+	public static  final String Default_rating = "0.0";
+
+	// For Parsalable transfer
+	/** The Constant PARCEL_categorylist. */
+	public static final String PARCEL_categorylist = "categorylist";
+	
+	/** The Constant PARCEL_productlist. */
+	public static final String PARCEL_productlist = "productlist";
+	
+	/** The Constant PARCEL_heading1. */
+	public static final String PARCEL_heading1 = "heading1";
+	
+	/** The Constant PARCEL_heading2. */
+	public static final String PARCEL_heading2 = "heading2";
+	
+	/** The Constant PARCEL_productdetail. */
+	public static final String PARCEL_productdetail = "productdetail";
+	
+	/** The Constant PARCEL_storelist. */
+	public static final String PARCEL_storelist = "storelist";
+	
+	/** The Constant PARCEL_totalitemcount. */
+	public static final String PARCEL_totalitemcount = "totalitemcount";
+	
+	/** The Constant PARCEL_productreview. */
+	public static final String PARCEL_productreview = "productreview";
+	
+	/** The Constant PARCEL_productname. */
+	public static final String PARCEL_productname = "productname";
+	
+	/** The Constant PARCEL_reviewcount. */
+	public static final String PARCEL_reviewcount = "reviewcount";
+	
+	/** The Constant PARCEL_itemId. */
+	public static final String PARCEL_itemId = "itemid";
+	
+	/** The Constant PARCEL_followby. */
+	public static final String PARCEL_followby = "followby";
+	
+	/** The Constant PARCEL_followbyvalue. */
+	public static final String PARCEL_followbyvalue = "followbyvalue";
+	
+	/** The Constant PARCEL_isSearchMode. */
+	public static final String PARCEL_isSearchMode = "searchmode";
+	
+	/** The Constant PARCEL_storedetail. */
+	public static final String PARCEL_storedetail = "storedetail";
+	
+	/** The Constant PARCEL_adcategorylist. */
+	public static final String PARCEL_adcategorylist = "adcategorylist";
+	
+	/** The Constant PARCEL_weeklyadlist. */
+	public static final String PARCEL_weeklyadlist = "weeklyadlist";
+	
+	/** The Constant PARCEL_weeklyaddetail. */
+	public static final String PARCEL_weeklyaddetail = "addetail";
+	
+	/** The Constant PARCEL_sortkey. */
+	public static final String PARCEL_sortkey = "sortkey";
+	
+	/** The Constant PARCEL_sortvalue. */
+	public static final String PARCEL_sortvalue = "sortvalue";
+	
+	/** The Constant PARCEL_catentryid. */
+	public static final String PARCEL_catentryid = "catentryid";
+	
+	/** The Constant PARCEL_isstoreavail. */
+	public static final String PARCEL_isstoreavail = "isstoreavailable";
+	
+	/** The Constant PARCEL_texttosearch. */
+	public static final String PARCEL_texttosearch = "texttosearch";
+	
+	/** The Constant PARCEL_storeavailstatus. */
+	public static final String PARCEL_storeavailstatus = "storeavailstatus";
+	
+	/** The Constant PARCEL_images. */
+	public static final String PARCEL_images = "images";
+	
+	/** The Constant PARCEL_descriptions. */
+	public static final String PARCEL_descriptions = "descriptions";
+	
+	/** The Constant PARCEL_specs. */
+	public static final String PARCEL_specs = "specifications";
+	
+	/** The Constant PARCEL_isfirstlevel. */
+	public static final String PARCEL_isfirstlevel = "firstlevelcategory";
+	
+	/** The String get link(). */
+	public static final String PARCEL_isfromcategory = "isfromcategory";
+	
+	/** The Constant PARCEL_keys. */
+	public static final String PARCEL_keys = "sortingkeys";
+	
+	/** The Constant PARCEL_values. */
+	public static final String PARCEL_values = "sortingvalues";
+
+	// For Omniture
+	/** The Constant TAG_omniture. */
+	public static final String TAG_omniture = "omniture";
+	
+	/** The Constant TAG_tag. */
+	public static final String TAG_tag = "tag";
+	
+	/** The Constant TAG_key. */
+	public static final String TAG_key = "key";
+	
+	/** The Constant TAG_value. */
+	public static final String TAG_value = "value";
+	
+	// For omnituure parcel
+	/** The Constant String getModel(). */
+	public static final String PARCEL_pagename = "pageName";
+	
+	/** The Constant PARCEL_channel. */
+	public static final String PARCEL_channel = "channel";
+	
+	/** The Constant PARCEL_prop4. */
+	public static final String PARCEL_prop4 = "prop4";
+	
+	/** The Constant PARCEL_prop5. */
+	public static final String PARCEL_prop5 = "prop5";
+	
+	/** The Constant PARCEL_prop6. */
+	public static final String PARCEL_prop6 = "prop6";
+
+	// For query parameters
+	/** The Constant PARAM_text. */
+	public static final String PARAM_text = "text";
+
+	// STORE preference data
+	/** The Constant SHAREDPREF_mystoredata. */
+	public static final String SHAREDPREF_mystoredata = "mystoredata";
+	
+	/** The Constant SHAREDPREF_isstoreset. */
+	public static final String SHAREDPREF_isstoreset = "isstoreset";
+
+	// Current STORE preference data
+	/** The Constant SHAREDPREF_mycurrentstoredata. */
+	public static final String SHAREDPREF_mycurrentstoredata = "mycurrentstoredata";
+	
+	/** The Constant SHAREDPREF_iscurrentstoreset. */
+	public static final String SHAREDPREF_iscurrentstoreset = "iscurrentstoreset";
+	
+	/** The String get unit(). */
+	public static final String SHAREDPREF_links = "links";
+	
+	/** The Constant SHAREDPREF_is_links_set. */
+	public static final String SHAREDPREF_is_links_set = "islinkset";
+
+	/** The Constant SHAREDPREF_mycurrentweeklyad. */
+	public static final String SHAREDPREF_mycurrentweeklyad = "mycurrentstoreweeklyad";
+
+	/** The Constant SHAREDPREF_app. */
+	public static final String SHAREDPREF_app = "app";
+	
+	/** The Constant SHAREDPREF_app. */
+	public static final String TAG_appversion = "appversion";
+	/** The Constant SHAREDPREF_app. */
+	public static final String TAG_udid = "udid";
+	
+	// Defaults
+	/** The Constant DEFAULT_emptystring. */
+	public static final String DEFAULT_emptystring = "";
+	
+	/** The Constant DEFAULT_zipcode. */
+	public static final String DEFAULT_zipcode = "01702";
+	
+	/** The Constant DEFAULT_distance. */
+	public static final String DEFAULT_distance = "100";
+	
+	/** The Constant DEFAULT_phone. */
+	public static final String DEFAULT_phone = "+18003333330";
+	// app version
+	/** The Constant Default_app_version. */
+	public static final String Default_app_version = "1.2";
+	
+	/** The Constant Default_invalidStoreSearchStringMsg. */
+	public static final String Default_invalidStoreSearchStringMsg = "We’re sorry, no stores were found matching your search terms.\n\nPlease check your spelling and be sure to place a comma between city and state.";
+
+	// default text which will be added before product name in case of store
+	// availability
+	/** The Constant Default_searchtext. */
+	public static final String Default_searchtext = "Search: ";
+
+	// For validation check in search string length
+	/** The Constant DEFAULT_searchstringlength. */
+	public static final int DEFAULT_searchstringlength = 100;
+
+	// a message on location update timeout
+	/** The Constant NO_LOCATION_UPDATE. */
+	public static final int NO_LOCATION_UPDATE = 100;
+	// a message on successful location update
+	/** The Constant LOCATION_UPDATE. */
+	public static final int LOCATION_UPDATE = 101;
+
+	/** The Constant TAG_data. */
+	public static final String TAG_data = "data";
+	
+	/** The Constant TAG_ErrorText. */
+	public static final String TAG_ErrorText = "ErrorText";
+	
+	/** The Constant TAG_isweeklyad. */
+	public static final String TAG_isweeklyad = "isweeklyad";
+
+	/** The Constant TAG_msgtype_start. */
+	public static final String TAG_msgtype_start = "<msgtype>";
+	
+	/** The Constant TAG_msgtype_end. */
+	public static final String TAG_msgtype_end = "</msgtype>";
+	
+	/** The Constant TAG_pkey. */
+	public static final String TAG_pkey = "pkey";
+	
+	/** The Constant TAG_pvalue. */
+	public static final String TAG_pvalue = "pvalue";
+	
+	/** The Constant TAG_offer. */
+	public static final String TAG_offer = "offer";
+	
+	/** The Constant TAG_offer. */
+	public static final String TAG_offers = "offers";
+	
+	/** The Constant TAG_offerinfo. */
+	public static final String TAG_offerinfo = "offerinfo";
+	
+	/** The Constant TAG_infotext. */
+	public static final String TAG_infotext = "infotext";
+	
+	/** The Constant TAG_offertext. */
+	public static final String TAG_offertext = "offertext";
+
+	/** The Constant TAG_priceitems. */
+	public static final String TAG_priceitems = "priceitems";
+	
+	public static final String ATTR_bold = "bold";
+	public static final String ATTR_color = "color";
+	public static final String ATTR_fontsize = "fontsize";
+	
+	/** The Constant PARAM_mode. */
+	public static final String PARAM_mode = "mode";
+	
+	/** The Constant PARAM_page. */
+	public static final String PARAM_page = "page";
+	
+	/** The Constant PARAM_field. */
+	public static final String PARAM_field = "field";
+	
+	/** The Constant PARAM_submit. */
+	public static final String PARAM_submit = "submit";
+	
+	/** The Constant PARAM_storelocator. */
+	public static final String PARAM_storelocator = "storelocator";
+	
+	/** The Constant PARAM_category. */
+	public static final String PARAM_category = "category";
+	
+	/** The Constant PARAM_schedule. */
+	public static final String PARAM_schedule = "schedule";
+	
+	/** The Constant PARAM_storeid. */
+	public static final String PARAM_storeid = "storeid";
+	
+	/** The Constant PARAM_sortby. */
+	public static final String PARAM_sortby = "sortby";
+	
+	/** The Constant PARAM_zipcode. */
+	public static final String PARAM_zipcode = "zipcode";
+	
+	/** The Constant PARAM_index. */
+	public static final String PARAM_index = "index";
+	
+	/** The Constant WeeklyAdStoreNotSet. */
+	public static final int WeeklyAdStoreNotSet = 1;
+	
+	/** The Constant WeeklyAdStoreSet. */
+	public static final int WeeklyAdStoreSet = 2;
+	
+	/** The Constant WeeklyAdOnScreenRotation. */
+	public static final int WeeklyAdOnScreenRotation = 3;
+	
+	/** The Constant WeeklyAdFromStoreDetail. */
+	public static final int WeeklyAdFromStoreDetail = 4;
+	
+	//for validation of sending result back to the previous activity
+	/** The constant Default_Store. */
+	public static final int DEFAULT_Result = 1;
+	
+	/** The constant DEFAULT_Store_address. */
+	public static final String DEFAULT_Store_address = "defaultstoreaddress";
+
+	/** The Constant SHAREDPREF_seed. */
+	public static final String SHAREDPREF_seed = "seed";
+	/** The Constant SHAREDPREF_seed. */
+	public static final String SHAREDPREF_isSeedSet = "isseedset";
+
+	public static final String TAG_seed = "seed";
+	
+	public static final String Empty_String = "";
+	
+	public static final String TAB_HOME  = "tab_home_identifier";
+	public static final String TAB_INFO  = "tab_info_identifier";
+	public static final String TAB_EHR  = "tab_ehr_identifier";
+	public static final String TAB_QUERIES  = "tab_queries_identifier";
+	public static final String TAB_COMMUNITY  = "tab_community_identifier";
+	
+}
